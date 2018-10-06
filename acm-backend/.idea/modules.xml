@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/acm-backend.iml" filepath="$PROJECT_DIR$/.idea/acm-backend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/customerservice/customerservice.iml" filepath="$PROJECT_DIR$/customerservice/customerservice.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iam/iam-oss.iml" filepath="$PROJECT_DIR$/iam/iam-oss.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jpaframework/jpaframework.iml" filepath="$PROJECT_DIR$/jpaframework/jpaframework.iml" />
+      <module fileurl="file://$PROJECT_DIR$/registry/registry-oss.iml" filepath="$PROJECT_DIR$/registry/registry-oss.iml" />
+      <module fileurl="file://$PROJECT_DIR$/restclient/restclient.iml" filepath="$PROJECT_DIR$/restclient/restclient.iml" />
+    </modules>
+  </component>
+</project>

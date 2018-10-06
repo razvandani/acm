@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="common" />
+        <module name="customerservice" />
+        <module name="iam-oss" />
+        <module name="jpaframework" />
+        <module name="registry-oss" />
+        <module name="restclient" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="common" target="1.8" />
+      <module name="customerservice" target="1.8" />
+      <module name="email" target="1.8" />
+      <module name="iam-oss" target="1.8" />
+      <module name="jpaframework" target="1.8" />
+      <module name="registry-oss" target="1.8" />
+      <module name="restclient" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
