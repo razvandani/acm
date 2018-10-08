@@ -1,6 +1,7 @@
 package com.gcr.acm.customerservice.customer;
 
 import com.gcr.acm.common.utils.SuccessObject;
+import com.gcr.acm.customerservice.report.CustomerReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,9 @@ import java.util.List;
 public class CustomerController {
     @Autowired
     private CustomerService customerService;
+
+    @Autowired
+    private CustomerReportService customerReportService;
 
     /**
      * Finds customers.
@@ -46,5 +50,11 @@ public class CustomerController {
     public SuccessObject updateCustomer(@RequestBody CustomerInfo customerInfo) throws Exception {
         customerService.saveCustomer(customerInfo);
         return new SuccessObject();
+    }
+
+
+    @RequestMapping(value = "/export", method = RequestMethod.POST)
+    public String exportCustomers(@RequestBody SearchCustomerCriteria searchCustomerCriteria) throws Exception {
+        return customerReportService.getCustomerReportInExcelFormat(searchCustomerCriteria);
     }
 }
