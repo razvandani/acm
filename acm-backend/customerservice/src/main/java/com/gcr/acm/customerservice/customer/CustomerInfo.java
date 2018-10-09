@@ -37,6 +37,7 @@ public class CustomerInfo  {
     @JsonSerialize(using = JsonDateSerializer.class)
     private Date startDeliveryDate; // date when the service (energy or gas) starts
     private Integer status; // 1 = Not Delivered to Admin, 2 = Delivered to Admin
+    private BigDecimal commission;
 
     public String getId() {
         return id;
@@ -180,5 +181,13 @@ public class CustomerInfo  {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public BigDecimal getCommission() {
+        return commission;
+    }
+
+    public void setCommission(BigDecimal commission) {
+        this.commission = commission;
     }
 }
