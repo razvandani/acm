@@ -154,7 +154,7 @@ CREATE TABLE IF NOT EXISTS `customer` (
   street VARCHAR(100) NOT NULL,
   street_number VARCHAR(10) NOT NULL,
   start_delivery_date date NOT NULL,
-  commission DECIMAL(12, 2) NOT NULL,
+  commission DECIMAL(12, 2) NULL,
   status INT NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY (contract_number),

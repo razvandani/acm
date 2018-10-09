@@ -76,6 +76,7 @@ public class CustomerService {
         customerInfo.setAgentId(customerEntity.getAgentId().toString());
         customerInfo.setStartDeliveryDate(customerEntity.getStartDeliveryDate());
         customerInfo.setStatus(customerEntity.getStatus());
+        customerInfo.setCommission(customerEntity.getCommission());
 
         if (customerEntity.getCountyEntity() != null) {
             customerInfo.setCountyName(customerEntity.getCountyEntity().getName());
@@ -110,8 +111,8 @@ public class CustomerService {
         customerEntity.setContractType(customerInfo.getContractType());
         customerEntity.setCommissionType(customerInfo.getCommissionType());
 
-        CommissionTypeEntity commissionTypeEntity = commissionTypeEAO.getCommissionType(customerInfo.getCommissionType());
-        customerEntity.setCommission(commissionTypeEntity.getCommissionValue());
+//        CommissionTypeEntity commissionTypeEntity = commissionTypeEAO.getCommissionType(customerInfo.getCommissionType());
+        customerEntity.setCommission(customerInfo.getCommission());
 
         customerEntity.setCountyId(customerInfo.getCountyId());
         customerEntity.setIsActive(customerInfo.getIsActive());
@@ -148,6 +149,11 @@ public class CustomerService {
         validateRequiredObject(customerInfo.getAgentId(), "agentId");
         validateRequiredObject(customerInfo.getPhoneNumber(), "phoneNumber");
         validateRequiredObject(customerInfo.getStartDeliveryDate(), "startDeliveryDate");
+
+        if (customerInfo.getStatus().equals(CustomerInfo.STATUS_DELIVERED_TO_ADMIN)
+                && UserIdentity.getLoginUser().isSuperUser()) {
+            validateRequiredObject(customerInfo.getCommission(), "commission");
+        }
     }
 
     /**
