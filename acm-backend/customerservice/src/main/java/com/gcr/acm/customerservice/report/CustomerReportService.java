@@ -52,26 +52,28 @@ import java.util.*;
 			throws IOException {
 
 		// creates an empty  workbook
-		File excel = new File("d:/temp/Employee.xlsx");
-		FileInputStream fis = new FileInputStream(excel);
-		XSSFWorkbook workbook = new XSSFWorkbook(fis);
+		File excel = new File("d:/temp/Employee"+ UUID.randomUUID() +".xlsx");
+		FileInputStream fileInputStream = new FileInputStream(excel);
+		XSSFWorkbook xssfWorkbook = new XSSFWorkbook(fileInputStream);
 
 		//creates a blank sheet
-		XSSFSheet sheet = workbook.createSheet("Participant");
+		XSSFSheet xssfWorkbookSheet = xssfWorkbook.createSheet("Participant");
 
-		Map<String, Object[]> data = getCustomerInfoMap(customerInfoList);
+		Map<String, Object[]> customerInfoMap = getCustomerInfoMap(customerInfoList);
 
 		// iteration on the map data and writing in the excel sheet
-		createRowsFromMapOfArrays(sheet, data);
-		FileOutputStream os = new FileOutputStream(excel);
-		workbook.write(os);
-		os.close();
-		fis.close();
+		createRowsFromMapOfArrays(xssfWorkbookSheet, customerInfoMap);
+		FileOutputStream fileOutputStream = new FileOutputStream(excel);
+		xssfWorkbook.write(fileOutputStream);
+		fileOutputStream.close();
+		fileInputStream.close();
 		// Writing the excel file as an byte[]
 		// todo muie psd
 		ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
-		workbook.write(outByteStream);
+		xssfWorkbook.write(outByteStream);
 		byte[] outArray = outByteStream.toByteArray();
+
+		excel.delete();
 
 		// apply base64 encoder
 		return new String(Base64.getEncoder().encode(outArray), "UTF-8");
@@ -85,6 +87,7 @@ import java.util.*;
 				"Enegie//gaz", "Tipul de contract", "Categoria", "Judet", "Localitate", "Telefon", "Partener",
 				"Data intrare in furnizare" };
 		data.put(Integer.toString(indiceMap), tableHeader);
+
 		if (!customerInfoList.isEmpty()) {
 			for (CustomerInfo customerInfo : customerInfoList) {
 				indiceMap++;
@@ -100,6 +103,7 @@ import java.util.*;
 								"test", customerInfo.getStartDeliveryDate() });
 			}
 		}
+
 		return data;
 	}
 
