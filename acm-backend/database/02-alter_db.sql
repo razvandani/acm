@@ -34,21 +34,6 @@ CREATE TABLE IF NOT EXISTS `county` (
   `name` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---CREATE TABLE IF NOT EXISTS `customer` (
---  `id` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
---  `first_name` varchar(100) NOT NULL,
---  `last_name` varchar(100) NOT NULL,
---  county_id  int NOT NULL,
---  location varchar(100) NOT NULL,
---  phone_number varchar(20) NOT NULL,
---  contract_date datetime NOT NULL,
---  is_active bit not null,
---  agent_id bigint(20) not null,
---  KEY `fk_customer_county` (`county_id`),
---  CONSTRAINT `fk_customer_county` FOREIGN KEY (`county_id`) REFERENCES `county` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
---  CONSTRAINT `fk_customer_agent` FOREIGN KEY (`agent_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE NO ACTION
---) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 INSERT IGNORE INTO role (role_id, role_name, role_desc, is_predefined_role) VALUES(1, 'Super user', 'Super user', 1);
 INSERT IGNORE INTO role (role_id, role_name, role_desc, is_predefined_role) VALUES(2, 'Agent', 'Agent', 1);
 
