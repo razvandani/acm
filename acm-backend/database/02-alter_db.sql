@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS permission_rest_method (
   permission_rest_method_id int(11) NOT NULL AUTO_INCREMENT,
   permission_id int(11) NOT NULL,
   rest_request_path varchar(200) DEFAULT NULL,
-  rest_request_method varchar(10) DEFAULT NULL,
+  rest_request_method varchar(20) DEFAULT NULL,
   PRIMARY KEY (`permission_rest_method_id`),
   UNIQUE KEY `PERMISSION_REST_METHOD_UNIQUE` (`rest_request_path`,`rest_request_method`,`permission_id`),
   KEY `fk_RN_PERMISSION_REST_METHOD_PERIMISSION` (`permission_id`),
@@ -136,6 +136,17 @@ VALUES ((SELECT permission_id FROM permission WHERE permission_code='MCU'), '/cu
 
 INSERT IGNORE INTO permission_rest_method (permission_id, rest_request_path, rest_request_method)
 VALUES ((SELECT permission_id FROM permission WHERE permission_code='MCU'), '/customerservice/commission/calculate', 'POST');
+
+
+INSERT IGNORE INTO permission (permission_name, permission_code, permission_desc, is_deleted)
+VALUES ('Customer Export', 'CE', 'Customer Export', 0);
+
+INSERT IGNORE INTO role_permission (role_id, permission_id)
+VALUES (1, (SELECT permission_id FROM permission WHERE permission_code='CE'));
+
+INSERT IGNORE INTO permission_rest_method (permission_id, rest_request_path, rest_request_method)
+VALUES ((SELECT permission_id FROM permission WHERE permission_code='CE'), '/customerservice/customer/export', 'POST');
+
 
 CREATE TABLE IF NOT EXISTS `customer` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,

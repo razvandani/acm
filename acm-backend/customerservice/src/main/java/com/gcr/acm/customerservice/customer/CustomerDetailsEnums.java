@@ -47,7 +47,7 @@ public final class CustomerDetailsEnums {
 			return description;
 		}
 
-		public static ContractTypeEnum getContractTypeByTypeId(Integer typeId) {
+		public static String getContractTypeByTypeId(Integer typeId) {
 
 			ContractTypeEnum contractTypeResult = null;
 
@@ -58,7 +58,7 @@ public final class CustomerDetailsEnums {
 					contractTypeResult = contractTypeResultEnum;
 				}
 			}
-			return contractTypeResult;
+			return contractTypeResult != null ? contractTypeResult.getDescription() : null;
 		}
 	}
 
