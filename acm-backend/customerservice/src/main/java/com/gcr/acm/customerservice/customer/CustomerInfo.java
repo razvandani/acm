@@ -5,7 +5,6 @@ import com.gcr.acm.common.utils.JsonDateSerializer;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Contains information about a customer.
@@ -33,7 +32,7 @@ public class CustomerInfo  {
     private String countyName; // readonly
     private Integer productType; // 1 = Electric energy, 2 = Natural Gas
     private Integer contractType; // 1 = Fix, 2 = E-go, 3 = Flex, 4 = Flux
-    private Integer commissionType; // 1 = B1, 2 = B2, 3 = B3, 4 = B4
+    private Integer commissionSubcategory; // 1 = B1, 2 = B2, 3 = B3, 4 = B4
     @JsonSerialize(using = JsonDateSerializer.class)
     private Date startDeliveryDate; // date when the service (energy or gas) starts
     private Integer status; // 1 = Not Delivered to Admin, 2 = Delivered to Admin
@@ -159,12 +158,12 @@ public class CustomerInfo  {
         this.contractType = contractType;
     }
 
-    public Integer getCommissionType() {
-        return commissionType;
+    public Integer getCommissionSubcategory() {
+        return commissionSubcategory;
     }
 
-    public void setCommissionType(Integer commissionType) {
-        this.commissionType = commissionType;
+    public void setCommissionSubcategory(Integer commissionType) {
+        this.commissionSubcategory = commissionType;
     }
 
     public Date getStartDeliveryDate() {

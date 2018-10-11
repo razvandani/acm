@@ -4,7 +4,6 @@ import com.gcr.acm.common.exception.NotFoundException;
 import com.gcr.acm.common.utils.Utilities;
 import com.gcr.acm.common.utils.ValidationUtils;
 import com.gcr.acm.customerservice.commissiontype.CommissionTypeEAO;
-import com.gcr.acm.customerservice.commissiontype.CommissionTypeEntity;
 import com.gcr.acm.customerservice.report.CustomerReportService;
 import com.gcr.acm.iam.user.UserIdentity;
 import com.gcr.acm.iam.user.UserInfo;
@@ -66,7 +65,7 @@ public class CustomerService {
         customerInfo.setLastName(customerEntity.getLastName());
         customerInfo.setProductType(customerEntity.getProductType());
         customerInfo.setContractType(customerEntity.getContractType());
-        customerInfo.setCommissionType(customerEntity.getCommissionType());
+        customerInfo.setCommissionSubcategory(customerEntity.getCommissionSubcategory());
         customerInfo.setCountyId(customerEntity.getCountyId());
         customerInfo.setIsActive(customerEntity.getIsActive());
         customerInfo.setLocation(customerEntity.getLocation());
@@ -109,9 +108,9 @@ public class CustomerService {
         customerEntity.setLastName(customerInfo.getLastName());
         customerEntity.setProductType(customerInfo.getProductType());
         customerEntity.setContractType(customerInfo.getContractType());
-        customerEntity.setCommissionType(customerInfo.getCommissionType());
+        customerEntity.setCommissionSubcategory(customerInfo.getCommissionSubcategory());
 
-//        CommissionTypeEntity commissionTypeEntity = commissionTypeEAO.getCommissionType(customerInfo.getCommissionType());
+//        CommissionTypeEntity commissionTypeEntity = commissionTypeEAO.getCommissionSubcategory(customerInfo.getCommissionSubcategory());
         customerEntity.setCommission(customerInfo.getCommission());
 
         customerEntity.setCountyId(customerInfo.getCountyId());
@@ -139,7 +138,7 @@ public class CustomerService {
         validateRequiredObject(customerInfo.getLastName(), "lastName", 50);
         validateRequiredObject(customerInfo.getProductType(), "productType");
         validateRequiredObject(customerInfo.getContractType(), "contractType");
-        validateRequiredObject(customerInfo.getCommissionType(), "commissionType");
+        validateRequiredObject(customerInfo.getCommissionSubcategory(), "commissionType");
         validateRequiredObject(customerInfo.getCountyId(), "countyId");
         validateRequiredObject(customerInfo.getLocation(), "location");
         validateRequiredObject(customerInfo.getStreet(), "street");
