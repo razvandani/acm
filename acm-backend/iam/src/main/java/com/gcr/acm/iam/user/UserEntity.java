@@ -38,12 +38,18 @@ public class UserEntity extends EntityBase {
     @Column(name ="created_dttm")
     private Date createdDttm;
 
+    // will be set to is_active by default
     @Column(name = "is_active")
     private Boolean isActive;
 
+    // behind the scenes, in case of multiple invalid password attempts, this is set to true. afterwards,
+    // logins are not possible until super user manually unlocks
     @Column(name = "is_locked")
     private Boolean isLocked;
 
+    // set behind the scenes to role id 2, when an agent is created by super user. Otherwise, the only the other role id is 1,
+    // which means super user. Only super users can create other super users, but this is not part of the intial version when it comes to UI,
+    // even though in the backend this feature is already supported.
     @Column(name = "role_id")
     private Integer roleId;
 
