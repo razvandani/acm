@@ -113,7 +113,7 @@ public class CustomerService {
         customerEntity.setContractType(customerInfo.getContractType());
         customerEntity.setCommissionSubcategory(customerInfo.getCommissionSubcategory());
 
-        customerEntity.setCommission(claculateCommission(customerInfo));
+        customerEntity.setCommission(calculateCommission(customerInfo));
 
         customerEntity.setCountyId(customerInfo.getCountyId());
         customerEntity.setIsActive(customerInfo.getIsActive());
@@ -128,7 +128,7 @@ public class CustomerService {
         return customerEntity;
     }
 
-    private BigDecimal claculateCommission(CustomerInfo customerInfo) {
+    private BigDecimal calculateCommission(CustomerInfo customerInfo) {
         AgentCommissionEntity agentCommissionEntity = commissionEAO.getAgentCommissionByPrimaryKey(new BigInteger(customerInfo.getAgentId()),
                 customerInfo.getContractType(), customerInfo.getCommissionSubcategory());
         BigDecimal commission;
