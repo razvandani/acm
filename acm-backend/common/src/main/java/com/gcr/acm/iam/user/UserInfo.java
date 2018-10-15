@@ -2,6 +2,7 @@ package com.gcr.acm.iam.user;
 
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -30,6 +31,8 @@ public class UserInfo {
     private String errorMessage; // readonly
     private String loginToken; // readonly
     private String newPassword; // write only
+    // todo list of agent commissions
+    private List<AgentCommissionInfo> agentCommissionInfoList;
 
     public String getUserId() {
         return userId;
@@ -157,5 +160,13 @@ public class UserInfo {
 
     public void setEncryptedPassword(String encryptedPassword) {
         this.encryptedPassword = encryptedPassword;
+    }
+
+    private class AgentCommissionInfo {
+        // todo AgentCommissionEntity to map the agent_commission table
+        // define the attributes here for the Info class
+        // todo modify saveUser from UserService (also validate data), to save this list of agent commissions in the database
+        // todo modify getUser from UserService, to return the the list of agent commissions
+
     }
 }
