@@ -21,6 +21,7 @@ import java.io.OutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -52,9 +53,7 @@ import java.util.*;
 			throws IOException {
 
 		// creates an empty  workbook
-		File excel = new File("d:/temp/Employee"+ UUID.randomUUID() +".xlsx");
-		FileInputStream fileInputStream = new FileInputStream(excel);
-		XSSFWorkbook xssfWorkbook = new XSSFWorkbook(fileInputStream);
+		XSSFWorkbook xssfWorkbook = new XSSFWorkbook();
 
 		//creates a blank sheet
 		XSSFSheet xssfWorkbookSheet = xssfWorkbook.createSheet("Participant");
@@ -63,17 +62,14 @@ import java.util.*;
 
 		// iteration on the map data and writing in the excel sheet
 		createRowsFromMapOfArrays(xssfWorkbookSheet, customerInfoMap);
-		FileOutputStream fileOutputStream = new FileOutputStream(excel);
-		xssfWorkbook.write(fileOutputStream);
-		fileOutputStream.close();
-		fileInputStream.close();
+
 		// Writing the excel file as an byte[]
 		// todo muie psd
 		ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
 		xssfWorkbook.write(outByteStream);
 		byte[] outArray = outByteStream.toByteArray();
 
-		excel.delete();
+//		xssfWorkbook.delete();
 
 		// apply base64 encoder
 		return new String(Base64.getEncoder().encode(outArray), "UTF-8");
@@ -84,8 +80,7 @@ import java.util.*;
 		int indiceMap = 1;
 		Map<String, Object[]> data = new TreeMap<String, Object[]>();
 		Object[] tableHeader = new Object[] { "Numar curent", "Numar de contract", "Data Contractului", "Numele",
-				"Enegie//gaz", "Tipul de contract", "Categoria", "Judet", "Localitate", "Telefon", "Partener",
-				"Data intrare in furnizare" };
+				"Enegie/gaz", "Tipul de contract", "Categoria", "Judet", "Localitate", "Telefon", "Data intrare in furnizare" };
 		data.put(Integer.toString(indiceMap), tableHeader);
 
 		if (!customerInfoList.isEmpty()) {
@@ -98,9 +93,9 @@ import java.util.*;
 				data.put(Integer.toString(indiceMap),
 						new Object[] { indiceMap - 1, customerInfo.getContractNumber(), customerInfo.getContractDate(),
 								customerInfo.getLastName() + customerInfo.getFirstName(), productType,
-								getContractTypeByTypeId(customerInfo.getContractType()), "1",
+								getContractTypeByTypeId(customerInfo.getContractType()), customerInfo.getCommission(),
 								customerInfo.getCountyName(), customerInfo.getLocation(), customerInfo.getPhoneNumber(),
-								"test", customerInfo.getStartDeliveryDate() });
+								customerInfo.getStartDeliveryDate() });
 			}
 		}
 
@@ -124,8 +119,8 @@ import java.util.*;
 					cell.setCellValue((Integer) obj);
 				} else if (obj instanceof Date) {
 					cell.setCellValue(dateFormat.format((Date) obj));
-				} else if (obj instanceof Double) {
-					cell.setCellValue((Double) obj);
+				} else if (obj instanceof BigDecimal) {
+					cell.setCellValue(((BigDecimal) obj).doubleValue());
 				}
 
 			}

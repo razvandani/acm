@@ -3,7 +3,9 @@ package com.gcr.acm.customerservice.customer;
 import com.gcr.acm.common.exception.NotFoundException;
 import com.gcr.acm.common.utils.Utilities;
 import com.gcr.acm.common.utils.ValidationUtils;
-import com.gcr.acm.customerservice.commissiontype.CommissionTypeEAO;
+import com.gcr.acm.customerservice.commission.AgentCommissionEntity;
+import com.gcr.acm.customerservice.commission.CommissionEAO;
+import com.gcr.acm.customerservice.commission.DefaultCommissionEntity;
 import com.gcr.acm.customerservice.report.CustomerReportService;
 import com.gcr.acm.iam.user.UserIdentity;
 import com.gcr.acm.iam.user.UserInfo;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,7 +37,7 @@ public class CustomerService {
     private CustomerEAO customerEAO;
 
     @Autowired
-    private CommissionTypeEAO commissionTypeEAO;
+    private CommissionEAO commissionEAO;
 
     @Autowired
     private CustomerReportService customerReportService;
@@ -110,8 +113,7 @@ public class CustomerService {
         customerEntity.setContractType(customerInfo.getContractType());
         customerEntity.setCommissionSubcategory(customerInfo.getCommissionSubcategory());
 
-//        CommissionTypeEntity commissionTypeEntity = commissionTypeEAO.getCommissionSubcategory(customerInfo.getCommissionSubcategory());
-        customerEntity.setCommission(customerInfo.getCommission());
+        customerEntity.setCommission(claculateCommission(customerInfo));
 
         customerEntity.setCountyId(customerInfo.getCountyId());
         customerEntity.setIsActive(customerInfo.getIsActive());
@@ -126,6 +128,27 @@ public class CustomerService {
         return customerEntity;
     }
 
+    private BigDecimal claculateCommission(CustomerInfo customerInfo) {
+        AgentCommissionEntity agentCommissionEntity = commissionEAO.getAgentCommissionByPrimaryKey(new BigInteger(customerInfo.getAgentId()),
+                customerInfo.getContractType(), customerInfo.getCommissionSubcategory());
+        BigDecimal commission;
+
+        if (agentCommissionEntity != null) {
+            commission = agentCommissionEntity.getCommissionValue();
+        } else {
+            DefaultCommissionEntity defaultCommissionEntity =
+                    commissionEAO.getDefaultCommissionByPrimaryKey(customerInfo.getContractType(), customerInfo.getCommissionSubcategory());
+
+            if (defaultCommissionEntity == null) {
+                throw new NotFoundException("cannot find a default commission");
+            }
+
+            commission = defaultCommissionEntity.getCommissionValue();
+        }
+
+        return commission;
+    }
+
     private void validateCustomer(CustomerInfo customerInfo) {
         validateRequiredObject(customerInfo, "customerInfo");
 
@@ -138,7 +161,7 @@ public class CustomerService {
         validateRequiredObject(customerInfo.getLastName(), "lastName", 50);
         validateRequiredObject(customerInfo.getProductType(), "productType");
         validateRequiredObject(customerInfo.getContractType(), "contractType");
-        validateRequiredObject(customerInfo.getCommissionSubcategory(), "commissionType");
+        validateRequiredObject(customerInfo.getCommissionSubcategory(), "commissionSubcategory");
         validateRequiredObject(customerInfo.getCountyId(), "countyId");
         validateRequiredObject(customerInfo.getLocation(), "location");
         validateRequiredObject(customerInfo.getStreet(), "street");
@@ -149,10 +172,10 @@ public class CustomerService {
         validateRequiredObject(customerInfo.getPhoneNumber(), "phoneNumber");
         validateRequiredObject(customerInfo.getStartDeliveryDate(), "startDeliveryDate");
 
-        if (customerInfo.getStatus().equals(CustomerInfo.STATUS_DELIVERED_TO_ADMIN)
-                && UserIdentity.getLoginUser().isSuperUser()) {
-            validateRequiredObject(customerInfo.getCommission(), "commission");
-        }
+//        if (customerInfo.getStatus().equals(CustomerInfo.STATUS_DELIVERED_TO_ADMIN)
+//                && UserIdentity.getLoginUser().isSuperUser()) {
+//            validateRequiredObject(customerInfo.getCommission(), "commission");
+//        }
     }
 
     /**

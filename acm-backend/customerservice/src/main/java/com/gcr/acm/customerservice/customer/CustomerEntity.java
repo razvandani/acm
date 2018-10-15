@@ -69,6 +69,14 @@ public class CustomerEntity extends EntityBase {
     @Column(name ="status")
     private Integer status; // 1 = Not Delivered to Admin, 2 = Delivered to Admin
 
+    // todo seria, numar si cnp
+
+    // todo locul de consum adresa
+
+    // todo listare contract?
+
+
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "county_id", nullable = false, insertable = false, updatable = false)
     private CountyEntity countyEntity;

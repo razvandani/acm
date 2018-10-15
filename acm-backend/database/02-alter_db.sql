@@ -34,21 +34,6 @@ CREATE TABLE IF NOT EXISTS `county` (
   `name` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---CREATE TABLE IF NOT EXISTS `customer` (
---  `id` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
---  `first_name` varchar(100) NOT NULL,
---  `last_name` varchar(100) NOT NULL,
---  county_id  int NOT NULL,
---  location varchar(100) NOT NULL,
---  phone_number varchar(20) NOT NULL,
---  contract_date datetime NOT NULL,
---  is_active bit not null,
---  agent_id bigint(20) not null,
---  KEY `fk_customer_county` (`county_id`),
---  CONSTRAINT `fk_customer_county` FOREIGN KEY (`county_id`) REFERENCES `county` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
---  CONSTRAINT `fk_customer_agent` FOREIGN KEY (`agent_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE NO ACTION
---) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 INSERT IGNORE INTO role (role_id, role_name, role_desc, is_predefined_role) VALUES(1, 'Super user', 'Super user', 1);
 INSERT IGNORE INTO role (role_id, role_name, role_desc, is_predefined_role) VALUES(2, 'Agent', 'Agent', 1);
 
@@ -103,7 +88,7 @@ CREATE TABLE IF NOT EXISTS permission_rest_method (
   permission_rest_method_id int(11) NOT NULL AUTO_INCREMENT,
   permission_id int(11) NOT NULL,
   rest_request_path varchar(200) DEFAULT NULL,
-  rest_request_method varchar(10) DEFAULT NULL,
+  rest_request_method varchar(20) DEFAULT NULL,
   PRIMARY KEY (`permission_rest_method_id`),
   UNIQUE KEY `PERMISSION_REST_METHOD_UNIQUE` (`rest_request_path`,`rest_request_method`,`permission_id`),
   KEY `fk_RN_PERMISSION_REST_METHOD_PERIMISSION` (`permission_id`),
@@ -136,6 +121,17 @@ VALUES ((SELECT permission_id FROM permission WHERE permission_code='MCU'), '/cu
 
 INSERT IGNORE INTO permission_rest_method (permission_id, rest_request_path, rest_request_method)
 VALUES ((SELECT permission_id FROM permission WHERE permission_code='MCU'), '/customerservice/commission/calculate', 'POST');
+
+
+INSERT IGNORE INTO permission (permission_name, permission_code, permission_desc, is_deleted)
+VALUES ('Customer Export', 'CE', 'Customer Export', 0);
+
+INSERT IGNORE INTO role_permission (role_id, permission_id)
+VALUES (1, (SELECT permission_id FROM permission WHERE permission_code='CE'));
+
+INSERT IGNORE INTO permission_rest_method (permission_id, rest_request_path, rest_request_method)
+VALUES ((SELECT permission_id FROM permission WHERE permission_code='CE'), '/customerservice/customer/export', 'POST');
+
 
 CREATE TABLE IF NOT EXISTS `customer` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -170,5 +166,24 @@ CREATE TABLE IF NOT EXISTS `commission_type` (
   `commission_value` decimal(12,2) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `default_commission` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `commission_type` int(11) NOT NULL,
+  `commission_subcategory` varchar(45) NOT NULL,
+  `commission_value` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `commission_type_UNIQUE` (`commission_type`, commission_subcategory)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `agent_commission` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `agent_id` bigint NOT NULL,
+  `commission_type` int(11) NOT NULL,
+  `commission_subcategory` int(11) NOT NULL,
+  `commission_value` decimal(10,0) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `agent_commission_UNIQUE` (`agent_id`, commission_type, commission_subcategory)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
