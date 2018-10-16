@@ -140,13 +140,14 @@ CREATE TABLE IF NOT EXISTS `customer` (
   `last_name` varchar(100) NOT NULL,
   product_type INT NOT NULL, -- 1 = Electric energy, 2 = Natural Gas
   contract_type INT NOT NULL, -- 1 = Fix, 2 = E-go, 3 = Flex, 4 = Flux
-  commission_type INT NOT NULL, -- 1 = B1, 2 = B2, 3 = B3, 4 = B4
+  commission_subcategory INT NOT NULL, -- 1 = B1, 2 = B2, 3 = B3, 4 = B4
   `county_id` int(11) NOT NULL,
   `location` varchar(100) NOT NULL,
   `phone_number` varchar(20) NOT NULL,
   `contract_date` date NOT NULL,
   `is_active` bit(1) NOT NULL,
   `agent_id` bigint(20) NOT NULL,
+  agent_name varchar(100) NOT NULL,
   street VARCHAR(100) NOT NULL,
   street_number VARCHAR(10) NOT NULL,
   start_delivery_date date NOT NULL,

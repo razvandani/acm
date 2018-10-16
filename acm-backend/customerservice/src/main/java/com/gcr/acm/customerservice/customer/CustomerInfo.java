@@ -5,7 +5,6 @@ import com.gcr.acm.common.utils.JsonDateSerializer;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Contains information about a customer.
@@ -29,11 +28,11 @@ public class CustomerInfo  {
     private Date contractDate;
     private Boolean isActive;
     private String agentId;
-    // todo agent name?
+    private String agentName; // readonly
     private String countyName; // readonly
     private Integer productType; // 1 = Electric energy, 2 = Natural Gas
     private Integer contractType; // 1 = Fix, 2 = E-go, 3 = Flex, 4 = Flux
-    private Integer commissionType; // 1 = B1, 2 = B2, 3 = B3, 4 = B4
+    private Integer contractSubcategory; // 1 = B1, 2 = B2, 3 = B3, 4 = B4 and so on, see CustomerDetailsEnums.ContractSubcategoryEnum
     @JsonSerialize(using = JsonDateSerializer.class)
     private Date startDeliveryDate; // date when the service (energy or gas) starts
     private Integer status; // 1 = Not Delivered to Admin, 2 = Delivered to Admin
@@ -159,12 +158,12 @@ public class CustomerInfo  {
         this.contractType = contractType;
     }
 
-    public Integer getCommissionType() {
-        return commissionType;
+    public Integer getContractSubcategory() {
+        return contractSubcategory;
     }
 
-    public void setCommissionType(Integer commissionType) {
-        this.commissionType = commissionType;
+    public void setContractSubcategory(Integer contractSubcategory) {
+        this.contractSubcategory = contractSubcategory;
     }
 
     public Date getStartDeliveryDate() {
@@ -189,5 +188,13 @@ public class CustomerInfo  {
 
     public void setCommission(BigDecimal commission) {
         this.commission = commission;
+    }
+
+    public String getAgentName() {
+        return agentName;
+    }
+
+    public void setAgentName(String agentName) {
+        this.agentName = agentName;
     }
 }
