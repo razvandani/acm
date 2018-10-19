@@ -1,6 +1,5 @@
 package com.gcr.acm.customerservice.commission;
 
-import com.gcr.acm.jpaframework.EntityAccessObjectBase;
 import com.gcr.acm.jpaframework.EntitySearchCriteria;
 
 import java.math.BigInteger;
@@ -12,8 +11,9 @@ import java.math.BigInteger;
  */
 public class AgentCommissionEntitySearchCriteria extends EntitySearchCriteria {
 	private BigInteger agentId;
-	private Integer commissionType;
+	private Integer contractType;
 	private Integer commissionSubcategory;
+	private Integer commissionSubcategoryElectricCurrent;
 
 	public BigInteger getAgentId() {
 		return agentId;
@@ -23,12 +23,12 @@ public class AgentCommissionEntitySearchCriteria extends EntitySearchCriteria {
 		this.agentId = agentId;
 	}
 
-	public Integer getCommissionType() {
-		return commissionType;
+	public Integer getContractType() {
+		return contractType;
 	}
 
-	public void setCommissionType(Integer commissionType) {
-		this.commissionType = commissionType;
+	public void setContractType(Integer contractType) {
+		this.contractType = contractType;
 	}
 
 	public Integer getCommissionSubcategory() {
@@ -37,5 +37,13 @@ public class AgentCommissionEntitySearchCriteria extends EntitySearchCriteria {
 
 	public void setCommissionSubcategory(Integer commissionSubcategory) {
 		this.commissionSubcategory = commissionSubcategory;
+	}
+
+	public Integer getCommissionSubcategoryElectricCurrent() {
+		return commissionSubcategoryElectricCurrent;
+	}
+
+	public void setCommissionSubcategoryElectricCurrent(Integer commissionSubcategoryElectricCurrent) {
+		this.commissionSubcategoryElectricCurrent = commissionSubcategoryElectricCurrent;
 	}
 }

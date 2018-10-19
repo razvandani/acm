@@ -15,6 +15,14 @@ public class CustomerInfo  {
     public static final Integer STATUS_NOT_DELIVERED_TO_ADMIN = 1;
     public static final Integer STATUS_DELIVERED_TO_ADMIN = 2;
 
+    public static final Integer PRODUCT_TYPE_ELECTRIC_ENERGY = 1;
+    public static final Integer PRODUCT_TYPE_NATURAL_GAS = 2;
+
+    public static final Integer CONTRACT_TYPE_FIX = 1;
+    public static final Integer CONTRACT_TYPE_EGO = 2;
+    public static final Integer CONTRACT_TYPE_FLEX = 3;
+    public static final Integer CONTRACT_TYPE_FLUX = 4;
+
     private String id;
     private String contractNumber;
     private String firstName;

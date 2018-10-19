@@ -66,22 +66,7 @@ public final class CustomerDetailsEnums {
 		B1(1, "B1"),
 		B2(2, "B2"),
 		B3(3, "B3"),
-		B4(4, "B4"),
-		KW50(5, "50kw"),
-		KW75(6, "75kw"),
-		KW100(7, "100kw"),
-		KW125(8, "125kw"),
-		KW150(9, "150kw"),
-		KW175(10, "175kw"),
-		KW200(11, "200kw"),
-		KW250(12, "250kw"),
-		KW300(13, "300kw"),
-		KW350(14, "350kw"),
-		KW400(15, "400kw"),
-		KW450(16, "450kw"),
-		KW500(17, "500kw"),
-		KW750(18, "750kw"),
-		KW1000(19, "1000kw");
+		B4(4, "B4");
 
 		private final Integer id;
 		private final String description;
@@ -100,17 +85,21 @@ public final class CustomerDetailsEnums {
 		}
 
 		public static String getCommissionSubcategoryById(Integer id) {
-			CommissionSubcategoryEnum commissionSubcategoryResult = null;
+			if (id <= 4) {
+				CommissionSubcategoryEnum commissionSubcategoryResult = null;
 
-			for (int i = 0; i < values().length; i++) {
-				CommissionSubcategoryEnum  commissionSubcategoryResultEnum = values()[i];
+				for (int i = 0; i < values().length; i++) {
+					CommissionSubcategoryEnum commissionSubcategoryResultEnum = values()[i];
 
-				if ( commissionSubcategoryResultEnum.getId().equals(id)) {
-					commissionSubcategoryResult =  commissionSubcategoryResultEnum;
+					if (commissionSubcategoryResultEnum.getId().equals(id)) {
+						commissionSubcategoryResult = commissionSubcategoryResultEnum;
+					}
 				}
-			}
 
-			return commissionSubcategoryResult != null ? commissionSubcategoryResult.getDescription() : null;
+				return commissionSubcategoryResult != null ? commissionSubcategoryResult.getDescription() : null;
+			} else {
+				return id + "KW";
+			}
 		}
 	}
 

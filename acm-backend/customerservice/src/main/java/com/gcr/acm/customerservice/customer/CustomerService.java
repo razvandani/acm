@@ -3,8 +3,10 @@ package com.gcr.acm.customerservice.customer;
 import com.gcr.acm.common.exception.NotFoundException;
 import com.gcr.acm.common.utils.Utilities;
 import com.gcr.acm.common.utils.ValidationUtils;
-import com.gcr.acm.customerservice.commissiontype.CommissionTypeEAO;
-import com.gcr.acm.customerservice.commissiontype.CommissionTypeEntity;
+import com.gcr.acm.customerservice.commission.AgentCommissionEntity;
+import com.gcr.acm.customerservice.commission.CommissionEAO;
+import com.gcr.acm.customerservice.commission.DefaultCommissionEntity;
+import com.gcr.acm.customerservice.external.IdentityAccessManagementServiceAdapter;
 import com.gcr.acm.customerservice.report.CustomerReportService;
 import com.gcr.acm.iam.user.UserIdentity;
 import com.gcr.acm.iam.user.UserInfo;
@@ -25,6 +27,7 @@ import java.util.List;
 
 import static com.gcr.acm.common.utils.ValidationUtils.validateAtLeastOneIsSet;
 import static com.gcr.acm.common.utils.ValidationUtils.validateRequiredObject;
+import javax.validation.ValidationException;
 
 /**
  * Service for customers.
@@ -141,8 +144,18 @@ public class CustomerService {
     }
 
     private BigDecimal calculateCommission(CustomerInfo customerInfo) {
-        AgentCommissionEntity agentCommissionEntity = commissionEAO.getAgentCommissionByPrimaryKey(new BigInteger(customerInfo.getAgentId()),
-                customerInfo.getContractType(), customerInfo.getCommissionSubcategory());
+        AgentCommissionEntity agentCommissionEntity = null;
+
+        if (customerInfo.getProductType().equals(CustomerInfo.PRODUCT_TYPE_NATURAL_GAS)) {
+            agentCommissionEntity =
+                    commissionEAO.getAgentCommissionForNaturalGas(new BigInteger(customerInfo.getAgentId()),
+                            customerInfo.getContractType(), customerInfo.getCommissionSubcategory());
+        } else if (customerInfo.getProductType().equals(CustomerInfo.PRODUCT_TYPE_ELECTRIC_ENERGY)) {
+            agentCommissionEntity =
+                    commissionEAO.getAgentCommissionForElectricCurrent(new BigInteger(customerInfo.getAgentId()),
+                            customerInfo.getContractType(), customerInfo.getCommissionSubcategory());
+        }
+
         BigDecimal commission;
 
         if (agentCommissionEntity != null) {
@@ -173,6 +186,17 @@ public class CustomerService {
         validateRequiredObject(customerInfo.getLastName(), "lastName", 50);
         validateRequiredObject(customerInfo.getProductType(), "productType");
         validateRequiredObject(customerInfo.getContractType(), "contractType");
+
+        if (customerInfo.getProductType().equals(CustomerInfo.PRODUCT_TYPE_NATURAL_GAS)) {
+            if (!customerInfo.getContractType().equals(CustomerInfo.CONTRACT_TYPE_FLUX)) {
+                throw new ValidationException("Invalid contract type");
+            }
+        } else if (customerInfo.getProductType().equals(CustomerInfo.PRODUCT_TYPE_ELECTRIC_ENERGY)) {
+            if (customerInfo.getContractType().equals(CustomerInfo.CONTRACT_TYPE_FLUX)) {
+                throw new ValidationException("Invalid contract type");
+            }
+        }
+
         validateRequiredObject(customerInfo.getCommissionSubcategory(), "commissionSubcategory");
         validateRequiredObject(customerInfo.getCountyId(), "countyId");
         validateRequiredObject(customerInfo.getLocation(), "location");

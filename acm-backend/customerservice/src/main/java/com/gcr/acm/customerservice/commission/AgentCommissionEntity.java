@@ -30,6 +30,12 @@ public class AgentCommissionEntity extends EntityBase {
 	@Column(name ="commission_subcategory")
 	private Integer commissionSubcategory;
 
+	@Column(name ="commission_subcategory_start")
+	private Integer commissionSubcategoryStart;
+
+	@Column(name ="commission_subcategory_end")
+	private Integer commissionSubcategoryEnd;
+
 	@Column(name ="commission_value")
 	private BigDecimal commissionValue;
 

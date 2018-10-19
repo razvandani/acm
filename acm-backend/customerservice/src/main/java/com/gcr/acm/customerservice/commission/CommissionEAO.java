@@ -1,7 +1,5 @@
 package com.gcr.acm.customerservice.commission;
 
-import com.gcr.acm.customerservice.customer.CustomerEntity;
-import com.gcr.acm.customerservice.customer.CustomerEntitySearchCriteria;
 import com.gcr.acm.jpaframework.EntityAccessObjectBase;
 import com.gcr.acm.jpaframework.JpaQueryBuilder;
 import org.springframework.stereotype.Component;
@@ -42,22 +40,38 @@ public class CommissionEAO extends EntityAccessObjectBase {
 			queryBuilder.addCondition("ac.agentId = :agentId");
 		}
 
-		if (searchCriteria.getCommissionType() != null) {
-			queryBuilder.addCondition("ac.commissionType = :commissionType");
+		if (searchCriteria.getContractType() != null) {
+			queryBuilder.addCondition("ac.contractType = :contractType");
 		}
 
 		if (searchCriteria.getCommissionSubcategory() != null) {
 			queryBuilder.addCondition("ac.commissionSubcategory = :commissionSubcategory");
 		}
+
+		if (searchCriteria.getCommissionSubcategoryElectricCurrent() != null) {
+			queryBuilder.addCondition(":commissionSubcategoryElectricCurrent BETWEEN ac.commissionSubcategoryStart AND ac.commissionSubcategoryEnd");
+		}
 	}
 
-	public AgentCommissionEntity getAgentCommissionByPrimaryKey(BigInteger agentId, Integer commissionType, Integer commissionSubcategory) {
+	public AgentCommissionEntity getAgentCommissionForNaturalGas(BigInteger agentId, Integer contractType, Integer commissionSubcategory) {
 		AgentCommissionEntitySearchCriteria agentCommissionEntitySearchCriteria = new AgentCommissionEntitySearchCriteria();
 		agentCommissionEntitySearchCriteria.setAgentId(agentId);
-		agentCommissionEntitySearchCriteria.setCommissionType(commissionType);
+		agentCommissionEntitySearchCriteria.setContractType(contractType);
 		agentCommissionEntitySearchCriteria.setCommissionSubcategory(commissionSubcategory);
 		List<AgentCommissionEntity> agentCommissionEntityList = findAgentCommissions(agentCommissionEntitySearchCriteria);
 		
+		return agentCommissionEntityList.size() == 1 ? agentCommissionEntityList.get(0) : null;
+	}
+
+	public AgentCommissionEntity getAgentCommissionForElectricCurrent(
+			BigInteger agentId, Integer contractType, Integer commissionSubcategory) {
+		AgentCommissionEntitySearchCriteria agentCommissionEntitySearchCriteria = new AgentCommissionEntitySearchCriteria();
+		agentCommissionEntitySearchCriteria.setAgentId(agentId);
+		agentCommissionEntitySearchCriteria.setContractType(contractType);
+		agentCommissionEntitySearchCriteria.setCommissionSubcategoryElectricCurrent(commissionSubcategory);
+
+		List<AgentCommissionEntity> agentCommissionEntityList = findAgentCommissions(agentCommissionEntitySearchCriteria);
+
 		return agentCommissionEntityList.size() == 1 ? agentCommissionEntityList.get(0) : null;
 	}
 	

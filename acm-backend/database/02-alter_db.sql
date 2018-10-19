@@ -139,7 +139,7 @@ CREATE TABLE IF NOT EXISTS `customer` (
   `first_name` varchar(100) NOT NULL,
   `last_name` varchar(100) NOT NULL,
   product_type INT NOT NULL, -- 1 = Electric energy, 2 = Natural Gas
-  contract_type INT NOT NULL, -- 1 = Fix, 2 = E-go, 3 = Flex, 4 = Flux
+  contract_type INT NOT NULL, -- 1 = Fix abonament 6 luni, 2 = E-go citire lunara, 3 = Flex citire lunara, 4 = Flux gaz
   commission_subcategory INT NOT NULL, -- 1 = B1, 2 = B2, 3 = B3, 4 = B4
   `county_id` int(11) NOT NULL,
   `location` varchar(100) NOT NULL,
@@ -182,9 +182,12 @@ CREATE TABLE IF NOT EXISTS `agent_commission` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `agent_id` bigint NOT NULL,
   `commission_type` int(11) NOT NULL,
-  `commission_subcategory` int(11) NOT NULL,
+  `commission_subcategory` int(11) NOT NULL, -- this is only spplicable for Gas, 1 = B1, 2 = B2, 3 = B3, 4 = B4
+  `commission_subcategory_start` int(11) NOT NULL, -- this is applicable for Electric current, for ex 5KW - 25KW
+  `commission_subcategory_end` int(11) NOT NULL, -- this is applicable for Electric current, for ex 5KW - 25KW
   `commission_value` decimal(10,0) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `agent_commission_UNIQUE` (`agent_id`, commission_type, commission_subcategory)
+  KEY `agent_commission_gas` (`agent_id`, commission_type, commission_subcategory),
+  KEY `agent_commission_electric` (`agent_id`, commission_type, commission_subcategory_start, commission_subcategory_end)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

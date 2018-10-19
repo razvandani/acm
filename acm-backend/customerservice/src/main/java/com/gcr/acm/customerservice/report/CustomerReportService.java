@@ -91,12 +91,6 @@ import static com.gcr.acm.customerservice.customer.CustomerDetailsEnums.ProductT
 								CustomerDetailsEnums.CommissionSubcategoryEnum.getCommissionSubcategoryById(customerInfo.getCommissionSubcategory()),
 								customerInfo.getCountyName(), customerInfo.getLocation(), customerInfo.getPhoneNumber(),
 								customerInfo.getStartDeliveryDate(), customerInfo.getAgentName() });
-
-			// todo 930 RON
-			// todo 700 RON
-
-				// todo 250 euro
-				// todo 50 euro
 			}
 		}
 
