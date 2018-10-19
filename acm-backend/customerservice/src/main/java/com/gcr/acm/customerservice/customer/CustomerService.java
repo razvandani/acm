@@ -75,7 +75,7 @@ public class CustomerService {
         customerInfo.setLastName(customerEntity.getLastName());
         customerInfo.setProductType(customerEntity.getProductType());
         customerInfo.setContractType(customerEntity.getContractType());
-        customerInfo.setContractSubcategory(customerEntity.getCommissionSubcategory());
+        customerInfo.setCommissionSubcategory(customerEntity.getCommissionSubcategory());
         customerInfo.setCountyId(customerEntity.getCountyId());
         customerInfo.setIsActive(customerEntity.getIsActive());
         customerInfo.setLocation(customerEntity.getLocation());
@@ -83,10 +83,7 @@ public class CustomerService {
         customerInfo.setStreetNumber(customerEntity.getStreetNumber());
         customerInfo.setContractDate(customerEntity.getContractDate());
         customerInfo.setAgentId(customerEntity.getAgentId().toString());
-
-        UserInfo userInfo = identityAccessManagementServiceAdapter.getUser(customerEntity.getAgentId());
-        customerInfo.setAgentName(userInfo.getFirstName() + " " + userInfo.getLastName());
-
+        customerInfo.setAgentName(customerEntity.getAgentName());
         customerInfo.setStartDeliveryDate(customerEntity.getStartDeliveryDate());
         customerInfo.setStatus(customerEntity.getStatus());
         customerInfo.setCommission(customerEntity.getCommission());
@@ -122,9 +119,9 @@ public class CustomerService {
         customerEntity.setLastName(customerInfo.getLastName());
         customerEntity.setProductType(customerInfo.getProductType());
         customerEntity.setContractType(customerInfo.getContractType());
-        customerEntity.setCommissionSubcategory(customerInfo.getContractSubcategory());
+        customerEntity.setCommissionSubcategory(customerInfo.getCommissionSubcategory());
 
-//        CommissionTypeEntity commissionTypeEntity = commissionTypeEAO.getContractSubcategory(customerInfo.getContractSubcategory());
+//        CommissionTypeEntity commissionTypeEntity = commissionTypeEAO.getCommissionSubcategory(customerInfo.getCommissionSubcategory());
         customerEntity.setCommission(customerInfo.getCommission());
 
         customerEntity.setCountyId(customerInfo.getCountyId());
@@ -136,6 +133,9 @@ public class CustomerService {
         customerEntity.setAgentId(new BigInteger(customerInfo.getAgentId()));
         customerEntity.setPhoneNumber(customerInfo.getPhoneNumber());
         customerEntity.setStartDeliveryDate(customerInfo.getStartDeliveryDate());
+
+        UserInfo userInfo = identityAccessManagementServiceAdapter.getUser(customerEntity.getAgentId());
+        customerEntity.setAgentName(userInfo.getFirstName() + " " + userInfo.getLastName());
 
         return customerEntity;
     }
@@ -152,7 +152,7 @@ public class CustomerService {
         validateRequiredObject(customerInfo.getLastName(), "lastName", 50);
         validateRequiredObject(customerInfo.getProductType(), "productType");
         validateRequiredObject(customerInfo.getContractType(), "contractType");
-        validateRequiredObject(customerInfo.getContractSubcategory(), "commissionType");
+        validateRequiredObject(customerInfo.getCommissionSubcategory(), "commissionSubcategory");
         validateRequiredObject(customerInfo.getCountyId(), "countyId");
         validateRequiredObject(customerInfo.getLocation(), "location");
         validateRequiredObject(customerInfo.getStreet(), "street");

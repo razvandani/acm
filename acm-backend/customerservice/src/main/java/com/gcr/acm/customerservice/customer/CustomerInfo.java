@@ -32,7 +32,7 @@ public class CustomerInfo  {
     private String countyName; // readonly
     private Integer productType; // 1 = Electric energy, 2 = Natural Gas
     private Integer contractType; // 1 = Fix, 2 = E-go, 3 = Flex, 4 = Flux
-    private Integer contractSubcategory; // 1 = B1, 2 = B2, 3 = B3, 4 = B4 and so on, see CustomerDetailsEnums.ContractSubcategoryEnum
+    private Integer commissionSubcategory; // 1 = B1, 2 = B2, 3 = B3, 4 = B4 and so on, see CustomerDetailsEnums.ContractSubcategoryEnum
     @JsonSerialize(using = JsonDateSerializer.class)
     private Date startDeliveryDate; // date when the service (energy or gas) starts
     private Integer status; // 1 = Not Delivered to Admin, 2 = Delivered to Admin
@@ -158,12 +158,12 @@ public class CustomerInfo  {
         this.contractType = contractType;
     }
 
-    public Integer getContractSubcategory() {
-        return contractSubcategory;
+    public Integer getCommissionSubcategory() {
+        return commissionSubcategory;
     }
 
-    public void setContractSubcategory(Integer contractSubcategory) {
-        this.contractSubcategory = contractSubcategory;
+    public void setCommissionSubcategory(Integer commissionSubcategory) {
+        this.commissionSubcategory = commissionSubcategory;
     }
 
     public Date getStartDeliveryDate() {

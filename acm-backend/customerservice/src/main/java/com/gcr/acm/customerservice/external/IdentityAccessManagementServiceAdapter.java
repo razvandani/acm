@@ -27,16 +27,12 @@ import java.util.Set;
 public class IdentityAccessManagementServiceAdapter extends BaseServiceAdapter {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(IdentityAccessManagementServiceAdapter.class);
-	public static final String SERVICE_NAME = "iam-oss";
+	public static final String SERVICE_NAME = "iam";
 
 	@Autowired
 	private RestClient restClient;
 
-	public UserInfo getUserInfoForJob(BigInteger userId) throws Exception{
-		return restClient.get(chooseService(SERVICE_NAME).getUri() + "/iam-oss/getUserInfoForJob/" + userId , UserInfo.class);
-	}
-
-	public UserInfo getUser(BigInteger userId) throws Exception {
+	public UserInfo getUser(BigInteger userId) {
 		String authorizationHeader = UserIdentity.getAuthorizationHeader();
 		UserInfo userInfo;
 
@@ -44,16 +40,16 @@ public class IdentityAccessManagementServiceAdapter extends BaseServiceAdapter {
 			Map<String, String> headersMap = new HashMap<>();
 			headersMap.put("Authorization", getSuperUserAuthorizationHeader());
 
-			userInfo = restClient.get(chooseService(SERVICE_NAME).getUri() + "/iam-oss/" + userId + "/", UserInfo.class, headersMap);
+			userInfo = restClient.get(chooseService(SERVICE_NAME).getUri() + "/iam/" + userId + "/", UserInfo.class, headersMap);
 		} else {
-			userInfo = restClient.get(chooseService(SERVICE_NAME).getUri() + "/iam-oss/" + userId + "/", UserInfo.class);
+			userInfo = restClient.get(chooseService(SERVICE_NAME).getUri() + "/iam/" + userId + "/", UserInfo.class);
 		}
 
 		return userInfo;
 	}
 
 	public List<UserInfo> findUsers(SearchUserCriteria searchUserCriteria) {
-		return restClient.post(chooseService(SERVICE_NAME).getUri() + "/iam-oss/find", searchUserCriteria,
+		return restClient.post(chooseService(SERVICE_NAME).getUri() + "/iam/find", searchUserCriteria,
 				UserInfoListResponse.class, null).getUserInfoList();
 	}
 }

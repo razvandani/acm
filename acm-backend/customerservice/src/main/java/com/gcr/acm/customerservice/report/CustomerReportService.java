@@ -75,7 +75,7 @@ import static com.gcr.acm.customerservice.customer.CustomerDetailsEnums.ProductT
 		int indiceMap = 1;
 		Map<String, Object[]> data = new TreeMap<>();
 		Object[] tableHeader = new Object[] { "Numar curent", "Numar de contract", "Data Contractului", "Numele",
-				"Enegie/gaz", "Tipul de contract", "Categoria", "Judet", "Localitate", "Telefon", "Data intrare in furnizare" };
+				"Enegie/gaz", "Tipul de contract", "Categoria", "Judet", "Localitate", "Telefon", "Data intrare in furnizare", "Agent" };
 		data.put(Integer.toString(indiceMap), tableHeader);
 
 		if (!customerInfoList.isEmpty()) {
@@ -85,14 +85,18 @@ import static com.gcr.acm.customerservice.customer.CustomerDetailsEnums.ProductT
 						ELECTRIC_ENERGY.getDescription() :
 						NATURAL_GAS.getDescription();
 				data.put(Integer.toString(indiceMap),
-						new Object[] { indiceMap - 1, customerInfo.getLastName() + customerInfo.getFirstName(), productType,
+						new Object[] { indiceMap - 1, customerInfo.getContractNumber(),
+								customerInfo.getContractDate(), customerInfo.getLastName() + customerInfo.getFirstName(), productType,
 								getContractTypeByTypeId(customerInfo.getContractType()),
-								CustomerDetailsEnums.CommissionSubcategoryEnum.getCommissionSubcategoryById(customerInfo.getContractSubcategory()),
+								CustomerDetailsEnums.CommissionSubcategoryEnum.getCommissionSubcategoryById(customerInfo.getCommissionSubcategory()),
 								customerInfo.getCountyName(), customerInfo.getLocation(), customerInfo.getPhoneNumber(),
 								customerInfo.getStartDeliveryDate(), customerInfo.getAgentName() });
 
 			// todo 930 RON
 			// todo 700 RON
+
+				// todo 250 euro
+				// todo 50 euro
 			}
 		}
 
