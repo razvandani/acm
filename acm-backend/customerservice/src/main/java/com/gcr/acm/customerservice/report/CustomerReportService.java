@@ -1,9 +1,6 @@
 package com.gcr.acm.customerservice.report;
 
-import static com.gcr.acm.customerservice.customer.CustomerDetailsEnums.ProductTypeEnum.ELECTRIC_ENERGY;
-import static com.gcr.acm.customerservice.customer.CustomerDetailsEnums.ProductTypeEnum.NATURAL_GAS;
-import static com.gcr.acm.customerservice.customer.CustomerDetailsEnums.ContractTypeEnum.getContractTypeByTypeId;
-
+import com.gcr.acm.customerservice.customer.CustomerDetailsEnums;
 import com.gcr.acm.customerservice.customer.CustomerInfo;
 import com.gcr.acm.customerservice.customer.CustomerService;
 import com.gcr.acm.customerservice.customer.SearchCustomerCriteria;
@@ -17,14 +14,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
+import static com.gcr.acm.customerservice.customer.CustomerDetailsEnums.ContractTypeEnum.*;
+import static com.gcr.acm.customerservice.customer.CustomerDetailsEnums.ProductTypeEnum.ELECTRIC_ENERGY;
+import static com.gcr.acm.customerservice.customer.CustomerDetailsEnums.ProductTypeEnum.NATURAL_GAS;
 
 /**
  * Service for customer reports.
@@ -43,7 +40,7 @@ import java.util.*;
 	 */
 	@Transactional(readOnly = true)
 	public String getCustomerReportInExcelFormat(SearchCustomerCriteria searchCustomerCriteria)
-			throws IOException {
+			throws Exception {
 		List<CustomerInfo> customerInfoList = customerService.findCustomers(searchCustomerCriteria);
 
 		return exportExcel(customerInfoList);
@@ -53,23 +50,21 @@ import java.util.*;
 			throws IOException {
 
 		// creates an empty  workbook
-		XSSFWorkbook xssfWorkbook = new XSSFWorkbook();
+		XSSFWorkbook workbook = new XSSFWorkbook();
 
 		//creates a blank sheet
-		XSSFSheet xssfWorkbookSheet = xssfWorkbook.createSheet("Participant");
+		XSSFSheet sheet = workbook.createSheet("Participant");
 
-		Map<String, Object[]> customerInfoMap = getCustomerInfoMap(customerInfoList);
+		Map<String, Object[]> data = getCustomerInfoMap(customerInfoList);
 
 		// iteration on the map data and writing in the excel sheet
-		createRowsFromMapOfArrays(xssfWorkbookSheet, customerInfoMap);
+		createRowsFromMapOfArrays(sheet, data);
 
 		// Writing the excel file as an byte[]
 		// todo muie psd
 		ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
-		xssfWorkbook.write(outByteStream);
+		workbook.write(outByteStream);
 		byte[] outArray = outByteStream.toByteArray();
-
-//		xssfWorkbook.delete();
 
 		// apply base64 encoder
 		return new String(Base64.getEncoder().encode(outArray), "UTF-8");
@@ -78,9 +73,9 @@ import java.util.*;
 
 	private Map<String, Object[]> getCustomerInfoMap(List<CustomerInfo> customerInfoList) {
 		int indiceMap = 1;
-		Map<String, Object[]> data = new TreeMap<String, Object[]>();
+		Map<String, Object[]> data = new TreeMap<>();
 		Object[] tableHeader = new Object[] { "Numar curent", "Numar de contract", "Data Contractului", "Numele",
-				"Enegie/gaz", "Tipul de contract", "Categoria", "Judet", "Localitate", "Telefon", "Data intrare in furnizare" };
+				"Enegie/gaz", "Tipul de contract", "Categoria", "Judet", "Localitate", "Telefon", "Data intrare in furnizare", "Agent" };
 		data.put(Integer.toString(indiceMap), tableHeader);
 
 		if (!customerInfoList.isEmpty()) {
@@ -89,13 +84,19 @@ import java.util.*;
 				String productType = ELECTRIC_ENERGY.getTypeId().equals(customerInfo.getProductType()) ?
 						ELECTRIC_ENERGY.getDescription() :
 						NATURAL_GAS.getDescription();
-
 				data.put(Integer.toString(indiceMap),
-						new Object[] { indiceMap - 1, customerInfo.getContractNumber(), customerInfo.getContractDate(),
-								customerInfo.getLastName() + customerInfo.getFirstName(), productType,
-								getContractTypeByTypeId(customerInfo.getContractType()), customerInfo.getCommission(),
+						new Object[] { indiceMap - 1, customerInfo.getContractNumber(),
+								customerInfo.getContractDate(), customerInfo.getLastName() + customerInfo.getFirstName(), productType,
+								getContractTypeByTypeId(customerInfo.getContractType()),
+								CustomerDetailsEnums.CommissionSubcategoryEnum.getCommissionSubcategoryById(customerInfo.getCommissionSubcategory()),
 								customerInfo.getCountyName(), customerInfo.getLocation(), customerInfo.getPhoneNumber(),
-								customerInfo.getStartDeliveryDate() });
+								customerInfo.getStartDeliveryDate(), customerInfo.getAgentName() });
+
+			// todo 930 RON
+			// todo 700 RON
+
+				// todo 250 euro
+				// todo 50 euro
 			}
 		}
 

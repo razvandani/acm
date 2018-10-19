@@ -3,12 +3,12 @@ package com.gcr.acm.customerservice.customer;
 import com.gcr.acm.common.exception.NotFoundException;
 import com.gcr.acm.common.utils.Utilities;
 import com.gcr.acm.common.utils.ValidationUtils;
-import com.gcr.acm.customerservice.commission.AgentCommissionEntity;
-import com.gcr.acm.customerservice.commission.CommissionEAO;
-import com.gcr.acm.customerservice.commission.DefaultCommissionEntity;
+import com.gcr.acm.customerservice.commissiontype.CommissionTypeEAO;
+import com.gcr.acm.customerservice.commissiontype.CommissionTypeEntity;
 import com.gcr.acm.customerservice.report.CustomerReportService;
 import com.gcr.acm.iam.user.UserIdentity;
 import com.gcr.acm.iam.user.UserInfo;
+import com.gcr.acm.restclient.RestClient;
 import com.gcr.acm.restclient.exception.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +42,12 @@ public class CustomerService {
     @Autowired
     private CustomerReportService customerReportService;
 
+    @Autowired
+    private IdentityAccessManagementServiceAdapter identityAccessManagementServiceAdapter;
+
+    @Autowired
+    private RestClient restClient;
+
     private static final Logger log = LoggerFactory.getLogger(CustomerService.class);
 
     /**
@@ -51,7 +57,8 @@ public class CustomerService {
      * @return The saved customer info
      */
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public CustomerInfo saveCustomer(CustomerInfo customerInfo) {
+    public CustomerInfo saveCustomer(CustomerInfo customerInfo)
+            throws Exception {
         validateCustomer(customerInfo);
 
         CustomerEntity customerEntity = populateCustomerEntity(customerInfo);
@@ -59,7 +66,8 @@ public class CustomerService {
         return getCustomerInfo(customerEAO.saveCustomer(customerEntity));
     }
 
-    public CustomerInfo getCustomerInfo(CustomerEntity customerEntity) {
+    public CustomerInfo getCustomerInfo(CustomerEntity customerEntity)
+            throws Exception {
         CustomerInfo customerInfo = new CustomerInfo();
         customerInfo.setId(customerEntity.getId().toString());
         customerInfo.setContractNumber(customerEntity.getContractNumber());
@@ -76,6 +84,7 @@ public class CustomerService {
         customerInfo.setStreetNumber(customerEntity.getStreetNumber());
         customerInfo.setContractDate(customerEntity.getContractDate());
         customerInfo.setAgentId(customerEntity.getAgentId().toString());
+        customerInfo.setAgentName(customerEntity.getAgentName());
         customerInfo.setStartDeliveryDate(customerEntity.getStartDeliveryDate());
         customerInfo.setStatus(customerEntity.getStatus());
         customerInfo.setCommission(customerEntity.getCommission());
@@ -124,6 +133,9 @@ public class CustomerService {
         customerEntity.setAgentId(new BigInteger(customerInfo.getAgentId()));
         customerEntity.setPhoneNumber(customerInfo.getPhoneNumber());
         customerEntity.setStartDeliveryDate(customerInfo.getStartDeliveryDate());
+
+        UserInfo userInfo = identityAccessManagementServiceAdapter.getUser(customerEntity.getAgentId());
+        customerEntity.setAgentName(userInfo.getFirstName() + " " + userInfo.getLastName());
 
         return customerEntity;
     }
@@ -185,7 +197,8 @@ public class CustomerService {
      * @return The List of CustomerInfo objects
      */
     @Transactional(readOnly = true)
-    public List<CustomerInfo> findCustomers(SearchCustomerCriteria searchCustomerCriteria) {
+    public List<CustomerInfo> findCustomers(SearchCustomerCriteria searchCustomerCriteria)
+            throws Exception {
         validateFindCustomers(searchCustomerCriteria);
 
         List<CustomerInfo> customerInfoList = new ArrayList<>();
@@ -267,7 +280,8 @@ public class CustomerService {
      * @return The CustomerInfo
      */
     @Transactional(readOnly = true)
-    public CustomerInfo getCustomer(BigInteger customerId) {
+    public CustomerInfo getCustomer(BigInteger customerId)
+            throws Exception {
         ValidationUtils.validateRequiredObject(customerId, "customerId");
         UserInfo loginUser = UserIdentity.getLoginUser();
 

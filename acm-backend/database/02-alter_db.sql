@@ -147,6 +147,7 @@ CREATE TABLE IF NOT EXISTS `customer` (
   `contract_date` date NOT NULL,
   `is_active` bit(1) NOT NULL,
   `agent_id` bigint(20) NOT NULL,
+  agent_name varchar(100) NOT NULL,
   street VARCHAR(100) NOT NULL,
   street_number VARCHAR(10) NOT NULL,
   start_delivery_date date NOT NULL,

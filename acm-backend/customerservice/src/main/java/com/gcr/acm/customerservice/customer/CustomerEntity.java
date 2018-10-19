@@ -69,13 +69,8 @@ public class CustomerEntity extends EntityBase {
     @Column(name ="status")
     private Integer status; // 1 = Not Delivered to Admin, 2 = Delivered to Admin
 
-    // todo seria, numar si cnp
-
-    // todo locul de consum adresa
-
-    // todo listare contract?
-
-
+    @Column(name ="agent_name")
+    private String agentName;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "county_id", nullable = false, insertable = false, updatable = false)
@@ -231,5 +226,13 @@ public class CustomerEntity extends EntityBase {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getAgentName() {
+        return agentName;
+    }
+
+    public void setAgentName(String agentName) {
+        this.agentName = agentName;
     }
 }

@@ -28,7 +28,7 @@ public class CustomerInfo  {
     private Date contractDate;
     private Boolean isActive;
     private String agentId;
-    // todo agent name?
+    private String agentName; // readonly
     private String countyName; // readonly
     private Integer productType; // 1 = Electric energy, 2 = Natural Gas
     private Integer contractType; // 1 = Fix, 2 = E-go, 3 = Flex, 4 = Flux
@@ -162,8 +162,8 @@ public class CustomerInfo  {
         return commissionSubcategory;
     }
 
-    public void setCommissionSubcategory(Integer commissionType) {
-        this.commissionSubcategory = commissionType;
+    public void setCommissionSubcategory(Integer commissionSubcategory) {
+        this.commissionSubcategory = commissionSubcategory;
     }
 
     public Date getStartDeliveryDate() {
@@ -188,5 +188,13 @@ public class CustomerInfo  {
 
     public void setCommission(BigDecimal commission) {
         this.commission = commission;
+    }
+
+    public String getAgentName() {
+        return agentName;
+    }
+
+    public void setAgentName(String agentName) {
+        this.agentName = agentName;
     }
 }
