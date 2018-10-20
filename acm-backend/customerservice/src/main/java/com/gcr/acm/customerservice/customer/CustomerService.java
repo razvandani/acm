@@ -5,7 +5,6 @@ import com.gcr.acm.common.utils.Utilities;
 import com.gcr.acm.common.utils.ValidationUtils;
 import com.gcr.acm.customerservice.commission.AgentCommissionEntity;
 import com.gcr.acm.customerservice.commission.CommissionEAO;
-import com.gcr.acm.customerservice.commission.DefaultCommissionEntity;
 import com.gcr.acm.customerservice.external.IdentityAccessManagementServiceAdapter;
 import com.gcr.acm.customerservice.report.CustomerReportService;
 import com.gcr.acm.iam.user.UserIdentity;
@@ -69,8 +68,7 @@ public class CustomerService {
         return getCustomerInfo(customerEAO.saveCustomer(customerEntity));
     }
 
-    public CustomerInfo getCustomerInfo(CustomerEntity customerEntity)
-            throws Exception {
+    public CustomerInfo getCustomerInfo(CustomerEntity customerEntity) {
         CustomerInfo customerInfo = new CustomerInfo();
         customerInfo.setId(customerEntity.getId().toString());
         customerInfo.setContractNumber(customerEntity.getContractNumber());
@@ -161,14 +159,7 @@ public class CustomerService {
         if (agentCommissionEntity != null) {
             commission = agentCommissionEntity.getCommissionValue();
         } else {
-            DefaultCommissionEntity defaultCommissionEntity =
-                    commissionEAO.getDefaultCommissionByPrimaryKey(customerInfo.getContractType(), customerInfo.getCommissionSubcategory());
-
-            if (defaultCommissionEntity == null) {
-                throw new NotFoundException("cannot find a default commission");
-            }
-
-            commission = defaultCommissionEntity.getCommissionValue();
+            throw new ValidationException("commission not found");
         }
 
         return commission;

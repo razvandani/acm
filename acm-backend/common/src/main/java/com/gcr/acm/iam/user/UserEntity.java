@@ -1,11 +1,13 @@
 package com.gcr.acm.iam.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gcr.acm.customerservice.commission.AgentCommissionEntity;
 import com.gcr.acm.jpaframework.EntityBase;
 
 import javax.persistence.*;
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * JPA entity for user table.
@@ -59,6 +61,9 @@ public class UserEntity extends EntityBase {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id", nullable = false, insertable = false, updatable = false)
     private RoleEntity roleEntity;
+
+    @OneToMany(mappedBy = "agentEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<AgentCommissionEntity> agentCommissionEntitySet;
 
     public BigInteger getUserId() {
         return userId;
@@ -154,5 +159,13 @@ public class UserEntity extends EntityBase {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public Set<AgentCommissionEntity> getAgentCommissionEntitySet() {
+        return agentCommissionEntitySet;
+    }
+
+    public void setAgentCommissionEntitySet(Set<AgentCommissionEntity> agentCommissionEntitySet) {
+        this.agentCommissionEntitySet = agentCommissionEntitySet;
     }
 }

@@ -2,6 +2,7 @@ package com.gcr.acm.iam.user;
 
 import com.gcr.acm.common.exception.NotFoundException;
 import com.gcr.acm.common.utils.Utilities;
+import com.gcr.acm.customerservice.commission.AgentCommissionEntity;
 import com.gcr.acm.iam.permission.PermissionEAO;
 import com.gcr.acm.methodcache.CacheComponent;
 import com.gcr.acm.methodcache.MethodCache;
@@ -19,14 +20,9 @@ import org.springframework.util.Base64Utils;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.ValidationException;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
-import static com.gcr.acm.common.utils.ValidationUtils.validateMutuallyExclusiveObjects;
-import static com.gcr.acm.common.utils.ValidationUtils.validateRangeLength;
-import static com.gcr.acm.common.utils.ValidationUtils.validateRequiredObject;
+import static com.gcr.acm.common.utils.ValidationUtils.*;
 
 /**
  * User service.
@@ -37,6 +33,11 @@ import static com.gcr.acm.common.utils.ValidationUtils.validateRequiredObject;
 public class UserService {
 
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
+
+    public static final Integer CONTRACT_TYPE_FIX = 1;
+    public static final Integer CONTRACT_TYPE_EGO = 2;
+    public static final Integer CONTRACT_TYPE_FLEX = 3;
+    public static final Integer CONTRACT_TYPE_FLUX = 4;
 
     @Autowired
     private PasswordEncoder standardPasswordEncoder;
@@ -151,6 +152,10 @@ public class UserService {
         validateRequiredObject(userInfo.getEmail(), "email", 45);
         validateRequiredObject(userInfo.getFirstName(), "firstName", 45);
         validateRequiredObject(userInfo.getLastName(), "lastName", 45);
+        validateRequiredObject(userInfo.getPhoneNumber(), "phoneNumber", 20);
+        validateRequiredObject(userInfo.getRoleId(), "roleId");
+
+        validateCommissions(userInfo.getAgentCommissionInfoList());
 
         if (UserIdentity.getLoginUserName() != null) {
             loginUserInfo = getUserByUserName(UserIdentity.getLoginUserName());
@@ -170,6 +175,28 @@ public class UserService {
 
         if (loginUserInfo == null) {
             throw new ValidationException("invalid roleId");
+        }
+    }
+
+    private void validateCommissions(List<UserInfo.AgentCommissionInfo> agentCommissionInfoList) {
+        validateRequiredObject(agentCommissionInfoList, "agentCommissionInfoList");
+
+        for (UserInfo.AgentCommissionInfo agentCommissionInfo : agentCommissionInfoList) {
+            validateRequiredObject(agentCommissionInfo, "agentCommissionInfo");
+            validateRequiredObject(agentCommissionInfo.getCommissionType(), "commissionType");
+
+            if (agentCommissionInfo.getCommissionType().equals(CONTRACT_TYPE_FLUX)) {
+                validateRequiredObject(agentCommissionInfo.getCommissionSubcategory(), "commissionSubcategory");
+            } else {
+                validateRequiredObject(agentCommissionInfo.getCommissionSubcategoryStart(), "commissionSubcategoryStart");
+                validateRequiredObject(agentCommissionInfo.getCommissionSubcategoryEnd(), "commissionSubcategoryEnd");
+
+                if (agentCommissionInfo.getCommissionSubcategoryStart().compareTo(agentCommissionInfo.getCommissionSubcategoryEnd()) > 0) {
+                    throw new ValidationException("commissionSubcategoryStart cannot be after commissionSubcategoryEnd");
+                }
+            }
+
+            validateRequiredObject(agentCommissionInfo.getCommissionValue(), "commissionValue");
         }
     }
 
@@ -240,7 +267,55 @@ public class UserService {
         userEntity.setEmail(userInfo.getEmail());
         userEntity.setCreatedDttm(userInfo.getCreatedDttm());
 
+        if (userInfo.isAgent()) {
+            populateAgentCommissionEntityList(userInfo, userEntity);
+        }
+
         return userEntity;
+    }
+
+    private void populateAgentCommissionEntityList(UserInfo userInfo, UserEntity userEntity) {
+        Set<AgentCommissionEntity> agentCommissionEntitySet = userEntity.getAgentCommissionEntitySet();
+
+        if (agentCommissionEntitySet == null) {
+            agentCommissionEntitySet = new HashSet<>();
+            userEntity.setAgentCommissionEntitySet(agentCommissionEntitySet);
+        }
+
+        // prepare maps that are needed in order to identify what entities news to be added, modified and deleted
+        Map<Integer, UserInfo.AgentCommissionInfo> agentCommissionInfoByIdMap = new HashMap<>();
+
+        if (userInfo.getAgentCommissionInfoList() != null) {
+            for (UserInfo.AgentCommissionInfo agentCommissionInfo : userInfo.getAgentCommissionInfoList()) {
+                agentCommissionInfoByIdMap.put(agentCommissionInfo.getId(), agentCommissionInfo);
+            }
+        }
+
+        Map<Integer, AgentCommissionEntity> agentCommissionEntityByIdMap = new HashMap<>();
+
+        for (AgentCommissionEntity agentCommissionEntity : agentCommissionEntitySet) {
+            agentCommissionEntityByIdMap.put(agentCommissionEntity.getId(), agentCommissionEntity);
+        }
+
+        // add or update AgentCommissionEntity's
+        if (userInfo.getAgentCommissionInfoList() != null) {
+            for (UserInfo.AgentCommissionInfo agentCommissionInfo : userInfo.getAgentCommissionInfoList()) {
+                AgentCommissionEntity agentCommissionEntity = agentCommissionEntityByIdMap.get(agentCommissionInfo.getId());
+
+                if (agentCommissionEntity == null) {
+                    agentCommissionEntity = new AgentCommissionEntity();
+                    agentCommissionEntitySet.add(agentCommissionEntity);
+                }
+
+                agentCommissionEntity.setCommissionType(agentCommissionInfo.getCommissionType());
+                agentCommissionEntity.setCommissionSubcategory(agentCommissionInfo.getCommissionSubcategory());
+                agentCommissionEntity.setCommissionValue(agentCommissionInfo.getCommissionValue());
+                agentCommissionEntity.setAgentEntity(userEntity);
+            }
+        }
+
+        // remove relevant entities
+        agentCommissionEntitySet.removeIf(agentCommissionEntity -> !agentCommissionInfoByIdMap.containsKey(agentCommissionEntity.getId()));
     }
 
     @Transactional(readOnly = true)

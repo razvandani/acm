@@ -169,22 +169,13 @@ CREATE TABLE IF NOT EXISTS `commission_type` (
   UNIQUE KEY `name_UNIQUE` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `default_commission` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `commission_type` int(11) NOT NULL,
-  `commission_subcategory` varchar(45) NOT NULL,
-  `commission_value` varchar(45) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `commission_type_UNIQUE` (`commission_type`, commission_subcategory)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 CREATE TABLE IF NOT EXISTS `agent_commission` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `agent_id` bigint NOT NULL,
   `commission_type` int(11) NOT NULL,
-  `commission_subcategory` int(11) NOT NULL, -- this is only spplicable for Gas, 1 = B1, 2 = B2, 3 = B3, 4 = B4
-  `commission_subcategory_start` int(11) NOT NULL, -- this is applicable for Electric current, for ex 5KW - 25KW
-  `commission_subcategory_end` int(11) NOT NULL, -- this is applicable for Electric current, for ex 5KW - 25KW
+  `commission_subcategory` int(11) NULL, -- this is only spplicable for Gas, 1 = B1, 2 = B2, 3 = B3, 4 = B4
+  `commission_subcategory_start` int(11)  NULL, -- this is applicable for Electric current, for ex 5KW - 25KW
+  `commission_subcategory_end` int(11) NULL, -- this is applicable for Electric current, for ex 5KW - 25KW
   `commission_value` decimal(10,0) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `agent_commission_gas` (`agent_id`, commission_type, commission_subcategory),

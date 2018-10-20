@@ -74,43 +74,4 @@ public class CommissionEAO extends EntityAccessObjectBase {
 
 		return agentCommissionEntityList.size() == 1 ? agentCommissionEntityList.get(0) : null;
 	}
-	
-	/**
-	 * Finds the default commissions for the specified search criteria.
-	 *
-	 * @param searchCriteria    The DefaultCommissionEntitySearchCriteria
-	 * @return                  The List of DefaultCommissionEntity objects
-	 */
-	public List<DefaultCommissionEntity> findDefaultCommissions(DefaultCommissionEntitySearchCriteria searchCriteria) {
-		JpaQueryBuilder queryBuilder = constructFindDefaultCommissionsBuilder(searchCriteria);
-
-		return findEntities(queryBuilder, searchCriteria);
-	}
-
-	private JpaQueryBuilder constructFindDefaultCommissionsBuilder(DefaultCommissionEntitySearchCriteria searchCriteria) {
-		JpaQueryBuilder queryBuilder = new JpaQueryBuilder("DefaultCommissionEntity", "dc");
-
-		populateQueryBuilderConditionsAndJoins(searchCriteria, queryBuilder);
-
-		return queryBuilder;
-	}
-
-	private void populateQueryBuilderConditionsAndJoins(DefaultCommissionEntitySearchCriteria searchCriteria, JpaQueryBuilder queryBuilder) {
-		if (searchCriteria.getCommissionType() != null) {
-			queryBuilder.addCondition("dc.commissionType = :commissionType");
-		}
-
-		if (searchCriteria.getCommissionSubcategory() != null) {
-			queryBuilder.addCondition("dc.commissionSubcategory = :commissionSubcategory");
-		}
-	}
-
-	public DefaultCommissionEntity getDefaultCommissionByPrimaryKey(Integer commissionType, Integer commissionSubcategory) {
-		DefaultCommissionEntitySearchCriteria defaultCommissionEntitySearchCriteria = new DefaultCommissionEntitySearchCriteria();
-		defaultCommissionEntitySearchCriteria.setCommissionType(commissionType);
-		defaultCommissionEntitySearchCriteria.setCommissionSubcategory(commissionSubcategory);
-		List<DefaultCommissionEntity> defaultCommissionEntityList = findDefaultCommissions(defaultCommissionEntitySearchCriteria);
-
-		return defaultCommissionEntityList.size() == 1 ? defaultCommissionEntityList.get(0) : null;
-	}
 }

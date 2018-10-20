@@ -1,11 +1,9 @@
 package com.gcr.acm.customerservice.commission;
 
+import com.gcr.acm.iam.user.UserEntity;
 import com.gcr.acm.jpaframework.EntityBase;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
@@ -19,9 +17,10 @@ import java.math.BigInteger;
 public class AgentCommissionEntity extends EntityBase {
 	@Column(name = "id")
 	@Id
-	private BigInteger id;
+	@GeneratedValue
+	private Integer id;
 
-	@Column(name = "agent_id")
+	@Column(name = "agent_id", insertable = false, updatable = false)
 	private BigInteger agentId;
 
 	@Column(name = "commission_type")
@@ -39,11 +38,15 @@ public class AgentCommissionEntity extends EntityBase {
 	@Column(name ="commission_value")
 	private BigDecimal commissionValue;
 
-	public BigInteger getId() {
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "agent_id", nullable = false)
+	private UserEntity agentEntity;
+
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(BigInteger id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -77,5 +80,13 @@ public class AgentCommissionEntity extends EntityBase {
 
 	public void setCommissionValue(BigDecimal commissionValue) {
 		this.commissionValue = commissionValue;
+	}
+
+	public UserEntity getAgentEntity() {
+		return agentEntity;
+	}
+
+	public void setAgentEntity(UserEntity agentEntity) {
+		this.agentEntity = agentEntity;
 	}
 }

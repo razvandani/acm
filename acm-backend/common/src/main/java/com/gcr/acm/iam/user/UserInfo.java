@@ -1,10 +1,8 @@
 package com.gcr.acm.iam.user;
 
-import java.math.BigInteger;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Encapsulates user information.
@@ -162,11 +160,70 @@ public class UserInfo {
         this.encryptedPassword = encryptedPassword;
     }
 
-    private class AgentCommissionInfo {
-        // todo AgentCommissionEntity to map the agent_commission table
-        // define the attributes here for the Info class
-        // todo modify saveUser from UserService (also validate data), to save this list of agent commissions in the database
-        // todo modify getUser from UserService, to return the the list of agent commissions
+    public List<AgentCommissionInfo> getAgentCommissionInfoList() {
+        return agentCommissionInfoList;
+    }
+
+    public void setAgentCommissionInfoList(List<AgentCommissionInfo> agentCommissionInfoList) {
+        this.agentCommissionInfoList = agentCommissionInfoList;
+    }
+
+    public static class AgentCommissionInfo {
+        private Integer id;
+        private Integer commissionType;
+        private Integer commissionSubcategory;
+        private Integer commissionSubcategoryStart;
+        private Integer commissionSubcategoryEnd;
+        private BigDecimal commissionValue;
+
+        public Integer getId() {
+            return id;
+        }
+
+        public void setId(Integer id) {
+            this.id = id;
+        }
+
+        public Integer getCommissionType() {
+            return commissionType;
+        }
+
+        public void setCommissionType(Integer commissionType) {
+            this.commissionType = commissionType;
+        }
+
+        public Integer getCommissionSubcategory() {
+            return commissionSubcategory;
+        }
+
+        public void setCommissionSubcategory(Integer commissionSubcategory) {
+            this.commissionSubcategory = commissionSubcategory;
+        }
+
+        public Integer getCommissionSubcategoryStart() {
+            return commissionSubcategoryStart;
+        }
+
+        public void setCommissionSubcategoryStart(Integer commissionSubcategoryStart) {
+            this.commissionSubcategoryStart = commissionSubcategoryStart;
+        }
+
+        public Integer getCommissionSubcategoryEnd() {
+            return commissionSubcategoryEnd;
+        }
+
+        public void setCommissionSubcategoryEnd(Integer commissionSubcategoryEnd) {
+            this.commissionSubcategoryEnd = commissionSubcategoryEnd;
+        }
+
+        public BigDecimal getCommissionValue() {
+            return commissionValue;
+        }
+
+        public void setCommissionValue(BigDecimal commissionValue) {
+            this.commissionValue = commissionValue;
+        }
+
 
     }
 }

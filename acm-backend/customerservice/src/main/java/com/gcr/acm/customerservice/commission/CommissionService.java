@@ -1,7 +1,5 @@
 package com.gcr.acm.customerservice.commission;
 
-import com.gcr.acm.common.utils.Counter;
-import com.gcr.acm.common.utils.ValidationUtils;
 import com.gcr.acm.customerservice.customer.CustomerEAO;
 import com.gcr.acm.customerservice.customer.CustomerEntitySearchCriteria;
 import com.gcr.acm.customerservice.customer.CustomerInfo;
