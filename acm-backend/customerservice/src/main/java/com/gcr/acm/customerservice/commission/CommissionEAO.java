@@ -40,8 +40,8 @@ public class CommissionEAO extends EntityAccessObjectBase {
 			queryBuilder.addCondition("ac.agentId = :agentId");
 		}
 
-		if (searchCriteria.getContractType() != null) {
-			queryBuilder.addCondition("ac.contractType = :contractType");
+		if (searchCriteria.getCommissionType() != null) {
+			queryBuilder.addCondition("ac.commissionType = :commissionType");
 		}
 
 		if (searchCriteria.getCommissionSubcategory() != null) {
@@ -53,10 +53,10 @@ public class CommissionEAO extends EntityAccessObjectBase {
 		}
 	}
 
-	public AgentCommissionEntity getAgentCommissionForNaturalGas(BigInteger agentId, Integer contractType, Integer commissionSubcategory) {
+	public AgentCommissionEntity getAgentCommissionForNaturalGas(BigInteger agentId, Integer commissionType, Integer commissionSubcategory) {
 		AgentCommissionEntitySearchCriteria agentCommissionEntitySearchCriteria = new AgentCommissionEntitySearchCriteria();
 		agentCommissionEntitySearchCriteria.setAgentId(agentId);
-		agentCommissionEntitySearchCriteria.setContractType(contractType);
+		agentCommissionEntitySearchCriteria.setCommissionType(commissionType);
 		agentCommissionEntitySearchCriteria.setCommissionSubcategory(commissionSubcategory);
 		List<AgentCommissionEntity> agentCommissionEntityList = findAgentCommissions(agentCommissionEntitySearchCriteria);
 		
@@ -64,10 +64,10 @@ public class CommissionEAO extends EntityAccessObjectBase {
 	}
 
 	public AgentCommissionEntity getAgentCommissionForElectricCurrent(
-			BigInteger agentId, Integer contractType, Integer commissionSubcategory) {
+			BigInteger agentId, Integer commissionType, Integer commissionSubcategory) {
 		AgentCommissionEntitySearchCriteria agentCommissionEntitySearchCriteria = new AgentCommissionEntitySearchCriteria();
 		agentCommissionEntitySearchCriteria.setAgentId(agentId);
-		agentCommissionEntitySearchCriteria.setContractType(contractType);
+		agentCommissionEntitySearchCriteria.setCommissionType(commissionType);
 		agentCommissionEntitySearchCriteria.setCommissionSubcategoryElectricCurrent(commissionSubcategory);
 
 		List<AgentCommissionEntity> agentCommissionEntityList = findAgentCommissions(agentCommissionEntitySearchCriteria);

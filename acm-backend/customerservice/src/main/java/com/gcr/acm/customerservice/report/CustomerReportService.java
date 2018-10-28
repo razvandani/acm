@@ -19,7 +19,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static com.gcr.acm.customerservice.customer.CustomerDetailsEnums.ContractTypeEnum.*;
+import static com.gcr.acm.customerservice.customer.CustomerDetailsEnums.CommissionTypeEnum.*;
 import static com.gcr.acm.customerservice.customer.CustomerDetailsEnums.ProductTypeEnum.ELECTRIC_ENERGY;
 import static com.gcr.acm.customerservice.customer.CustomerDetailsEnums.ProductTypeEnum.NATURAL_GAS;
 
@@ -87,7 +87,7 @@ import static com.gcr.acm.customerservice.customer.CustomerDetailsEnums.ProductT
 				data.put(Integer.toString(indiceMap),
 						new Object[] { indiceMap - 1, customerInfo.getContractNumber(),
 								customerInfo.getContractDate(), customerInfo.getLastName() + customerInfo.getFirstName(), productType,
-								getContractTypeByTypeId(customerInfo.getContractType()),
+								getCommissionTypeByTypeId(customerInfo.getCommissionType()),
 								CustomerDetailsEnums.CommissionSubcategoryEnum.getCommissionSubcategoryById(customerInfo.getCommissionSubcategory()),
 								customerInfo.getCountyName(), customerInfo.getLocation(), customerInfo.getPhoneNumber(),
 								customerInfo.getStartDeliveryDate(), customerInfo.getAgentName() });

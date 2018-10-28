@@ -18,10 +18,10 @@ public class CustomerInfo  {
     public static final Integer PRODUCT_TYPE_ELECTRIC_ENERGY = 1;
     public static final Integer PRODUCT_TYPE_NATURAL_GAS = 2;
 
-    public static final Integer CONTRACT_TYPE_FIX = 1;
-    public static final Integer CONTRACT_TYPE_EGO = 2;
-    public static final Integer CONTRACT_TYPE_FLEX = 3;
-    public static final Integer CONTRACT_TYPE_FLUX = 4;
+    public static final Integer COMMISSION_TYPE_FIX = 1;
+    public static final Integer COMMISSION_TYPE_EGO = 2;
+    public static final Integer COMMISSION_TYPE_FLEX = 3;
+    public static final Integer COMMISSION_TYPE_FLUX = 4;
 
     private String id;
     private String contractNumber;
@@ -39,7 +39,7 @@ public class CustomerInfo  {
     private String agentName; // readonly
     private String countyName; // readonly
     private Integer productType; // 1 = Electric energy, 2 = Natural Gas
-    private Integer contractType; // 1 = Fix, 2 = E-go, 3 = Flex, 4 = Flux
+    private Integer commissionType; // 1 = Fix, 2 = E-go, 3 = Flex, 4 = Flux
     private Integer commissionSubcategory; // 1 = B1, 2 = B2, 3 = B3, 4 = B4
     @JsonSerialize(using = JsonDateSerializer.class)
     private Date startDeliveryDate; // date when the service (energy or gas) starts
@@ -158,12 +158,12 @@ public class CustomerInfo  {
         this.productType = productType;
     }
 
-    public Integer getContractType() {
-        return contractType;
+    public Integer getCommissionType() {
+        return commissionType;
     }
 
-    public void setContractType(Integer contractType) {
-        this.contractType = contractType;
+    public void setCommissionType(Integer commissionType) {
+        this.commissionType = commissionType;
     }
 
     public Integer getCommissionSubcategory() {

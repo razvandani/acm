@@ -55,8 +55,8 @@ public class CustomerEntity extends EntityBase {
 
     @Column(name ="product_type")
     private Integer productType; // 1 = Electric energy, 2 = Natural Gas
-    @Column(name ="contract_type")
-    private Integer contractType; // 1 = Fix, 2 = E-go, 3 = Flex, 4 = Flux
+    @Column(name ="commission_type")
+    private Integer commissionType; // 1 = Fix, 2 = E-go, 3 = Flex, 4 = Flux
     @Column(name ="commission_subcategory")
     private Integer commissionSubcategory; // 1 = B1, 2 = B2, 3 = B3, 4 = B4
 
@@ -188,12 +188,12 @@ public class CustomerEntity extends EntityBase {
         this.productType = productType;
     }
 
-    public Integer getContractType() {
-        return contractType;
+    public Integer getCommissionType() {
+        return commissionType;
     }
 
-    public void setContractType(Integer contractType) {
-        this.contractType = contractType;
+    public void setCommissionType(Integer commissionType) {
+        this.commissionType = commissionType;
     }
 
     public Integer getCommissionSubcategory() {

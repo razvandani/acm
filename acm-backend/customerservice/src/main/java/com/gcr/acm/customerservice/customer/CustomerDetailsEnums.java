@@ -24,7 +24,7 @@ public final class CustomerDetailsEnums {
 
 	}
 
-	public enum ContractTypeEnum {
+	public enum CommissionTypeEnum {
 		FIX(1, "FIX"),
 		E_GO(2, "E-GO"),
 		FLEX(3, "FLEX"),
@@ -34,7 +34,7 @@ public final class CustomerDetailsEnums {
 
 		private final String description;
 
-		ContractTypeEnum(final Integer typeId, String description) {
+		CommissionTypeEnum(final Integer typeId, String description) {
 			this.typeId = typeId;
 			this.description = description;
 		}
@@ -47,18 +47,18 @@ public final class CustomerDetailsEnums {
 			return description;
 		}
 
-		public static String getContractTypeByTypeId(Integer typeId) {
+		public static String getCommissionTypeByTypeId(Integer typeId) {
 
-			ContractTypeEnum contractTypeResult = null;
+			CommissionTypeEnum commissionTypeResult = null;
 
 			for (int i = 0; i < values().length; i++) {
-				ContractTypeEnum contractTypeResultEnum = values()[i];
+				CommissionTypeEnum commissionTypeResultEnum = values()[i];
 
-				if (contractTypeResultEnum.getTypeId().equals(typeId)) {
-					contractTypeResult = contractTypeResultEnum;
+				if (commissionTypeResultEnum.getTypeId().equals(typeId)) {
+					commissionTypeResult = commissionTypeResultEnum;
 				}
 			}
-			return contractTypeResult != null ? contractTypeResult.getDescription() : null;
+			return commissionTypeResult != null ? commissionTypeResult.getDescription() : null;
 		}
 	}
 

@@ -139,7 +139,7 @@ CREATE TABLE IF NOT EXISTS `customer` (
   `first_name` varchar(100) NOT NULL,
   `last_name` varchar(100) NOT NULL,
   product_type INT NOT NULL, -- 1 = Electric energy, 2 = Natural Gas
-  contract_type INT NOT NULL, -- 1 = Fix abonament 6 luni, 2 = E-go citire lunara, 3 = Flex citire lunara, 4 = Flux gaz
+  commission_type INT NOT NULL, -- 1 = Fix abonament 6 luni, 2 = E-go citire lunara, 3 = Flex citire lunara, 4 = Flux gaz
   commission_subcategory INT NOT NULL, -- 1 = B1, 2 = B2, 3 = B3, 4 = B4
   `county_id` int(11) NOT NULL,
   `location` varchar(100) NOT NULL,

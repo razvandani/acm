@@ -11,7 +11,7 @@ import java.math.BigInteger;
  */
 public class AgentCommissionEntitySearchCriteria extends EntitySearchCriteria {
 	private BigInteger agentId;
-	private Integer contractType;
+	private Integer commissionType;
 	private Integer commissionSubcategory;
 	private Integer commissionSubcategoryElectricCurrent;
 
@@ -23,12 +23,12 @@ public class AgentCommissionEntitySearchCriteria extends EntitySearchCriteria {
 		this.agentId = agentId;
 	}
 
-	public Integer getContractType() {
-		return contractType;
+	public Integer getCommissionType() {
+		return commissionType;
 	}
 
-	public void setContractType(Integer contractType) {
-		this.contractType = contractType;
+	public void setCommissionType(Integer commissionType) {
+		this.commissionType = commissionType;
 	}
 
 	public Integer getCommissionSubcategory() {

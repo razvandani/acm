@@ -59,8 +59,7 @@ public class CustomerService {
      * @return The saved customer info
      */
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public CustomerInfo saveCustomer(CustomerInfo customerInfo)
-            throws Exception {
+    public CustomerInfo saveCustomer(CustomerInfo customerInfo) {
         validateCustomer(customerInfo);
 
         CustomerEntity customerEntity = populateCustomerEntity(customerInfo);
@@ -76,7 +75,7 @@ public class CustomerService {
         customerInfo.setFirstName(customerEntity.getFirstName());
         customerInfo.setLastName(customerEntity.getLastName());
         customerInfo.setProductType(customerEntity.getProductType());
-        customerInfo.setContractType(customerEntity.getContractType());
+        customerInfo.setCommissionType(customerEntity.getCommissionType());
         customerInfo.setCommissionSubcategory(customerEntity.getCommissionSubcategory());
         customerInfo.setCountyId(customerEntity.getCountyId());
         customerInfo.setIsActive(customerEntity.getIsActive());
@@ -120,7 +119,7 @@ public class CustomerService {
         customerEntity.setFirstName(customerInfo.getFirstName());
         customerEntity.setLastName(customerInfo.getLastName());
         customerEntity.setProductType(customerInfo.getProductType());
-        customerEntity.setContractType(customerInfo.getContractType());
+        customerEntity.setCommissionType(customerInfo.getCommissionType());
         customerEntity.setCommissionSubcategory(customerInfo.getCommissionSubcategory());
 
         customerEntity.setCommission(calculateCommission(customerInfo));
@@ -147,11 +146,11 @@ public class CustomerService {
         if (customerInfo.getProductType().equals(CustomerInfo.PRODUCT_TYPE_NATURAL_GAS)) {
             agentCommissionEntity =
                     commissionEAO.getAgentCommissionForNaturalGas(new BigInteger(customerInfo.getAgentId()),
-                            customerInfo.getContractType(), customerInfo.getCommissionSubcategory());
+                            customerInfo.getCommissionType(), customerInfo.getCommissionSubcategory());
         } else if (customerInfo.getProductType().equals(CustomerInfo.PRODUCT_TYPE_ELECTRIC_ENERGY)) {
             agentCommissionEntity =
                     commissionEAO.getAgentCommissionForElectricCurrent(new BigInteger(customerInfo.getAgentId()),
-                            customerInfo.getContractType(), customerInfo.getCommissionSubcategory());
+                            customerInfo.getCommissionType(), customerInfo.getCommissionSubcategory());
         }
 
         BigDecimal commission;
@@ -176,14 +175,14 @@ public class CustomerService {
         validateRequiredObject(customerInfo.getFirstName(), "firstName", 50);
         validateRequiredObject(customerInfo.getLastName(), "lastName", 50);
         validateRequiredObject(customerInfo.getProductType(), "productType");
-        validateRequiredObject(customerInfo.getContractType(), "contractType");
+        validateRequiredObject(customerInfo.getCommissionType(), "commissionType");
 
         if (customerInfo.getProductType().equals(CustomerInfo.PRODUCT_TYPE_NATURAL_GAS)) {
-            if (!customerInfo.getContractType().equals(CustomerInfo.CONTRACT_TYPE_FLUX)) {
+            if (!customerInfo.getCommissionType().equals(CustomerInfo.COMMISSION_TYPE_FLUX)) {
                 throw new ValidationException("Invalid contract type");
             }
         } else if (customerInfo.getProductType().equals(CustomerInfo.PRODUCT_TYPE_ELECTRIC_ENERGY)) {
-            if (customerInfo.getContractType().equals(CustomerInfo.CONTRACT_TYPE_FLUX)) {
+            if (customerInfo.getCommissionType().equals(CustomerInfo.COMMISSION_TYPE_FLUX)) {
                 throw new ValidationException("Invalid contract type");
             }
         }

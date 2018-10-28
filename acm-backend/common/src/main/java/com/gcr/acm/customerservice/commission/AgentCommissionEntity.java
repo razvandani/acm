@@ -89,4 +89,20 @@ public class AgentCommissionEntity extends EntityBase {
 	public void setAgentEntity(UserEntity agentEntity) {
 		this.agentEntity = agentEntity;
 	}
+
+	public Integer getCommissionSubcategoryStart() {
+		return commissionSubcategoryStart;
+	}
+
+	public void setCommissionSubcategoryStart(Integer commissionSubcategoryStart) {
+		this.commissionSubcategoryStart = commissionSubcategoryStart;
+	}
+
+	public Integer getCommissionSubcategoryEnd() {
+		return commissionSubcategoryEnd;
+	}
+
+	public void setCommissionSubcategoryEnd(Integer commissionSubcategoryEnd) {
+		this.commissionSubcategoryEnd = commissionSubcategoryEnd;
+	}
 }

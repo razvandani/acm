@@ -34,10 +34,10 @@ public class UserService {
 
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
-    public static final Integer CONTRACT_TYPE_FIX = 1;
-    public static final Integer CONTRACT_TYPE_EGO = 2;
-    public static final Integer CONTRACT_TYPE_FLEX = 3;
-    public static final Integer CONTRACT_TYPE_FLUX = 4;
+    public static final Integer COMMISSION_TYPE_FIX = 1;
+    public static final Integer COMMISSION_TYPE_EGO = 2;
+    public static final Integer COMMISSION_TYPE_FLEX = 3;
+    public static final Integer COMMISSION_TYPE_FLUX = 4;
 
     @Autowired
     private PasswordEncoder standardPasswordEncoder;
@@ -64,7 +64,7 @@ public class UserService {
     public UserInfo getUserByUserName(String username) {
         validateRequiredObject(username, "username");
 
-        return getUserInfo(userEAO.getUser(username));
+        return getUserInfo(userEAO.getUser(username), false);
     }
 
     /**
@@ -84,10 +84,10 @@ public class UserService {
             throw new ValidationException("login user can only access his own profile");
         }
 
-        return getUserInfo(userEAO.getUser(userId));
+        return getUserInfo(userEAO.getUser(userId), true);
     }
 
-    private UserInfo getUserInfo(UserEntity userEntity) {
+    private UserInfo getUserInfo(UserEntity userEntity, boolean loadAgentCommissions) {
         if (userEntity == null) {
             throw new EntityNotFoundException("user not found");
         }
@@ -105,7 +105,29 @@ public class UserService {
         userInfo.setCreatedDttm(userEntity.getCreatedDttm());
         userInfo.setPhoneNumber(userEntity.getPhoneNumber());
 
+        if (loadAgentCommissions) {
+            userInfo.setAgentCommissionInfoList(getAgentCommissionInfoList(userEntity.getAgentCommissionEntitySet()));
+        }
+
         return userInfo;
+    }
+
+    private List<UserInfo.AgentCommissionInfo> getAgentCommissionInfoList(Set<AgentCommissionEntity> agentCommissionEntitySet) {
+        List<UserInfo.AgentCommissionInfo> agentCommissionInfoList = new ArrayList<>();
+
+        for (AgentCommissionEntity agentCommissionEntity : agentCommissionEntitySet) {
+            UserInfo.AgentCommissionInfo agentCommissionInfo = new UserInfo.AgentCommissionInfo();
+            agentCommissionInfo.setId(agentCommissionEntity.getId());
+            agentCommissionInfo.setCommissionType(agentCommissionEntity.getCommissionType());
+            agentCommissionInfo.setCommissionSubcategory(agentCommissionEntity.getCommissionSubcategory());
+            agentCommissionInfo.setCommissionSubcategoryStart(agentCommissionEntity.getCommissionSubcategoryStart());
+            agentCommissionInfo.setCommissionSubcategoryEnd(agentCommissionEntity.getCommissionSubcategoryEnd());
+            agentCommissionInfo.setCommissionValue(agentCommissionEntity.getCommissionValue());
+
+            agentCommissionInfoList.add(agentCommissionInfo);
+        }
+
+        return agentCommissionInfoList;
     }
 
     /**
@@ -125,7 +147,7 @@ public class UserService {
         UserEntity userEntity = populateUserEntity(userInfo);
         evictMethodCacheForUserName(userInfo.getUsername());
 
-        return getUserInfo(userEAO.saveUser(userEntity));
+        return getUserInfo(userEAO.saveUser(userEntity), false);
     }
 
     private String generateTempPassword() {
@@ -185,7 +207,7 @@ public class UserService {
             validateRequiredObject(agentCommissionInfo, "agentCommissionInfo");
             validateRequiredObject(agentCommissionInfo.getCommissionType(), "commissionType");
 
-            if (agentCommissionInfo.getCommissionType().equals(CONTRACT_TYPE_FLUX)) {
+            if (agentCommissionInfo.getCommissionType().equals(COMMISSION_TYPE_FLUX)) {
                 validateRequiredObject(agentCommissionInfo.getCommissionSubcategory(), "commissionSubcategory");
             } else {
                 validateRequiredObject(agentCommissionInfo.getCommissionSubcategoryStart(), "commissionSubcategoryStart");
@@ -309,6 +331,8 @@ public class UserService {
 
                 agentCommissionEntity.setCommissionType(agentCommissionInfo.getCommissionType());
                 agentCommissionEntity.setCommissionSubcategory(agentCommissionInfo.getCommissionSubcategory());
+                agentCommissionEntity.setCommissionSubcategoryStart(agentCommissionInfo.getCommissionSubcategoryStart());
+                agentCommissionEntity.setCommissionSubcategoryEnd(agentCommissionInfo.getCommissionSubcategoryEnd());
                 agentCommissionEntity.setCommissionValue(agentCommissionInfo.getCommissionValue());
                 agentCommissionEntity.setAgentEntity(userEntity);
             }
@@ -326,7 +350,7 @@ public class UserService {
         UserEntity userEntity = userEAO.getUser(userPwd.getUsername());
 
         if (isValidUserAndPassword(userPwd, userEntity)) {
-            return getUserInfo(userEntity);
+            return getUserInfo(userEntity, false);
         } else {
             return null;
         }
@@ -342,7 +366,7 @@ public class UserService {
             if (userEntity == null) {
                 throw new ValidationException("Bad Credentials");
             } else {
-                UserInfo userInfo = getUserInfo(userEntity);
+                UserInfo userInfo = getUserInfo(userEntity, false);
 
                 if (userInfo.getIsLocked()) {
                     userInfo.setErrorMessage("Account is locked");
@@ -358,7 +382,7 @@ public class UserService {
 
         userEAO.saveUser(userEntity);
 
-        UserInfo userInfo = getUserInfo(userEntity);
+        UserInfo userInfo = getUserInfo(userEntity, false);
 
         if (userEntity.getPassword() != null) {
             userInfo.setLoginToken(Base64Utils.encodeToString((userEntity.getUsername() + ":" + userEntity.getPassword()).getBytes()));
@@ -408,7 +432,7 @@ public class UserService {
 
         userEAO.saveUser(userEntity);
 
-        return getUserInfo(userEntity);
+        return getUserInfo(userEntity, false);
     }
 
     private RoleInfo getRoleInfo(RoleEntity roleEntity) {
@@ -519,7 +543,7 @@ public class UserService {
         List<UserEntity> userEntityList = userEAO.findUsers(userEntitySearchCriteria);
 
         for (UserEntity userEntity : userEntityList) {
-            UserInfo userInfo = getUserInfo(userEntity);
+            UserInfo userInfo = getUserInfo(userEntity, false);
             userInfoList.add(userInfo);
         }
 
