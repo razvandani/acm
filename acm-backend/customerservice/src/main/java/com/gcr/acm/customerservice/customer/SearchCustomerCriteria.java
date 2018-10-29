@@ -1,6 +1,11 @@
 package com.gcr.acm.customerservice.customer;
 
+import java.util.Date;
+
 public class SearchCustomerCriteria {
+    private Date startDate;
+    private Date endDate;
+    private Integer productType;
     private String firstNameStartsWith;
     private String lastNameStartsWith;
     private Integer countyId;
@@ -72,5 +77,29 @@ public class SearchCustomerCriteria {
 
     public void setAgentId(String agentId) {
         this.agentId = agentId;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public Integer getProductType() {
+        return productType;
+    }
+
+    public void setProductType(Integer productType) {
+        this.productType = productType;
     }
 }

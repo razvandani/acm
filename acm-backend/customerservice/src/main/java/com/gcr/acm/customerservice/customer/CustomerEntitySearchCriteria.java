@@ -11,6 +11,9 @@ import java.util.Date;
  * @author Razvan Dani
  */
 public class CustomerEntitySearchCriteria extends EntitySearchCriteria {
+    private Date startDate;
+    private Date endDate;
+    private Integer productType;
     private String firstNameStartsWith;
     private String lastNameStartsWith;
     private Integer countyId;
@@ -91,5 +94,29 @@ public class CustomerEntitySearchCriteria extends EntitySearchCriteria {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public Integer getProductType() {
+        return productType;
+    }
+
+    public void setProductType(Integer productType) {
+        this.productType = productType;
     }
 }
