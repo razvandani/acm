@@ -57,6 +57,18 @@ public class CustomerEAO extends EntityAccessObjectBase {
     private void populateQueryBuilderConditionsAndJoins(CustomerEntitySearchCriteria searchCriteria, JpaQueryBuilder queryBuilder) {
         queryBuilder.addInnerFetchJoin("c.countyEntity");
 
+        if (searchCriteria.getStartDate() != null) {
+            queryBuilder.addCondition("c.contractDate >= :startDate");
+        }
+
+        if (searchCriteria.getEndDate() != null) {
+            queryBuilder.addCondition("c.contractDate <= :endDate");
+        }
+
+        if (searchCriteria.getProductType() != null) {
+            queryBuilder.addCondition("c.productType = :productType");
+        }
+
         if (searchCriteria.getFirstNameStartsWith() != null) {
             queryBuilder.addCondition("c.firstName LIKE :firstNameStartsWith");
         }
