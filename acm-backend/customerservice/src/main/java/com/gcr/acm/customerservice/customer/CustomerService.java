@@ -222,6 +222,10 @@ public class CustomerService {
                 customerEntitySearchCriteria.setAgentId(new BigInteger(searchCustomerCriteria.getAgentId()));
             }
 
+            customerEntitySearchCriteria.setStartDate(searchCustomerCriteria.getStartDate());
+            customerEntitySearchCriteria.setEndDate(searchCustomerCriteria.getEndDate());
+            customerEntitySearchCriteria.setProductType(searchCustomerCriteria.getProductType());
+
             customerEntitySearchCriteria.setStartResultIndex(searchCustomerCriteria.getStartIndex());
             customerEntitySearchCriteria.setMaxResults(searchCustomerCriteria.getPageSize());
         }
@@ -234,7 +238,7 @@ public class CustomerService {
         validateLoginUserCustomer(searchCustomerCriteria.getAgentId());
         validateAtLeastOneIsSet(Arrays.asList(searchCustomerCriteria.getAgentId(), searchCustomerCriteria.getCountyId(),
                 searchCustomerCriteria.getFirstNameStartsWith(), searchCustomerCriteria.getLastNameStartsWith(),
-                searchCustomerCriteria.getLocationStartsWith()),
+                searchCustomerCriteria.getLocationStartsWith(), searchCustomerCriteria.getStartDate(), searchCustomerCriteria.getEndDate()),
                 "At least one search criteria must be set");
     }
 
