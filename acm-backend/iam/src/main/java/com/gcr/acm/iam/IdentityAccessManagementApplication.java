@@ -1,12 +1,18 @@
 package com.gcr.acm.iam;
 
 import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Properties;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import com.gcr.acm.common.auth.AuthenticationInterceptor;
 import com.gcr.acm.common.logging.LoggerAspect;
+import com.gcr.acm.common.utils.EncryptionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -45,6 +51,9 @@ public class IdentityAccessManagementApplication extends WebMvcConfigurerAdapter
     private PasswordEncoder standardPasswordEncoder;
 
     @Autowired
+    private EncryptionUtil encryptionUtil;
+
+    @Autowired
     private AuthenticationInterceptor authenticationInterceptor;
 
     @Value("${spring.profiles.active}")
@@ -57,15 +66,16 @@ public class IdentityAccessManagementApplication extends WebMvcConfigurerAdapter
     }
 
     @Bean
-    public DataSource dataSource() throws IOException {
+    public DataSource dataSource() throws IOException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
         Properties dsProps = PropertiesLoaderUtils.loadAllProperties("datasource-" + activeProfile + ".properties");
+        dsProps.setProperty("password", encryptionUtil.decrypt(dsProps.getProperty("password")));
         Properties hikariProps = PropertiesLoaderUtils.loadAllProperties("hikari-" + activeProfile + ".properties");
         hikariProps.put("dataSourceProperties", dsProps);
         return new HikariDataSource(new HikariConfig(hikariProps));
     }
 
     @Bean
-    public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) throws IOException {
+    public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) throws IOException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, NoSuchPaddingException {
         JpaTransactionManager tm = new JpaTransactionManager();
         tm.setEntityManagerFactory(entityManagerFactory);
         tm.setDataSource(dataSource());
