@@ -66,7 +66,14 @@ public class CustomerServiceApplication extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public DataSource dataSource() throws IOException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
+    public DataSource dataSource()
+            throws
+            IOException,
+            IllegalBlockSizeException,
+            InvalidKeyException,
+            BadPaddingException,
+            NoSuchAlgorithmException,
+            NoSuchPaddingException {
         Properties dsProps = PropertiesLoaderUtils.loadAllProperties("datasource-" + activeProfile + ".properties");
         dsProps.setProperty("password", encryptionUtil.decrypt(dsProps.getProperty("password")));
         Properties hikariProps = PropertiesLoaderUtils.loadAllProperties("hikari-" + activeProfile + ".properties");
@@ -75,7 +82,14 @@ public class CustomerServiceApplication extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) throws IOException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, NoSuchPaddingException {
+    public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory)
+            throws
+            IOException,
+            InvalidKeyException,
+            BadPaddingException,
+            NoSuchAlgorithmException,
+            IllegalBlockSizeException,
+            NoSuchPaddingException {
         JpaTransactionManager tm = new JpaTransactionManager();
         tm.setEntityManagerFactory(entityManagerFactory);
         tm.setDataSource(dataSource());

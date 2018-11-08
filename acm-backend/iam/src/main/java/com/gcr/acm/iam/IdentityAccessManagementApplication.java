@@ -20,6 +20,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -66,7 +67,14 @@ public class IdentityAccessManagementApplication extends WebMvcConfigurerAdapter
     }
 
     @Bean
-    public DataSource dataSource() throws IOException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
+    public DataSource dataSource()
+            throws
+            IOException,
+            IllegalBlockSizeException,
+            InvalidKeyException,
+            BadPaddingException,
+            NoSuchAlgorithmException,
+            NoSuchPaddingException {
         Properties dsProps = PropertiesLoaderUtils.loadAllProperties("datasource-" + activeProfile + ".properties");
         dsProps.setProperty("password", encryptionUtil.decrypt(dsProps.getProperty("password")));
         Properties hikariProps = PropertiesLoaderUtils.loadAllProperties("hikari-" + activeProfile + ".properties");
@@ -75,7 +83,14 @@ public class IdentityAccessManagementApplication extends WebMvcConfigurerAdapter
     }
 
     @Bean
-    public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) throws IOException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, NoSuchPaddingException {
+    public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory)
+            throws
+            IOException,
+            InvalidKeyException,
+            BadPaddingException,
+            NoSuchAlgorithmException,
+            IllegalBlockSizeException,
+            NoSuchPaddingException {
         JpaTransactionManager tm = new JpaTransactionManager();
         tm.setEntityManagerFactory(entityManagerFactory);
         tm.setDataSource(dataSource());
@@ -124,6 +139,6 @@ public class IdentityAccessManagementApplication extends WebMvcConfigurerAdapter
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(authenticationInterceptor).addPathPatterns("/**");;
+        registry.addInterceptor(authenticationInterceptor).addPathPatterns("/**");
     }
 }
