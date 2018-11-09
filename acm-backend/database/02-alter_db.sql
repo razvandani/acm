@@ -49,7 +49,48 @@ values ('agent.user@pixelenergy.com', 'agent.user@pixelenergy.com', 'Super', 'Us
 'fa6ebc77818e918d48cce57c1065c73be466833e794e22b5d6604b6c00e071d40f97063057bd6962',
 1, 0, 2, '111111');
 
+insert ignore into county(name) values ('Alba');
+insert ignore into county(name) values ('Arad');
+insert ignore into county(name) values ('Argeş');
+insert ignore into county(name) values ('Bacău');
+insert ignore into county(name) values ('Bihor');
+insert ignore into county(name) values ('Bistriţa-Năsăud');
+insert ignore into county(name) values ('Botoşani');
+insert ignore into county(name) values ('Brăila');
+insert ignore into county(name) values ('Braşov');
+insert ignore into county(name) values ('Buzău');
+insert ignore into county(name) values ('Călăraşi');
+insert ignore into county(name) values ('Caraş-Severin');
 insert ignore into county(name) values ('Cluj');
+insert ignore into county(name) values ('Constanţa');
+insert ignore into county(name) values ('Covasna');
+insert ignore into county(name) values ('Dâmboviţa');
+insert ignore into county(name) values ('Dolj');
+insert ignore into county(name) values ('Galaţi');
+insert ignore into county(name) values ('Giurgiu');
+insert ignore into county(name) values ('Gorj');
+insert ignore into county(name) values ('Harghita');
+insert ignore into county(name) values ('Hunedoara');
+insert ignore into county(name) values ('Ialomiţa');
+insert ignore into county(name) values ('Iaşi');
+insert ignore into county(name) values ('Ilfov');
+insert ignore into county(name) values ('Maramureş');
+insert ignore into county(name) values ('Mehedinţi');
+insert ignore into county(name) values ('Mureş');
+insert ignore into county(name) values ('Neamţ');
+insert ignore into county(name) values ('Olt');
+insert ignore into county(name) values ('Prahova');
+insert ignore into county(name) values ('Sălaj');
+insert ignore into county(name) values ('Satu Mare');
+insert ignore into county(name) values ('Sibiu');
+insert ignore into county(name) values ('Suceava');
+insert ignore into county(name) values ('Teleorman');
+insert ignore into county(name) values ('Timiş');
+insert ignore into county(name) values ('Tulcea');
+insert ignore into county(name) values ('Vâlcea');
+insert ignore into county(name) values ('Vaslui');
+insert ignore into county(name) values ('Vrancea');
+insert ignore into county(name) values ('Bucureşti');
 
 CREATE TABLE IF NOT EXISTS `permission` (
   permission_id int(11) NOT NULL AUTO_INCREMENT,
