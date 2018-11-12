@@ -65,6 +65,14 @@ public class CustomerEAO extends EntityAccessObjectBase {
             queryBuilder.addCondition("c.contractDate <= :endDate");
         }
 
+        if (searchCriteria.getDeliveryStartDate() != null) {
+            queryBuilder.addCondition("c.startDeliveryDate >= :deliveryStartDate");
+        }
+
+        if (searchCriteria.getDeliveryEndDate() != null) {
+            queryBuilder.addCondition("c.startDeliveryDate <= :deliveryEndDate");
+        }
+
         if (searchCriteria.getProductType() != null) {
             queryBuilder.addCondition("c.productType = :productType");
         }
@@ -93,9 +101,9 @@ public class CustomerEAO extends EntityAccessObjectBase {
             queryBuilder.addCondition("c.isActive = :isActive");
         }
 
-        if (searchCriteria.getContractStartDate() != null && searchCriteria.getContractEndDate() != null) {
-            queryBuilder.addCondition("c.contractDate BETWEEN :contractStartDate AND :contractEndDate");
-        }
+//        if (searchCriteria.getContractStartDate() != null && searchCriteria.getContractEndDate() != null) {
+//            queryBuilder.addCondition("c.contractDate BETWEEN :contractStartDate AND :contractEndDate");
+//        }
 
         if (searchCriteria.getStatus() != null) {
             queryBuilder.addCondition("c.status = :status");
