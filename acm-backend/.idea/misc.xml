@@ -5,12 +5,12 @@
       <list>
         <option value="$PROJECT_DIR$/common/pom.xml" />
         <option value="$PROJECT_DIR$/customerservice/pom.xml" />
-        <option value="$PROJECT_DIR$/iam/pom.xml" />
         <option value="$PROJECT_DIR$/jpaframework/pom.xml" />
-        <option value="$PROJECT_DIR$/registry/pom.xml" />
         <option value="$PROJECT_DIR$/restclient/pom.xml" />
       </list>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="1.8" project-jdk-type="JavaSDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
 </project>
