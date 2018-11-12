@@ -5,6 +5,8 @@ import java.util.Date;
 public class SearchCustomerCriteria {
     private Date startDate;
     private Date endDate;
+    private Date deliveryStartDate;
+    private Date deliveryEndDate;
     private Integer productType;
     private String firstNameStartsWith;
     private String lastNameStartsWith;
@@ -101,5 +103,21 @@ public class SearchCustomerCriteria {
 
     public void setProductType(Integer productType) {
         this.productType = productType;
+    }
+
+    public Date getDeliveryStartDate() {
+        return deliveryStartDate;
+    }
+
+    public void setDeliveryStartDate(Date deliveryStartDate) {
+        this.deliveryStartDate = deliveryStartDate;
+    }
+
+    public Date getDeliveryEndDate() {
+        return deliveryEndDate;
+    }
+
+    public void setDeliveryEndDate(Date deliveryEndDate) {
+        this.deliveryEndDate = deliveryEndDate;
     }
 }
