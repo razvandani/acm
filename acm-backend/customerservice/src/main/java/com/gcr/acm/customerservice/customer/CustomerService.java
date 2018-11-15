@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.jws.soap.SOAPBinding;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -130,7 +131,13 @@ public class CustomerService {
         customerEntity.setStreet(customerInfo.getStreet());
         customerEntity.setStreetNumber(customerInfo.getStreetNumber());
         customerEntity.setContractDate(customerInfo.getContractDate());
-        customerEntity.setAgentId(new BigInteger(customerInfo.getAgentId()));
+
+        if (UserIdentity.getLoginUser().isSuperUser()) {
+            customerEntity.setAgentId(new BigInteger(customerInfo.getAgentId()));
+        } else if (UserIdentity.getLoginUser().isAgent()){
+            customerEntity.setAgentId(new BigInteger(UserIdentity.getLoginUser().getUserId()));
+        }
+
         customerEntity.setPhoneNumber(customerInfo.getPhoneNumber());
         customerEntity.setStartDeliveryDate(customerInfo.getStartDeliveryDate());
 
@@ -159,7 +166,11 @@ public class CustomerService {
         validateRequiredObject(customerInfo.getStreetNumber(), "streetNumber");
         validateRequiredObject(customerInfo.getContractDate(), "contractDate");
         validateRequiredObject(customerInfo.getIsActive(), "isActive");
-        validateRequiredObject(customerInfo.getAgentId(), "agentId");
+
+        if (UserIdentity.getLoginUser().isSuperUser()) {
+            validateRequiredObject(customerInfo.getAgentId(), "agentId");
+        }
+
         validateRequiredObject(customerInfo.getPhoneNumber(), "phoneNumber");
         validateRequiredObject(customerInfo.getStartDeliveryDate(), "startDeliveryDate");
 
