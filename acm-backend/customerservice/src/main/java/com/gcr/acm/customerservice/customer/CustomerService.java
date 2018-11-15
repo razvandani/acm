@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.jws.soap.SOAPBinding;
+import javax.validation.ValidationException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -229,8 +229,12 @@ public class CustomerService {
                 customerEntitySearchCriteria.setIsActive(searchCustomerCriteria.getIsActive());
             }
 
-            if (searchCustomerCriteria.getAgentId() != null) {
+            if (searchCustomerCriteria.getAgentId() != null && UserIdentity.getLoginUser().isSuperUser()) {
                 customerEntitySearchCriteria.setAgentId(new BigInteger(searchCustomerCriteria.getAgentId()));
+            } else if (UserIdentity.getLoginUser().isAgent()) {
+                customerEntitySearchCriteria.setAgentId(new BigInteger(UserIdentity.getLoginUser().getUserId()));
+            } else {
+                throw new ValidationException("unauthorized");
             }
 
             customerEntitySearchCriteria.setStartDate(searchCustomerCriteria.getStartDate());
