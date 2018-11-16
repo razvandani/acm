@@ -229,8 +229,10 @@ public class CustomerService {
                 customerEntitySearchCriteria.setIsActive(searchCustomerCriteria.getIsActive());
             }
 
-            if (searchCustomerCriteria.getAgentId() != null && UserIdentity.getLoginUser().isSuperUser()) {
-                customerEntitySearchCriteria.setAgentId(new BigInteger(searchCustomerCriteria.getAgentId()));
+            if (UserIdentity.getLoginUser().isSuperUser()) {
+                if (searchCustomerCriteria.getAgentId() != null) {
+                    customerEntitySearchCriteria.setAgentId(new BigInteger(searchCustomerCriteria.getAgentId()));
+                }
             } else if (UserIdentity.getLoginUser().isAgent()) {
                 customerEntitySearchCriteria.setAgentId(new BigInteger(UserIdentity.getLoginUser().getUserId()));
             } else {
