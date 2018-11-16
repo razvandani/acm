@@ -82,6 +82,9 @@ public class CustomerService {
         customerInfo.setLocation(customerEntity.getLocation());
         customerInfo.setStreet(customerEntity.getStreet());
         customerInfo.setStreetNumber(customerEntity.getStreetNumber());
+        customerInfo.setFlat(customerEntity.getFlat());
+        customerInfo.setStairNumber(customerEntity.getStairNumber());
+        customerInfo.setApartmentNumber(customerEntity.getApartmentNumber());
         customerInfo.setContractDate(customerEntity.getContractDate());
         customerInfo.setAgentId(customerEntity.getAgentId().toString());
         customerInfo.setAgentName(customerEntity.getAgentName());
@@ -130,6 +133,9 @@ public class CustomerService {
         customerEntity.setLocation(customerInfo.getLocation());
         customerEntity.setStreet(customerInfo.getStreet());
         customerEntity.setStreetNumber(customerInfo.getStreetNumber());
+        customerEntity.setFlat(customerInfo.getFlat());
+        customerEntity.setStairNumber(customerInfo.getStairNumber());
+        customerEntity.setApartmentNumber(customerInfo.getApartmentNumber());
         customerEntity.setContractDate(customerInfo.getContractDate());
 
         if (UserIdentity.getLoginUser().isSuperUser()) {

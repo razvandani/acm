@@ -31,7 +31,8 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 CREATE TABLE IF NOT EXISTS `county` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `name` varchar(100) NOT NULL
+  `name` varchar(100) NOT NULL,
+  unique key county_unique (name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT IGNORE INTO role (role_id, role_name, role_desc, is_predefined_role) VALUES(1, 'Super user', 'Super user', 1);
@@ -209,3 +210,7 @@ CREATE TABLE IF NOT EXISTS `commission_type` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+call AddColumn('customer', 'flat', 'VARCHAR(10) NULL');
+call AddColumn('customer', 'stair_number', 'VARCHAR(10) NULL');
+call AddColumn('customer', 'apartment_number', 'VARCHAR(10) NULL');
