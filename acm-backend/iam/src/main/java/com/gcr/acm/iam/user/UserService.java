@@ -439,7 +439,12 @@ public class UserService {
 
         userEntitySearchCriteria.setMaxResults(searchUserCriteria.getPageSize());
         userEntitySearchCriteria.setStartResultIndex(searchUserCriteria.getStartIndex());
-        userEntitySearchCriteria.setRoleId(searchUserCriteria.getRoleId());
+
+        if (UserInfo.ROLE_ID_AGENT.equals(searchUserCriteria.getRoleId())) {
+            userEntitySearchCriteria.setRoleIdList(Arrays.asList(UserInfo.ROLE_ID_SUPER_USER, UserInfo.ROLE_ID_AGENT));
+        } else {
+            userEntitySearchCriteria.setRoleIdList(Collections.singletonList(searchUserCriteria.getRoleId()));
+        }
 
         List<UserEntity> userEntityList = userEAO.findUsers(userEntitySearchCriteria);
 

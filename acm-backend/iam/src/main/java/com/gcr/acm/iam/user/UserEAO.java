@@ -96,8 +96,8 @@ public class UserEAO extends EntityAccessObjectBase {
             queryBuilder.addCondition("u.userId IN (:userIdList)");
         }
 
-        if (searchCriteria.getRoleId() != null) {
-            queryBuilder.addCondition("u.roleId = :roleId");
+        if (searchCriteria.getRoleIdList() != null) {
+            queryBuilder.addCondition("u.roleId IN (:roleIdList)");
         }
 
         if (searchCriteria.getSearchOnlyActive()) {
