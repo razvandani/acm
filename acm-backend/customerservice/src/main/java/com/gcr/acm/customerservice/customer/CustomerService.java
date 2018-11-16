@@ -252,7 +252,7 @@ public class CustomerService {
 
     private void validateFindCustomers(SearchCustomerCriteria searchCustomerCriteria) {
         validateRequiredObject(searchCustomerCriteria, "searchCustomerCriteria");
-        validateLoginUserCustomer(searchCustomerCriteria.getAgentId());
+//        validateLoginUserCustomer(searchCustomerCriteria.getAgentId());
         validateAtLeastOneIsSet(Arrays.asList(searchCustomerCriteria.getAgentId(), searchCustomerCriteria.getCountyId(),
                 searchCustomerCriteria.getFirstNameStartsWith(), searchCustomerCriteria.getLastNameStartsWith(),
                 searchCustomerCriteria.getLocationStartsWith(), searchCustomerCriteria.getStartDate(), searchCustomerCriteria.getEndDate(),
@@ -260,19 +260,19 @@ public class CustomerService {
                 "At least one search criteria must be set");
     }
 
-    private void validateLoginUserCustomer(String agentId) {
-        UserInfo loginUser = UserIdentity.getLoginUser();
-
-        if (loginUser != null && loginUser.isAgent()) {
-            validateRequiredObject(agentId, "agentId");
-
-            if (!agentId.equals(loginUser.getUserId())) {
-                throw new UnauthorizedException("unauthorized");
-            }
-        } else if (loginUser == null || (!loginUser.isSuperUser())) {
-            throw new UnauthorizedException("unauthorized");
-        }
-    }
+//    private void validateLoginUserCustomer(String agentId) {
+//        UserInfo loginUser = UserIdentity.getLoginUser();
+//
+//        if (loginUser != null && loginUser.isAgent()) {
+//            validateRequiredObject(agentId, "agentId");
+//
+//            if (!agentId.equals(loginUser.getUserId())) {
+//                throw new UnauthorizedException("unauthorized");
+//            }
+//        } else if (loginUser == null || (!loginUser.isSuperUser())) {
+//            throw new UnauthorizedException("unauthorized");
+//        }
+//    }
 
     /**
      * Gets the customer info for the specified id.
