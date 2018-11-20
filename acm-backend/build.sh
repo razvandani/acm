@@ -1,6 +1,6 @@
 #!/bin/bash
 
-libraries=('restclient' 'jpaframework' 'common')
+libraries=('restclient' 'jpaframework' 'common', 'email')
 services=('registry' 'iam' 'customerservice')
 export PATH=C:\\apache-maven-3.5.3-bin\\bin:${PATH}
 

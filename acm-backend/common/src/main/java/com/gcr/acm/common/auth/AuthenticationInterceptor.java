@@ -31,7 +31,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationInterceptor.class);
 
     private static final List<String> PUBLIC_URI_LIST = Arrays.asList("login",
-            "checkPermissionForRequest", "checkUserAndPassword", "/configuration/ui", "/configuration/security",
+            "checkPermissionForRequest", "checkUserAndPassword", "resetPassword", "/configuration/ui", "/configuration/security",
             "swagger", "/error", "api-docs");
     @Value("${spring.application.name}")
     private String springApplicationName;
