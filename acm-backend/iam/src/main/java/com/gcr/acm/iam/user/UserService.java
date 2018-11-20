@@ -2,6 +2,7 @@ package com.gcr.acm.iam.user;
 
 import com.gcr.acm.common.exception.NotFoundException;
 import com.gcr.acm.common.utils.Utilities;
+import com.gcr.acm.email.EmailSenderService;
 import com.gcr.acm.iam.permission.PermissionEAO;
 import com.gcr.acm.methodcache.CacheComponent;
 import com.gcr.acm.methodcache.MethodCache;
@@ -10,12 +11,14 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
 
+import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.ValidationException;
 import java.math.BigInteger;
@@ -46,6 +49,12 @@ public class UserService {
 
     @Autowired
     private CacheComponent methodCacheComponent;
+
+    @Autowired
+    private EmailSenderService emailSenderService;
+
+    @Value("${resetPassword.url}")
+    private String resetPasswordUrl;
 
     public static final Integer TOKEN_ACTIVE_NUMBER_OF_DAYS = 2;
 
@@ -494,29 +503,17 @@ public class UserService {
 
 
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void changePassword(UserInfo userPwd) {
-        validateChangePassword(userPwd);
+    public void changePassword(ChangePasswordInfo changePasswordInfo) {
+        validateChangePassword(changePasswordInfo);
 
-        UserInfo loginUserInfo = getUserByUserName(UserIdentity.getLoginUserName());
+        UserEntity userEntity = userEAO.getUser(changePasswordInfo.getUserName());
 
-        if (loginUserInfo == null || (!loginUserInfo.isSuperUser() && !loginUserInfo.getUserId().equals(userPwd.getUserId()))) {
-            throw new ValidationException("user not authorized");
-        }
-
-        UserEntity userEntity = userEAO.getUser(new BigInteger(userPwd.getUserId()));
-
-        if (userEntity == null) {
+        if (userEntity == null || !changePasswordInfo.getResetPasswordToken().equals(userEntity.getResetPasswordToken())) {
             throw new NotFoundException("user not found");
         }
 
-
-        if (BooleanUtils.isTrue(userEntity.getIsLocked()) || userEntity.getPassword() == null
-                || !standardPasswordEncoder.matches(userPwd.getPassword(), userEntity.getPassword())) {
-            throw new ValidationException("password is not valid");
-        }
-
-
-        userEntity.setPassword(standardPasswordEncoder.encode(userPwd.getNewPassword()));
+        userEntity.setPassword(standardPasswordEncoder.encode(changePasswordInfo.getPassword()));
+        userEntity.setResetPasswordToken(null);
         userEAO.saveUser(userEntity);
     }
 
@@ -542,9 +539,48 @@ public class UserService {
         }
     }
 
-    private void validateChangePassword(UserInfo userInfo) {
-        validatePassword(userInfo);
-        validateRequiredObject(userInfo.getNewPassword(), "newPassword", 8, 50);
+    private void validateChangePassword(ChangePasswordInfo changePasswordInfo) {
+        validateRequiredObject(changePasswordInfo, "changePasswordInfo");
+        validateRequiredObject(changePasswordInfo.getUserName(), "userName");
+        validateRequiredObject(changePasswordInfo.getResetPasswordToken(), "resetPasswordToken");
+        validateRequiredObject(changePasswordInfo.getPassword(), "password", 8, 50);
+    }
 
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public ResetPasswordResponseInfo resetPassword(ResetPasswordInfo resetPasswordInfo)
+            throws MessagingException {
+        validateResetPassword(resetPasswordInfo);
+
+        UserEntity userEntity = userEAO.getUser(resetPasswordInfo.getUserName());
+
+        if (userEntity == null) {
+            throw new ValidationException("user not found");
+        }
+
+        userEntity.setResetPasswordToken(generateActivationToken());
+        userEAO.saveUser(userEntity);
+
+        sendResetPasswordEmail(resetPasswordInfo.getUserName(), userEntity.getEmail(), userEntity.getResetPasswordToken());
+
+        ResetPasswordResponseInfo resetPasswordResponseInfo = new ResetPasswordResponseInfo();
+        resetPasswordResponseInfo.setResetPasswordToken(userEntity.getResetPasswordToken());
+
+        return resetPasswordResponseInfo;
+    }
+
+    private void sendResetPasswordEmail(String userName, String email, String resetPasswordToken)
+            throws MessagingException {
+        String subject = "Cerere de resetare a parolei pentru Pixel Green Energy.";
+        StringBuilder bodyBuilder = new StringBuilder();
+        bodyBuilder.append("Ati primit o cerere de resetare a parolei.<br><br>");
+        bodyBuilder.append("Dati click pe acest link pentru a introduce noua parola:<br><br>");
+        bodyBuilder.append( resetPasswordUrl + "/" + userName + "/" + resetPasswordToken);
+
+        emailSenderService.sendEmail(email, subject, bodyBuilder.toString());
+    }
+
+    private void validateResetPassword(ResetPasswordInfo resetPasswordInfo) {
+        validateRequiredObject(resetPasswordInfo, "resetPasswordInfo");
+        validateRequiredObject(resetPasswordInfo.getUserName(), "userName");
     }
 }
