@@ -506,7 +506,7 @@ public class UserService {
     public void changePassword(ChangePasswordInfo changePasswordInfo) {
         validateChangePassword(changePasswordInfo);
 
-        UserEntity userEntity = userEAO.getUser(changePasswordInfo.getUserName());
+        UserEntity userEntity = userEAO.getUserByEmail(changePasswordInfo.getEmail());
 
         if (userEntity == null || !changePasswordInfo.getResetPasswordToken().equals(userEntity.getResetPasswordToken())) {
             throw new NotFoundException("user not found");
@@ -541,7 +541,7 @@ public class UserService {
 
     private void validateChangePassword(ChangePasswordInfo changePasswordInfo) {
         validateRequiredObject(changePasswordInfo, "changePasswordInfo");
-        validateRequiredObject(changePasswordInfo.getUserName(), "userName");
+        validateRequiredObject(changePasswordInfo.getEmail(), "userName");
         validateRequiredObject(changePasswordInfo.getResetPasswordToken(), "resetPasswordToken");
         validateRequiredObject(changePasswordInfo.getPassword(), "password", 8, 50);
     }
@@ -551,7 +551,7 @@ public class UserService {
             throws MessagingException {
         validateResetPassword(resetPasswordInfo);
 
-        UserEntity userEntity = userEAO.getUser(resetPasswordInfo.getUserName());
+        UserEntity userEntity = userEAO.getUserByEmail(resetPasswordInfo.getEmail());
 
         if (userEntity == null) {
             throw new ValidationException("user not found");
@@ -560,7 +560,7 @@ public class UserService {
         userEntity.setResetPasswordToken(generateActivationToken());
         userEAO.saveUser(userEntity);
 
-        sendResetPasswordEmail(resetPasswordInfo.getUserName(), userEntity.getEmail(), userEntity.getResetPasswordToken());
+        sendResetPasswordEmail(resetPasswordInfo.getEmail(), userEntity.getEmail(), userEntity.getResetPasswordToken());
 
         ResetPasswordResponseInfo resetPasswordResponseInfo = new ResetPasswordResponseInfo();
         resetPasswordResponseInfo.setResetPasswordToken(userEntity.getResetPasswordToken());
@@ -581,6 +581,6 @@ public class UserService {
 
     private void validateResetPassword(ResetPasswordInfo resetPasswordInfo) {
         validateRequiredObject(resetPasswordInfo, "resetPasswordInfo");
-        validateRequiredObject(resetPasswordInfo.getUserName(), "userName");
+        validateRequiredObject(resetPasswordInfo.getEmail(), "userName");
     }
 }
