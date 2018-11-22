@@ -1,6 +1,5 @@
 package com.gcr.acm.customerservice.customer;
 
-import com.gcr.acm.common.utils.BigIntegerIdInfo;
 import com.gcr.acm.common.utils.Counter;
 import com.gcr.acm.jpaframework.EntityAccessObjectBase;
 import com.gcr.acm.jpaframework.JpaQueryBuilder;
@@ -8,9 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Entity access object for customers.
@@ -119,7 +116,12 @@ public class CustomerEAO extends EntityAccessObjectBase {
         populateQueryBuilderConditionsAndJoins(customerEntitySearchCriteria, queryBuilder);
 
         List<Counter> countersList = findObjects(queryBuilder, customerEntitySearchCriteria);
+        BigDecimal commissionPercentage = BigDecimal.valueOf(Long.valueOf(System.getProperty("customer.commission")));
+        BigDecimal totalPercentage = countersList.get(0).getCount();
+        return calculatePercentageFromTotalCommision(totalPercentage, commissionPercentage);
+    }
 
-        return countersList.get(0).getCount();
+    private BigDecimal calculatePercentageFromTotalCommision(BigDecimal totalCommision, BigDecimal commissionPercentage) {
+        return totalCommision.multiply(commissionPercentage).divide(BigDecimal.valueOf(100));
     }
 }
