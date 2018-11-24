@@ -58,6 +58,9 @@ public class UserEntity extends EntityBase {
     @Column(name ="phone_number")
     private String phoneNumber;
 
+    @Column(name ="reset_password_token")
+    private String resetPasswordToken;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id", nullable = false, insertable = false, updatable = false)
     private RoleEntity roleEntity;
@@ -167,5 +170,13 @@ public class UserEntity extends EntityBase {
 
     public void setAgentCommissionEntitySet(Set<AgentCommissionEntity> agentCommissionEntitySet) {
         this.agentCommissionEntitySet = agentCommissionEntitySet;
+    }
+
+    public String getResetPasswordToken() {
+        return resetPasswordToken;
+    }
+
+    public void setResetPasswordToken(String resetPasswordToken) {
+        this.resetPasswordToken = resetPasswordToken;
     }
 }

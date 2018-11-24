@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ValidationException;
 import java.math.BigInteger;
@@ -100,8 +101,8 @@ public class UserController {
 
     @RequestMapping(value = "/changePassword", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public SuccessObject changePassword(@RequestBody UserInfo userPwd) {
-        userService.changePassword(userPwd);
+    public SuccessObject changePassword(@RequestBody ChangePasswordInfo changePasswordInfo) {
+        userService.changePassword(changePasswordInfo);
 
         return new SuccessObject();
     }
@@ -112,5 +113,12 @@ public class UserController {
         userService.checkUserIdAndPassword(userPwd);
 
         return new SuccessObject();
+    }
+
+    @RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public ResetPasswordResponseInfo resetPassword(@RequestBody ResetPasswordInfo resetPasswordInfo)
+            throws MessagingException {
+        return userService.resetPassword(resetPasswordInfo);
     }
 }

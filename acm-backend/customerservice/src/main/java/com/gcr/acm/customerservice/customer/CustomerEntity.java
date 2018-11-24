@@ -41,6 +41,15 @@ public class CustomerEntity extends EntityBase {
     @Column(name ="street_number")
     private String streetNumber;
 
+    @Column(name ="flat")
+    private String flat;
+
+    @Column(name ="stair_number")
+    private String stairNumber;
+
+    @Column(name ="apartment_number")
+    private String apartmentNumber;
+
     @Column(name ="phone_number")
     private String phoneNumber;
 
@@ -234,5 +243,29 @@ public class CustomerEntity extends EntityBase {
 
     public void setAgentName(String agentName) {
         this.agentName = agentName;
+    }
+
+    public String getFlat() {
+        return flat;
+    }
+
+    public void setFlat(String flat) {
+        this.flat = flat;
+    }
+
+    public String getStairNumber() {
+        return stairNumber;
+    }
+
+    public void setStairNumber(String stairNumber) {
+        this.stairNumber = stairNumber;
+    }
+
+    public String getApartmentNumber() {
+        return apartmentNumber;
+    }
+
+    public void setApartmentNumber(String apartmentNumber) {
+        this.apartmentNumber = apartmentNumber;
     }
 }

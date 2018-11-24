@@ -31,6 +31,9 @@ public class CustomerInfo  {
     private String location;
     private String street;
     private String streetNumber;
+    private String flat;
+    private String stairNumber;
+    private String apartmentNumber;
     private String phoneNumber;
     @JsonSerialize(using = JsonDateSerializer.class)
     private Date contractDate;
@@ -204,5 +207,29 @@ public class CustomerInfo  {
 
     public void setAgentName(String agentName) {
         this.agentName = agentName;
+    }
+
+    public String getFlat() {
+        return flat;
+    }
+
+    public void setFlat(String flat) {
+        this.flat = flat;
+    }
+
+    public String getStairNumber() {
+        return stairNumber;
+    }
+
+    public void setStairNumber(String stairNumber) {
+        this.stairNumber = stairNumber;
+    }
+
+    public String getApartmentNumber() {
+        return apartmentNumber;
+    }
+
+    public void setApartmentNumber(String apartmentNumber) {
+        this.apartmentNumber = apartmentNumber;
     }
 }

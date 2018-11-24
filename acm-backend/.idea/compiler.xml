@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="common" />
         <module name="customerservice" />
+        <module name="email" />
         <module name="iam-oss" />
         <module name="jpaframework" />
         <module name="registry-oss" />

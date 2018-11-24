@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import javax.validation.ValidationException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -62,6 +63,10 @@ public class CustomerService {
     public CustomerInfo saveCustomer(CustomerInfo customerInfo) {
         validateCustomer(customerInfo);
 
+        if (customerInfo.getId() != null && !UserIdentity.getLoginUser().isSuperUser()) {
+            throw new UnauthorizedException("unauthorized");
+        }
+
         CustomerEntity customerEntity = populateCustomerEntity(customerInfo);
 
         return getCustomerInfo(customerEAO.saveCustomer(customerEntity));
@@ -82,6 +87,9 @@ public class CustomerService {
         customerInfo.setLocation(customerEntity.getLocation());
         customerInfo.setStreet(customerEntity.getStreet());
         customerInfo.setStreetNumber(customerEntity.getStreetNumber());
+        customerInfo.setFlat(customerEntity.getFlat());
+        customerInfo.setStairNumber(customerEntity.getStairNumber());
+        customerInfo.setApartmentNumber(customerEntity.getApartmentNumber());
         customerInfo.setContractDate(customerEntity.getContractDate());
         customerInfo.setAgentId(customerEntity.getAgentId().toString());
         customerInfo.setAgentName(customerEntity.getAgentName());
@@ -129,8 +137,17 @@ public class CustomerService {
         customerEntity.setLocation(customerInfo.getLocation());
         customerEntity.setStreet(customerInfo.getStreet());
         customerEntity.setStreetNumber(customerInfo.getStreetNumber());
+        customerEntity.setFlat(customerInfo.getFlat());
+        customerEntity.setStairNumber(customerInfo.getStairNumber());
+        customerEntity.setApartmentNumber(customerInfo.getApartmentNumber());
         customerEntity.setContractDate(customerInfo.getContractDate());
-        customerEntity.setAgentId(new BigInteger(customerInfo.getAgentId()));
+
+        if (UserIdentity.getLoginUser().isSuperUser()) {
+            customerEntity.setAgentId(new BigInteger(customerInfo.getAgentId()));
+        } else if (UserIdentity.getLoginUser().isAgent()){
+            customerEntity.setAgentId(new BigInteger(UserIdentity.getLoginUser().getUserId()));
+        }
+
         customerEntity.setPhoneNumber(customerInfo.getPhoneNumber());
         customerEntity.setStartDeliveryDate(customerInfo.getStartDeliveryDate());
 
@@ -194,7 +211,11 @@ public class CustomerService {
         validateRequiredObject(customerInfo.getStreetNumber(), "streetNumber");
         validateRequiredObject(customerInfo.getContractDate(), "contractDate");
         validateRequiredObject(customerInfo.getIsActive(), "isActive");
-        validateRequiredObject(customerInfo.getAgentId(), "agentId");
+
+        if (UserIdentity.getLoginUser().isSuperUser()) {
+            validateRequiredObject(customerInfo.getAgentId(), "agentId");
+        }
+
         validateRequiredObject(customerInfo.getPhoneNumber(), "phoneNumber");
         validateRequiredObject(customerInfo.getStartDeliveryDate(), "startDeliveryDate");
 
@@ -253,8 +274,14 @@ public class CustomerService {
                 customerEntitySearchCriteria.setIsActive(searchCustomerCriteria.getIsActive());
             }
 
-            if (searchCustomerCriteria.getAgentId() != null) {
-                customerEntitySearchCriteria.setAgentId(new BigInteger(searchCustomerCriteria.getAgentId()));
+            if (UserIdentity.getLoginUser().isSuperUser()) {
+                if (searchCustomerCriteria.getAgentId() != null) {
+                    customerEntitySearchCriteria.setAgentId(new BigInteger(searchCustomerCriteria.getAgentId()));
+                }
+            } else if (UserIdentity.getLoginUser().isAgent()) {
+                customerEntitySearchCriteria.setAgentId(new BigInteger(UserIdentity.getLoginUser().getUserId()));
+            } else {
+                throw new ValidationException("unauthorized");
             }
 
             customerEntitySearchCriteria.setStartDate(searchCustomerCriteria.getStartDate());
@@ -272,7 +299,7 @@ public class CustomerService {
 
     private void validateFindCustomers(SearchCustomerCriteria searchCustomerCriteria) {
         validateRequiredObject(searchCustomerCriteria, "searchCustomerCriteria");
-        validateLoginUserCustomer(searchCustomerCriteria.getAgentId());
+//        validateLoginUserCustomer(searchCustomerCriteria.getAgentId());
         validateAtLeastOneIsSet(Arrays.asList(searchCustomerCriteria.getAgentId(), searchCustomerCriteria.getCountyId(),
                 searchCustomerCriteria.getFirstNameStartsWith(), searchCustomerCriteria.getLastNameStartsWith(),
                 searchCustomerCriteria.getLocationStartsWith(), searchCustomerCriteria.getStartDate(), searchCustomerCriteria.getEndDate(),
@@ -280,19 +307,19 @@ public class CustomerService {
                 "At least one search criteria must be set");
     }
 
-    private void validateLoginUserCustomer(String agentId) {
-        UserInfo loginUser = UserIdentity.getLoginUser();
-
-        if (loginUser != null && loginUser.isAgent()) {
-            validateRequiredObject(agentId, "agentId");
-
-            if (!agentId.equals(loginUser.getUserId())) {
-                throw new UnauthorizedException("unauthorized");
-            }
-        } else if (loginUser == null || (!loginUser.isSuperUser())) {
-            throw new UnauthorizedException("unauthorized");
-        }
-    }
+//    private void validateLoginUserCustomer(String agentId) {
+//        UserInfo loginUser = UserIdentity.getLoginUser();
+//
+//        if (loginUser != null && loginUser.isAgent()) {
+//            validateRequiredObject(agentId, "agentId");
+//
+//            if (!agentId.equals(loginUser.getUserId())) {
+//                throw new UnauthorizedException("unauthorized");
+//            }
+//        } else if (loginUser == null || (!loginUser.isSuperUser())) {
+//            throw new UnauthorizedException("unauthorized");
+//        }
+//    }
 
     /**
      * Gets the customer info for the specified id.

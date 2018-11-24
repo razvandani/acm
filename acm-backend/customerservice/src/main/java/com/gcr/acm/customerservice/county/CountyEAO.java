@@ -29,6 +29,8 @@ public class CountyEAO extends EntityAccessObjectBase {
         if (!Utilities.isEmptyOrNull(searchCriteria.getNameStartsWith())) {
             queryBuilder.addCondition("c.name LIKE :nameStartsWith");
         }
+
+        queryBuilder.addOrderByStatement("c.name");
     }
     public CountyEntity getEmploymentType(Integer id) {
         return getEntity(CountyEntity.class, id);
