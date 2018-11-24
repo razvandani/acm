@@ -21,6 +21,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -46,6 +47,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @EnableTransactionManagement
 @EnableSwagger2
 @EntityScan(value = "com.gcr.acm")
+@PropertySource("application-${spring.profiles.active}.properties")
 public class CustomerServiceApplication extends WebMvcConfigurerAdapter {
     @Autowired
     private PasswordEncoder standardPasswordEncoder;
@@ -58,6 +60,9 @@ public class CustomerServiceApplication extends WebMvcConfigurerAdapter {
 
     @Value("${spring.profiles.active}")
     private String activeProfile;
+
+    @Value("${customer.commission}")
+    private String commission;
 
     public static void main(String[] args) {
         LoggerAspect.initializeLogging();
@@ -78,6 +83,7 @@ public class CustomerServiceApplication extends WebMvcConfigurerAdapter {
         dsProps.setProperty("password", encryptionUtil.decrypt(dsProps.getProperty("password")));
         Properties hikariProps = PropertiesLoaderUtils.loadAllProperties("hikari-" + activeProfile + ".properties");
         hikariProps.put("dataSourceProperties", dsProps);
+        System.getProperties().put("customer.commission", commission);
         return new HikariDataSource(new HikariConfig(hikariProps));
     }
 
