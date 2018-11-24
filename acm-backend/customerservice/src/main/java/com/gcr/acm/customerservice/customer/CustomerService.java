@@ -61,6 +61,10 @@ public class CustomerService {
             throws Exception {
         validateCustomer(customerInfo);
 
+        if (customerInfo.getId() != null && !UserIdentity.getLoginUser().isSuperUser()) {
+            throw new UnauthorizedException("unauthorized");
+        }
+
         CustomerEntity customerEntity = populateCustomerEntity(customerInfo);
 
         return getCustomerInfo(customerEAO.saveCustomer(customerEntity));
