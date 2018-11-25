@@ -203,14 +203,6 @@ CREATE TABLE IF NOT EXISTS `customer` (
   CONSTRAINT `fk_customer_county` FOREIGN KEY (`county_id`) REFERENCES `county` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `commission_type` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  `commission_value` decimal(12,2) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `name_UNIQUE` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 call AddColumn('customer', 'flat', 'VARCHAR(10) NULL');
 call AddColumn('customer', 'stair_number', 'VARCHAR(10) NULL');
 call AddColumn('customer', 'apartment_number', 'VARCHAR(10) NULL');
