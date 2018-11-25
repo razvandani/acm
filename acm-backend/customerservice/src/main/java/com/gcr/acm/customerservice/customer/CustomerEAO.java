@@ -117,11 +117,6 @@ public class CustomerEAO extends EntityAccessObjectBase {
 
         List<Counter> countersList = findObjects(queryBuilder, customerEntitySearchCriteria);
         BigDecimal commissionPercentage = BigDecimal.valueOf(Long.valueOf(System.getProperty("customer.commission")));
-        BigDecimal totalPercentage = countersList.get(0).getCount();
-        return calculatePercentageFromTotalCommision(totalPercentage, commissionPercentage);
-    }
-
-    private BigDecimal calculatePercentageFromTotalCommision(BigDecimal totalCommision, BigDecimal commissionPercentage) {
-        return totalCommision.multiply(commissionPercentage).divide(BigDecimal.valueOf(100));
+        return countersList.get(0).getCount();
     }
 }
