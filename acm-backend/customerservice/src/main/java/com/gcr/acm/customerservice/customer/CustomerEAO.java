@@ -116,7 +116,6 @@ public class CustomerEAO extends EntityAccessObjectBase {
         populateQueryBuilderConditionsAndJoins(customerEntitySearchCriteria, queryBuilder);
 
         List<Counter> countersList = findObjects(queryBuilder, customerEntitySearchCriteria);
-        BigDecimal commissionPercentage = BigDecimal.valueOf(Long.valueOf(System.getProperty("customer.commission")));
         return countersList.get(0).getCount();
     }
 }
