@@ -230,3 +230,5 @@ call AddColumn('customer', 'stair_number', 'VARCHAR(10) NULL');
 call AddColumn('customer', 'apartment_number', 'VARCHAR(10) NULL');
 
 call AddColumn('user', 'reset_password_token', 'VARCHAR(50) NULL');
+
+call RenameColumn('customer', 'contract_type', 'commission_type', 'INT NOT NULL');
