@@ -1,6 +1,7 @@
 package com.gcr.acm.customerservice;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Properties;
@@ -61,9 +62,6 @@ public class CustomerServiceApplication extends WebMvcConfigurerAdapter {
     @Value("${spring.profiles.active}")
     private String activeProfile;
 
-    @Value("${customer.commission}")
-    private String commission;
-
     public static void main(String[] args) {
         LoggerAspect.initializeLogging();
 
@@ -83,7 +81,6 @@ public class CustomerServiceApplication extends WebMvcConfigurerAdapter {
         dsProps.setProperty("password", encryptionUtil.decrypt(dsProps.getProperty("password")));
         Properties hikariProps = PropertiesLoaderUtils.loadAllProperties("hikari-" + activeProfile + ".properties");
         hikariProps.put("dataSourceProperties", dsProps);
-        System.getProperties().put("customer.commission", commission);
         return new HikariDataSource(new HikariConfig(hikariProps));
     }
 

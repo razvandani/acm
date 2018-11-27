@@ -5,6 +5,7 @@ import com.gcr.acm.customerservice.customer.CustomerEntitySearchCriteria;
 import com.gcr.acm.customerservice.customer.CustomerInfo;
 import com.gcr.acm.iam.user.UserIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,9 @@ import static com.gcr.acm.common.utils.ValidationUtils.validateRequiredObject;
  */
 @Service
 public class CommissionService {
+
+    @Value("${customer.commission}")
+	private BigDecimal customerCommission;
 
 	@Autowired
 	private CustomerEAO customerEAO;
@@ -42,7 +46,7 @@ public class CommissionService {
 		BigDecimal commissionTotal = customerEAO.calculateCommission(customerEntitySearchCriteria);
 
 		CommissionInfo commissionInfo = new CommissionInfo();
-		commissionInfo.setCommissionTotal(commissionTotal != null ? commissionTotal : new BigDecimal(0));
+		commissionInfo.setCommissionTotal(calculatePercentageFromTotalCommision(commissionTotal != null ? commissionTotal : new BigDecimal(0)));
 
 		return commissionInfo;
 	}
@@ -50,6 +54,9 @@ public class CommissionService {
 	private void validateSearchCommissionCriteria(SearchCommissionCriteria searchCommissionCriteria) {
 		validateRequiredObject(searchCommissionCriteria.getStartDate(), "startDate");
 		validateRequiredObject(searchCommissionCriteria.getEndDate(), "endDate");
+	}
 
+	private BigDecimal calculatePercentageFromTotalCommision(BigDecimal totalCommision) {
+		return totalCommision.multiply(customerCommission).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP);
 	}
 }
