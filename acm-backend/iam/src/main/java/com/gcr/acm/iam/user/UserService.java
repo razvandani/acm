@@ -300,9 +300,7 @@ public class UserService {
         userEntity.setEmail(userInfo.getEmail());
         userEntity.setCreatedDttm(userInfo.getCreatedDttm());
 
-        if (userInfo.isAgent()) {
-            populateAgentCommissionEntityList(userInfo, userEntity);
-        }
+        populateAgentCommissionEntityList(userInfo, userEntity);
 
         return userEntity;
     }
