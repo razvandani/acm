@@ -236,3 +236,5 @@ call AddColumn('customer', 'status', 'INT NOT NULL DEFAULT 1');
 update customer set status = 4 where status = 2 and id != 0;
 
 private Integer status; // 1 = Active, 2 = Gave up, 3 = Wrong, 4 = Approved
+
+call ChangeColumn('customer', 'is_active', 'BIT NULL');
