@@ -210,24 +210,26 @@ public class UserService {
     }
 
     private void validateCommissions(List<UserInfo.AgentCommissionInfo> agentCommissionInfoList) {
-        validateRequiredObject(agentCommissionInfoList, "agentCommissionInfoList");
+        if (agentCommissionInfoList != null) {
+            for (UserInfo.AgentCommissionInfo agentCommissionInfo : agentCommissionInfoList) {
+                validateRequiredObject(agentCommissionInfo, "agentCommissionInfo");
+                validateRequiredObject(agentCommissionInfo.getCommissionType(), "commissionType");
 
-        for (UserInfo.AgentCommissionInfo agentCommissionInfo : agentCommissionInfoList) {
-            validateRequiredObject(agentCommissionInfo, "agentCommissionInfo");
-            validateRequiredObject(agentCommissionInfo.getCommissionType(), "commissionType");
+                if (agentCommissionInfo.getCommissionType().equals(COMMISSION_TYPE_FLUX)) {
+                    validateRequiredObject(agentCommissionInfo.getCommissionSubcategory(), "commissionSubcategory");
+                } else {
+                    validateRequiredObject(agentCommissionInfo.getCommissionSubcategoryStart(),
+                            "commissionSubcategoryStart");
+                    validateRequiredObject(agentCommissionInfo.getCommissionSubcategoryEnd(), "commissionSubcategoryEnd");
 
-            if (agentCommissionInfo.getCommissionType().equals(COMMISSION_TYPE_FLUX)) {
-                validateRequiredObject(agentCommissionInfo.getCommissionSubcategory(), "commissionSubcategory");
-            } else {
-                validateRequiredObject(agentCommissionInfo.getCommissionSubcategoryStart(), "commissionSubcategoryStart");
-                validateRequiredObject(agentCommissionInfo.getCommissionSubcategoryEnd(), "commissionSubcategoryEnd");
-
-                if (agentCommissionInfo.getCommissionSubcategoryStart().compareTo(agentCommissionInfo.getCommissionSubcategoryEnd()) > 0) {
-                    throw new ValidationException("commissionSubcategoryStart cannot be after commissionSubcategoryEnd");
+                    if (agentCommissionInfo.getCommissionSubcategoryStart().compareTo(agentCommissionInfo.getCommissionSubcategoryEnd()) > 0) {
+                        throw new ValidationException(
+                                "commissionSubcategoryStart cannot be after commissionSubcategoryEnd");
+                    }
                 }
-            }
 
-            validateRequiredObject(agentCommissionInfo.getCommissionValue(), "commissionValue");
+                validateRequiredObject(agentCommissionInfo.getCommissionValue(), "commissionValue");
+            }
         }
     }
 
@@ -306,49 +308,51 @@ public class UserService {
     }
 
     private void populateAgentCommissionEntityList(UserInfo userInfo, UserEntity userEntity) {
-        Set<AgentCommissionEntity> agentCommissionEntitySet = userEntity.getAgentCommissionEntitySet();
-
-        if (agentCommissionEntitySet == null) {
-            agentCommissionEntitySet = new HashSet<>();
-            userEntity.setAgentCommissionEntitySet(agentCommissionEntitySet);
-        }
-
-        // prepare maps that are needed in order to identify what entities news to be added, modified and deleted
-        Map<Integer, UserInfo.AgentCommissionInfo> agentCommissionInfoByIdMap = new HashMap<>();
-
         if (userInfo.getAgentCommissionInfoList() != null) {
-            for (UserInfo.AgentCommissionInfo agentCommissionInfo : userInfo.getAgentCommissionInfoList()) {
-                agentCommissionInfoByIdMap.put(agentCommissionInfo.getId(), agentCommissionInfo);
+            Set<AgentCommissionEntity> agentCommissionEntitySet = userEntity.getAgentCommissionEntitySet();
+
+            if (agentCommissionEntitySet == null) {
+                agentCommissionEntitySet = new HashSet<>();
+                userEntity.setAgentCommissionEntitySet(agentCommissionEntitySet);
             }
-        }
 
-        Map<Integer, AgentCommissionEntity> agentCommissionEntityByIdMap = new HashMap<>();
+            // prepare maps that are needed in order to identify what entities news to be added, modified and deleted
+            Map<Integer, UserInfo.AgentCommissionInfo> agentCommissionInfoByIdMap = new HashMap<>();
 
-        for (AgentCommissionEntity agentCommissionEntity : agentCommissionEntitySet) {
-            agentCommissionEntityByIdMap.put(agentCommissionEntity.getId(), agentCommissionEntity);
-        }
-
-        // add or update AgentCommissionEntity's
-        if (userInfo.getAgentCommissionInfoList() != null) {
-            for (UserInfo.AgentCommissionInfo agentCommissionInfo : userInfo.getAgentCommissionInfoList()) {
-                AgentCommissionEntity agentCommissionEntity = agentCommissionEntityByIdMap.get(agentCommissionInfo.getId());
-
-                if (agentCommissionEntity == null) {
-                    agentCommissionEntity = new AgentCommissionEntity();
-                    agentCommissionEntitySet.add(agentCommissionEntity);
+            if (userInfo.getAgentCommissionInfoList() != null) {
+                for (UserInfo.AgentCommissionInfo agentCommissionInfo : userInfo.getAgentCommissionInfoList()) {
+                    agentCommissionInfoByIdMap.put(agentCommissionInfo.getId(), agentCommissionInfo);
                 }
-
-                agentCommissionEntity.setCommissionType(agentCommissionInfo.getCommissionType());
-                agentCommissionEntity.setCommissionSubcategory(agentCommissionInfo.getCommissionSubcategory());
-                agentCommissionEntity.setCommissionSubcategoryStart(agentCommissionInfo.getCommissionSubcategoryStart());
-                agentCommissionEntity.setCommissionSubcategoryEnd(agentCommissionInfo.getCommissionSubcategoryEnd());
-                agentCommissionEntity.setCommissionValue(agentCommissionInfo.getCommissionValue());
-                agentCommissionEntity.setAgentEntity(userEntity);
             }
-        }
 
-        // remove relevant entities
-        agentCommissionEntitySet.removeIf(agentCommissionEntity -> !agentCommissionInfoByIdMap.containsKey(agentCommissionEntity.getId()));
+            Map<Integer, AgentCommissionEntity> agentCommissionEntityByIdMap = new HashMap<>();
+
+            for (AgentCommissionEntity agentCommissionEntity : agentCommissionEntitySet) {
+                agentCommissionEntityByIdMap.put(agentCommissionEntity.getId(), agentCommissionEntity);
+            }
+
+            // add or update AgentCommissionEntity's
+            if (userInfo.getAgentCommissionInfoList() != null) {
+                for (UserInfo.AgentCommissionInfo agentCommissionInfo : userInfo.getAgentCommissionInfoList()) {
+                    AgentCommissionEntity agentCommissionEntity = agentCommissionEntityByIdMap.get(agentCommissionInfo.getId());
+
+                    if (agentCommissionEntity == null) {
+                        agentCommissionEntity = new AgentCommissionEntity();
+                        agentCommissionEntitySet.add(agentCommissionEntity);
+                    }
+
+                    agentCommissionEntity.setCommissionType(agentCommissionInfo.getCommissionType());
+                    agentCommissionEntity.setCommissionSubcategory(agentCommissionInfo.getCommissionSubcategory());
+                    agentCommissionEntity.setCommissionSubcategoryStart(agentCommissionInfo.getCommissionSubcategoryStart());
+                    agentCommissionEntity.setCommissionSubcategoryEnd(agentCommissionInfo.getCommissionSubcategoryEnd());
+                    agentCommissionEntity.setCommissionValue(agentCommissionInfo.getCommissionValue());
+                    agentCommissionEntity.setAgentEntity(userEntity);
+                }
+            }
+
+            // remove relevant entities
+            agentCommissionEntitySet.removeIf(agentCommissionEntity -> !agentCommissionInfoByIdMap.containsKey(agentCommissionEntity.getId()));
+        }
     }
 
     @Transactional(readOnly = true)
