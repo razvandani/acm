@@ -73,8 +73,8 @@ import static com.gcr.acm.customerservice.customer.CustomerDetailsEnums.ProductT
 
 	private Map<String, Object[]> getCustomerInfoMap(List<CustomerInfo> customerInfoList) {
 		int indiceMap = 1;
-		Map<String, Object[]> data = new TreeMap<>();
-		Object[] tableHeader = new Object[] { "Numar curent", "Numar de contract", "Data Contractului", "Numele",
+		Map<String, Object[]> data = new LinkedHashMap<>();
+		Object[] tableHeader = new Object[] { "Numar de contract", "Data Contractului", "Numele",
 				"Enegie/gaz", "Tipul de contract", "Categoria", "Judet", "Localitate", "Telefon", "Data intrare in furnizare", "Agent" };
 		data.put(Integer.toString(indiceMap), tableHeader);
 
@@ -85,8 +85,9 @@ import static com.gcr.acm.customerservice.customer.CustomerDetailsEnums.ProductT
 						ELECTRIC_ENERGY.getDescription() :
 						NATURAL_GAS.getDescription();
 				data.put(Integer.toString(indiceMap),
-						new Object[] { indiceMap - 1, customerInfo.getContractNumber(),
-								customerInfo.getContractDate(), customerInfo.getLastName() + customerInfo.getFirstName(), productType,
+						new Object[] {
+								customerInfo.getContractNumber(),
+								customerInfo.getContractDate(), customerInfo.getLastName() + " " + customerInfo.getFirstName(), productType,
 								getCommissionTypeByTypeId(customerInfo.getCommissionType()),
 								CustomerDetailsEnums.CommissionSubcategoryEnum.getCommissionSubcategoryById(customerInfo.getCommissionSubcategory()),
 								customerInfo.getCountyName(), customerInfo.getLocation(), customerInfo.getPhoneNumber(),
@@ -101,15 +102,19 @@ import static com.gcr.acm.customerservice.customer.CustomerDetailsEnums.ProductT
 		Set<String> keyset = data.keySet();
 		int rownum = 0;
 		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+		int numberOfColumns = 0;
 
 		for (String key : keyset) {
 			Row row = sheet.createRow(rownum++);
 			Object[] objArr = data.get(key);
+			numberOfColumns = objArr.length;
 			int cellnum = 0;
 			for (Object obj : objArr) {
 				Cell cell = row.createCell(cellnum++);
+
 				if (obj instanceof String) {
 					cell.setCellValue((String) obj);
+
 				} else if (obj instanceof Integer) {
 					cell.setCellValue((Integer) obj);
 				} else if (obj instanceof Date) {
@@ -119,6 +124,10 @@ import static com.gcr.acm.customerservice.customer.CustomerDetailsEnums.ProductT
 				}
 
 			}
+		}
+
+		for (int i = 0; i < numberOfColumns; i++) {
+			sheet.autoSizeColumn(i);
 		}
 	}
 }

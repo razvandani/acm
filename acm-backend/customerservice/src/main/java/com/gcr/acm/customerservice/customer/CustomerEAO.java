@@ -106,7 +106,7 @@ public class CustomerEAO extends EntityAccessObjectBase {
             queryBuilder.addCondition("c.status = :status");
         }
 
-        queryBuilder.addOrderByStatement("c.firstName, c.lastName");
+        queryBuilder.addOrderByStatement("c.contractDate, c.firstName, c.lastName");
     }
 
     public BigDecimal calculateCommission(CustomerEntitySearchCriteria customerEntitySearchCriteria) {
