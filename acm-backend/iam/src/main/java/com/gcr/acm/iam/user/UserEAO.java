@@ -30,7 +30,7 @@ public class UserEAO extends EntityAccessObjectBase {
 
         UserEntitySearchCriteria userEntitySearchCriteria = new UserEntitySearchCriteria();
         userEntitySearchCriteria.setUserName(userName);
-        userEntitySearchCriteria.setSearchOnlyActive(false);
+        userEntitySearchCriteria.setSearchOnlyActive(null);
 
         List<UserEntity> userEntityList = findUsers(userEntitySearchCriteria);
 
@@ -52,7 +52,7 @@ public class UserEAO extends EntityAccessObjectBase {
 
         UserEntitySearchCriteria userEntitySearchCriteria = new UserEntitySearchCriteria();
         userEntitySearchCriteria.setEmail(email);
-        userEntitySearchCriteria.setSearchOnlyActive(false);
+        userEntitySearchCriteria.setSearchOnlyActive(null);
 
         List<UserEntity> userEntityList = findUsers(userEntitySearchCriteria);
 
@@ -100,8 +100,8 @@ public class UserEAO extends EntityAccessObjectBase {
             queryBuilder.addCondition("u.roleId IN (:roleIdList)");
         }
 
-        if (searchCriteria.getSearchOnlyActive()) {
-            queryBuilder.addCondition("u.isActive = true");
+        if (searchCriteria.getSearchOnlyActive() != null) {
+            queryBuilder.addCondition("u.isActive = :searchOnlyActive");
         }
 
         if (!Utilities.isEmptyOrNull(searchCriteria.getFirstName())) {

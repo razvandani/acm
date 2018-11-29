@@ -56,9 +56,6 @@ public class CustomerEntity extends EntityBase {
     @Column(name ="contract_date")
     private Date contractDate;
 
-    @Column(name ="is_active")
-    private Boolean isActive;
-
     @Column(name ="agent_id")
     private BigInteger agentId;
 
@@ -78,7 +75,7 @@ public class CustomerEntity extends EntityBase {
     private BigDecimal commission; // calculated commission
 
     @Column(name ="status")
-    private Integer status; // 1 = Not Delivered to Admin, 2 = Delivered to Admin
+    private Integer status; // 1 = Active, 2 = Gave up, 3 = Wrong, 4 = Approved
 
     @Column(name ="agent_name")
     private String agentName;
@@ -149,14 +146,6 @@ public class CustomerEntity extends EntityBase {
 
     public void setContractDate(Date contractDate) {
         this.contractDate = contractDate;
-    }
-
-    public Boolean getIsActive() {
-        return isActive;
-    }
-
-    public void setIsActive(Boolean active) {
-        isActive = active;
     }
 
     public BigInteger getAgentId() {

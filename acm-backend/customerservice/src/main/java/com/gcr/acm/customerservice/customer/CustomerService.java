@@ -83,7 +83,6 @@ public class CustomerService {
         customerInfo.setCommissionType(customerEntity.getCommissionType());
         customerInfo.setCommissionSubcategory(customerEntity.getCommissionSubcategory());
         customerInfo.setCountyId(customerEntity.getCountyId());
-        customerInfo.setIsActive(customerEntity.getIsActive());
         customerInfo.setLocation(customerEntity.getLocation());
         customerInfo.setStreet(customerEntity.getStreet());
         customerInfo.setStreetNumber(customerEntity.getStreetNumber());
@@ -117,10 +116,10 @@ public class CustomerService {
             customerEntity = new CustomerEntity();
         }
 
-        if (UserIdentity.getLoginUser().isSuperUser()) {
+        if (UserIdentity.getLoginUser().isSuperUser() && customerInfo.getStatus() != null) {
             customerEntity.setStatus(customerInfo.getStatus());
-        } else if (UserIdentity.getLoginUser().isAgent() && customerInfo.getId() == null) {
-            customerEntity.setStatus(CustomerInfo.STATUS_NOT_DELIVERED_TO_ADMIN);
+        } else if (customerInfo.getId() == null) {
+            customerEntity.setStatus(CustomerInfo.STATUS_ACTIVE);
         }
 
         customerEntity.setContractNumber(customerInfo.getContractNumber());
@@ -133,7 +132,6 @@ public class CustomerService {
         customerEntity.setCommission(calculateCommission(customerInfo));
 
         customerEntity.setCountyId(customerInfo.getCountyId());
-        customerEntity.setIsActive(customerInfo.getIsActive());
         customerEntity.setLocation(customerInfo.getLocation());
         customerEntity.setStreet(customerInfo.getStreet());
         customerEntity.setStreetNumber(customerInfo.getStreetNumber());
@@ -210,7 +208,6 @@ public class CustomerService {
         validateRequiredObject(customerInfo.getStreet(), "street");
         validateRequiredObject(customerInfo.getStreetNumber(), "streetNumber");
         validateRequiredObject(customerInfo.getContractDate(), "contractDate");
-        validateRequiredObject(customerInfo.getIsActive(), "isActive");
 
         if (UserIdentity.getLoginUser().isSuperUser()) {
             validateRequiredObject(customerInfo.getAgentId(), "agentId");
@@ -268,10 +265,6 @@ public class CustomerService {
 
             if (!Utilities.isEmptyOrNull(searchCustomerCriteria.getLocationStartsWith())) {
                 customerEntitySearchCriteria.setLocationStartsWith(searchCustomerCriteria.getLocationStartsWith() + "%");
-            }
-
-            if (searchCustomerCriteria.getIsActive() != null) {
-                customerEntitySearchCriteria.setIsActive(searchCustomerCriteria.getIsActive());
             }
 
             if (UserIdentity.getLoginUser().isSuperUser()) {

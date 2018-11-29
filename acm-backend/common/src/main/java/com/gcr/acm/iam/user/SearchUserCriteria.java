@@ -8,7 +8,7 @@ import java.util.List;
  * @author Razvan Dani
  */
 public class SearchUserCriteria {
-    private Boolean searchOnlyActive = true;
+    private Boolean searchOnlyActive;
     private List<String> userIdList;
     private String username;
     private String email;

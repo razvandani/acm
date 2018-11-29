@@ -94,10 +94,6 @@ public class CustomerEAO extends EntityAccessObjectBase {
             queryBuilder.addCondition("c.agentId = :agentId");
         }
 
-        if (searchCriteria.getIsActive() != null) {
-            queryBuilder.addCondition("c.isActive = :isActive");
-        }
-
 //        if (searchCriteria.getContractStartDate() != null && searchCriteria.getContractEndDate() != null) {
 //            queryBuilder.addCondition("c.contractDate BETWEEN :contractStartDate AND :contractEndDate");
 //        }

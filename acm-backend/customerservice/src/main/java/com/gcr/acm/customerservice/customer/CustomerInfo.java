@@ -12,8 +12,10 @@ import java.util.Date;
  * @author Razvan Dani
  */
 public class CustomerInfo  {
-    public static final Integer STATUS_NOT_DELIVERED_TO_ADMIN = 1;
-    public static final Integer STATUS_DELIVERED_TO_ADMIN = 2;
+    public static final Integer STATUS_ACTIVE = 1;
+    public static final Integer STATUS_GAVE_UP = 2;
+    public static final Integer STATUS_WRONG = 3;
+    public static final Integer STATUS_APPROVED = 4;
 
     public static final Integer PRODUCT_TYPE_ELECTRIC_ENERGY = 1;
     public static final Integer PRODUCT_TYPE_NATURAL_GAS = 2;
@@ -37,7 +39,6 @@ public class CustomerInfo  {
     private String phoneNumber;
     @JsonSerialize(using = JsonDateSerializer.class)
     private Date contractDate;
-    private Boolean isActive;
     private String agentId;
     private String agentName; // readonly
     private String countyName; // readonly
@@ -46,7 +47,7 @@ public class CustomerInfo  {
     private Integer commissionSubcategory; // 1 = B1, 2 = B2, 3 = B3, 4 = B4
     @JsonSerialize(using = JsonDateSerializer.class)
     private Date startDeliveryDate; // date when the service (energy or gas) starts
-    private Integer status; // 1 = Not Delivered to Admin, 2 = Delivered to Admin
+    private Integer status; // 1 = Active, 2 = Gave up, 3 = Wrong, 4 = Approved
     private BigDecimal commission;
 
     public String getId() {
@@ -103,14 +104,6 @@ public class CustomerInfo  {
 
     public void setContractDate(Date contractDate) {
         this.contractDate = contractDate;
-    }
-
-    public Boolean getIsActive() {
-        return isActive;
-    }
-
-    public void setIsActive(Boolean active) {
-        isActive = active;
     }
 
     public String getCountyName() {

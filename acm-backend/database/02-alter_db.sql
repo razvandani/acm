@@ -232,3 +232,7 @@ call AddColumn('customer', 'apartment_number', 'VARCHAR(10) NULL');
 call AddColumn('user', 'reset_password_token', 'VARCHAR(50) NULL');
 
 call RenameColumn('customer', 'contract_type', 'commission_type', 'INT NOT NULL');
+call AddColumn('customer', 'status', 'INT NOT NULL DEFAULT 1');
+update customer set status = 4 where status = 2 and id != 0;
+
+private Integer status; // 1 = Active, 2 = Gave up, 3 = Wrong, 4 = Approved

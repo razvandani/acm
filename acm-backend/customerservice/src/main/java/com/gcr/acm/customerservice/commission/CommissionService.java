@@ -35,7 +35,7 @@ public class CommissionService {
 		CustomerEntitySearchCriteria customerEntitySearchCriteria = new CustomerEntitySearchCriteria();
 		customerEntitySearchCriteria.setContractStartDate(searchCommissionCriteria.getStartDate());
 		customerEntitySearchCriteria.setContractEndDate(searchCommissionCriteria.getEndDate());
-		customerEntitySearchCriteria.setStatus(CustomerInfo.STATUS_DELIVERED_TO_ADMIN);
+		customerEntitySearchCriteria.setStatus(CustomerInfo.STATUS_APPROVED);
 
 		if (UserIdentity.getLoginUser().isAgent()) {
 			customerEntitySearchCriteria.setAgentId(new BigInteger(UserIdentity.getLoginUser().getUserId()));
