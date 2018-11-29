@@ -550,7 +550,7 @@ public class UserService {
 
         if (UserInfo.ROLE_ID_AGENT.equals(searchUserCriteria.getRoleId())) {
             userEntitySearchCriteria.setRoleIdList(Arrays.asList(UserInfo.ROLE_ID_SUPER_USER, UserInfo.ROLE_ID_AGENT));
-        } else {
+        } else if (searchUserCriteria.getRoleId() != null) {
             userEntitySearchCriteria.setRoleIdList(Collections.singletonList(searchUserCriteria.getRoleId()));
         }
 
