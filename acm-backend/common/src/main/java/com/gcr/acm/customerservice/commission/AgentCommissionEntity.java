@@ -17,7 +17,7 @@ import java.math.BigInteger;
 public class AgentCommissionEntity extends EntityBase {
 	@Column(name = "id")
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
 	@Column(name = "agent_id", insertable = false, updatable = false)
