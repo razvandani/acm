@@ -164,8 +164,7 @@ public class CustomerService {
                             customerInfo.getCommissionType(), customerInfo.getCommissionSubcategory());
         } else if (customerInfo.getProductType().equals(CustomerInfo.PRODUCT_TYPE_ELECTRIC_ENERGY)) {
             agentCommissionEntity =
-                    commissionEAO.getAgentCommissionForElectricCurrent(new BigInteger(customerInfo.getAgentId()),
-                            customerInfo.getCommissionType(), customerInfo.getCommissionSubcategory());
+                    commissionEAO.getAgentCommissionForElectricCurrent(new BigInteger(customerInfo.getAgentId()), customerInfo.getCommissionSubcategory());
         }
 
         BigDecimal commission;
@@ -251,6 +250,10 @@ public class CustomerService {
         CustomerEntitySearchCriteria customerEntitySearchCriteria = new CustomerEntitySearchCriteria();
 
         if (searchCustomerCriteria!= null) {
+            if (searchCustomerCriteria.getStatus() != null) {
+                customerEntitySearchCriteria.setStatus(searchCustomerCriteria.getStatus());
+            }
+
             if (!Utilities.isEmptyOrNull(searchCustomerCriteria.getFirstNameStartsWith())) {
                 customerEntitySearchCriteria.setFirstNameStartsWith(searchCustomerCriteria.getFirstNameStartsWith() + "%");
             }

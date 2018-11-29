@@ -64,10 +64,9 @@ public class CommissionEAO extends EntityAccessObjectBase {
 	}
 
 	public AgentCommissionEntity getAgentCommissionForElectricCurrent(
-			BigInteger agentId, Integer commissionType, Integer commissionSubcategory) {
+			BigInteger agentId, Integer commissionSubcategory) {
 		AgentCommissionEntitySearchCriteria agentCommissionEntitySearchCriteria = new AgentCommissionEntitySearchCriteria();
 		agentCommissionEntitySearchCriteria.setAgentId(agentId);
-		agentCommissionEntitySearchCriteria.setCommissionType(commissionType);
 		agentCommissionEntitySearchCriteria.setCommissionSubcategoryElectricCurrent(commissionSubcategory);
 
 		List<AgentCommissionEntity> agentCommissionEntityList = findAgentCommissions(agentCommissionEntitySearchCriteria);

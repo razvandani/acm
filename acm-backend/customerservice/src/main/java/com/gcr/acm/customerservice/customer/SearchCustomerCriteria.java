@@ -16,6 +16,7 @@ public class SearchCustomerCriteria {
     private Integer startIndex;
     private Integer pageSize;
     private String agentId;
+    private Integer status;
 
     public String getFirstNameStartsWith() {
         return firstNameStartsWith;
@@ -119,5 +120,13 @@ public class SearchCustomerCriteria {
 
     public void setDeliveryEndDate(Date deliveryEndDate) {
         this.deliveryEndDate = deliveryEndDate;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

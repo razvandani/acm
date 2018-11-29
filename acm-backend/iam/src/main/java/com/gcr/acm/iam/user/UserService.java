@@ -213,7 +213,7 @@ public class UserService {
         if (agentCommissionInfoList != null) {
             for (UserInfo.AgentCommissionInfo agentCommissionInfo : agentCommissionInfoList) {
                 validateRequiredObject(agentCommissionInfo, "agentCommissionInfo");
-                validateRequiredObject(agentCommissionInfo.getCommissionType(), "commissionType");
+//                validateRequiredObject(agentCommissionInfo.getCommissionType(), "commissionType");
 
                 if (agentCommissionInfo.getCommissionType().equals(COMMISSION_TYPE_FLUX)) {
                     validateRequiredObject(agentCommissionInfo.getCommissionSubcategory(), "commissionSubcategory");
