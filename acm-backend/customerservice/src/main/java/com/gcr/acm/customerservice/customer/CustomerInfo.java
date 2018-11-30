@@ -45,10 +45,10 @@ public class CustomerInfo  {
     private Integer productType; // 1 = Electric energy, 2 = Natural Gas
     private Integer commissionType; // 1 = Fix, 2 = E-go, 3 = Flex, 4 = Flux
     private Integer commissionSubcategory; // 1 = B1, 2 = B2, 3 = B3, 4 = B4
+    private BigDecimal commission; // only super user can edit this, normally it is calculated when customer is created
     @JsonSerialize(using = JsonDateSerializer.class)
     private Date startDeliveryDate; // date when the service (energy or gas) starts
     private Integer status; // 1 = Active, 2 = Gave up, 3 = Wrong, 4 = Approved
-    private BigDecimal commission;
 
     public String getId() {
         return id;

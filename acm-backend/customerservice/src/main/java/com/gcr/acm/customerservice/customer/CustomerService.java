@@ -129,7 +129,11 @@ public class CustomerService {
         customerEntity.setCommissionType(customerInfo.getCommissionType());
         customerEntity.setCommissionSubcategory(customerInfo.getCommissionSubcategory());
 
-        customerEntity.setCommission(calculateCommission(customerInfo));
+        if (customerInfo.getId() == null) {
+            customerEntity.setCommission(calculateCommission(customerInfo));
+        } else if (UserIdentity.getLoginUser().isSuperUser() && customerInfo.getCommission() != null) {
+            customerEntity.setCommission(customerInfo.getCommission());
+        }
 
         customerEntity.setCountyId(customerInfo.getCountyId());
         customerEntity.setLocation(customerInfo.getLocation());
