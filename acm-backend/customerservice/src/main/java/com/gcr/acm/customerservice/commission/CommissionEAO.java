@@ -51,6 +51,8 @@ public class CommissionEAO extends EntityAccessObjectBase {
 		if (searchCriteria.getCommissionSubcategoryElectricCurrent() != null) {
 			queryBuilder.addCondition(":commissionSubcategoryElectricCurrent BETWEEN ac.commissionSubcategoryStart AND ac.commissionSubcategoryEnd");
 		}
+
+		queryBuilder.addOrderByStatement("ac.commissionSubcategory, ac.commissionSubcategoryStart, ac.commissionSubcategoryEnd");
 	}
 
 	public AgentCommissionEntity getAgentCommissionForNaturalGas(BigInteger agentId, Integer commissionType, Integer commissionSubcategory) {
