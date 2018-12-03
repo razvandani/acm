@@ -165,7 +165,7 @@ public class CustomerService {
         if (customerInfo.getProductType().equals(CustomerInfo.PRODUCT_TYPE_NATURAL_GAS)) {
             agentCommissionEntity =
                     commissionEAO.getAgentCommissionForNaturalGas(new BigInteger(customerInfo.getAgentId()),
-                            customerInfo.getCommissionType(), customerInfo.getCommissionSubcategory());
+                            2, customerInfo.getCommissionSubcategory()); // QUICK-FIX: in order to get and set comissions for B1 - B4
         } else if (customerInfo.getProductType().equals(CustomerInfo.PRODUCT_TYPE_ELECTRIC_ENERGY)) {
             agentCommissionEntity =
                     commissionEAO.getAgentCommissionForElectricCurrent(new BigInteger(customerInfo.getAgentId()), customerInfo.getCommissionSubcategory());
