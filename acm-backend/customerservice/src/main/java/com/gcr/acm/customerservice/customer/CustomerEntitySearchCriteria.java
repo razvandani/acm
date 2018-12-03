@@ -22,8 +22,6 @@ public class CustomerEntitySearchCriteria extends EntitySearchCriteria {
     private String locationStartsWith;
     private Boolean isActive;
     private BigInteger agentId;
-    private Date contractStartDate;
-    private Date contractEndDate;
     private Integer status;
 
     public Date getDeliveryStartDate() {
@@ -88,22 +86,6 @@ public class CustomerEntitySearchCriteria extends EntitySearchCriteria {
 
     public void setAgentId(BigInteger agentId) {
         this.agentId = agentId;
-    }
-
-    public Date getContractStartDate() {
-        return contractStartDate;
-    }
-
-    public void setContractStartDate(Date contractStartDate) {
-        this.contractStartDate = contractStartDate;
-    }
-
-    public Date getContractEndDate() {
-        return contractEndDate;
-    }
-
-    public void setContractEndDate(Date contractEndDate) {
-        this.contractEndDate = contractEndDate;
     }
 
     public Integer getStatus() {
