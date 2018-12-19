@@ -37,6 +37,7 @@ CREATE TABLE IF NOT EXISTS `county` (
 
 INSERT IGNORE INTO role (role_id, role_name, role_desc, is_predefined_role) VALUES(1, 'Super user', 'Super user', 1);
 INSERT IGNORE INTO role (role_id, role_name, role_desc, is_predefined_role) VALUES(2, 'Agent', 'Agent', 1);
+INSERT IGNORE INTO role (role_id, role_name, role_desc, is_predefined_role) VALUES(3, 'Moderator', 'Moderator', 1);
 
 insert ignore into user(user_name, email, first_name, last_name, password, is_active, is_locked,
 role_id, phone_number)
@@ -49,6 +50,12 @@ role_id, phone_number)
 values ('agent.user@pixelenergy.com', 'agent.user@pixelenergy.com', 'Super', 'User',
 'fa6ebc77818e918d48cce57c1065c73be466833e794e22b5d6604b6c00e071d40f97063057bd6962',
 1, 0, 2, '111111');
+
+insert ignore into user(user_name, email, first_name, last_name, password, is_active, is_locked,
+role_id, phone_number)
+values ('moderator.user@pixelenergy.com', 'moderator.user@pixelenergy.com', 'Super', 'User',
+'fa6ebc77818e918d48cce57c1065c73be466833e794e22b5d6604b6c00e071d40f97063057bd6962',
+1, 0, 3, '111111');
 
 insert ignore into county(name) values ('Alba');
 insert ignore into county(name) values ('Arad');
@@ -164,6 +171,23 @@ VALUES ((SELECT permission_id FROM permission WHERE permission_code='MCU'), '/cu
 INSERT IGNORE INTO permission_rest_method (permission_id, rest_request_path, rest_request_method)
 VALUES ((SELECT permission_id FROM permission WHERE permission_code='MCU'), '/customerservice/commission/calculate', 'POST');
 
+INSERT IGNORE INTO permission (permission_name, permission_code, permission_desc, is_deleted)
+VALUES ('Manage customer moderator', 'MCUM', 'Manage customer moderator', 0);
+
+INSERT IGNORE INTO permission_rest_method (permission_id, rest_request_path, rest_request_method)
+VALUES ((SELECT permission_id FROM permission WHERE permission_code='MCUM'), '/customerservice/customer', 'PUT');
+
+INSERT IGNORE INTO permission_rest_method (permission_id, rest_request_path, rest_request_method)
+VALUES ((SELECT permission_id FROM permission WHERE permission_code='MCUM'), '/customerservice/customer', 'GET');
+
+INSERT IGNORE INTO permission_rest_method (permission_id, rest_request_path, rest_request_method)
+VALUES ((SELECT permission_id FROM permission WHERE permission_code='MCUM'), '/customerservice/customer/find', 'POST');
+
+INSERT IGNORE INTO permission_rest_method (permission_id, rest_request_path, rest_request_method)
+VALUES ((SELECT permission_id FROM permission WHERE permission_code='MCUM'), '/customerservice/county/find', 'POST');
+
+INSERT IGNORE INTO role_permission (role_id, permission_id)
+VALUES (3, (SELECT permission_id FROM permission WHERE permission_code='MCUM'));
 
 INSERT IGNORE INTO permission (permission_name, permission_code, permission_desc, is_deleted)
 VALUES ('Customer Export', 'CE', 'Customer Export', 0);

@@ -63,7 +63,12 @@ public class CustomerService {
     public CustomerInfo saveCustomer(CustomerInfo customerInfo) {
         validateCustomer(customerInfo);
 
-        if (customerInfo.getId() != null && !UserIdentity.getLoginUser().isSuperUser()) {
+        if (customerInfo.getId() != null && !UserIdentity.getLoginUser().isSuperUser()
+                && !UserIdentity.getLoginUser().isModerator()) {
+            throw new UnauthorizedException("unauthorized");
+        }
+
+        if (customerInfo.getId() == null && UserIdentity.getLoginUser().isModerator()) {
             throw new UnauthorizedException("unauthorized");
         }
 
@@ -91,7 +96,11 @@ public class CustomerService {
         customerInfo.setApartmentNumber(customerEntity.getApartmentNumber());
         customerInfo.setContractDate(customerEntity.getContractDate());
         customerInfo.setAgentId(customerEntity.getAgentId().toString());
-        customerInfo.setAgentName(customerEntity.getAgentName());
+
+        if (!UserIdentity.getLoginUser().isModerator()) {
+            customerInfo.setAgentName(customerEntity.getAgentName());
+        }
+
         customerInfo.setStartDeliveryDate(customerEntity.getStartDeliveryDate());
         customerInfo.setStatus(customerEntity.getStatus());
         customerInfo.setCommission(customerEntity.getCommission());
@@ -116,45 +125,49 @@ public class CustomerService {
             customerEntity = new CustomerEntity();
         }
 
-        if (UserIdentity.getLoginUser().isSuperUser() && customerInfo.getStatus() != null) {
+        if ((UserIdentity.getLoginUser().isSuperUser() || UserIdentity.getLoginUser().isModerator())
+                && customerInfo.getStatus() != null) {
             customerEntity.setStatus(customerInfo.getStatus());
         } else if (customerInfo.getId() == null) {
             customerEntity.setStatus(CustomerInfo.STATUS_ACTIVE);
         }
 
-        customerEntity.setContractNumber(customerInfo.getContractNumber());
-        customerEntity.setFirstName(customerInfo.getFirstName());
-        customerEntity.setLastName(customerInfo.getLastName());
-        customerEntity.setProductType(customerInfo.getProductType());
-        customerEntity.setCommissionType(customerInfo.getCommissionType());
-        customerEntity.setCommissionSubcategory(customerInfo.getCommissionSubcategory());
 
-        if (customerInfo.getId() == null) {
-            customerEntity.setCommission(calculateCommission(customerInfo));
-        } else if (UserIdentity.getLoginUser().isSuperUser() && customerInfo.getCommission() != null) {
-            customerEntity.setCommission(customerInfo.getCommission());
+        if (!UserIdentity.getLoginUser().isModerator()) {
+            customerEntity.setContractNumber(customerInfo.getContractNumber());
+            customerEntity.setFirstName(customerInfo.getFirstName());
+            customerEntity.setLastName(customerInfo.getLastName());
+            customerEntity.setProductType(customerInfo.getProductType());
+            customerEntity.setCommissionType(customerInfo.getCommissionType());
+            customerEntity.setCommissionSubcategory(customerInfo.getCommissionSubcategory());
+
+            if (customerInfo.getId() == null) {
+                customerEntity.setCommission(calculateCommission(customerInfo));
+            } else if (UserIdentity.getLoginUser().isSuperUser() && customerInfo.getCommission() != null) {
+                customerEntity.setCommission(customerInfo.getCommission());
+            }
+
+            customerEntity.setCountyId(customerInfo.getCountyId());
+            customerEntity.setLocation(customerInfo.getLocation());
+            customerEntity.setStreet(customerInfo.getStreet());
+            customerEntity.setStreetNumber(customerInfo.getStreetNumber());
+            customerEntity.setFlat(customerInfo.getFlat());
+            customerEntity.setStairNumber(customerInfo.getStairNumber());
+            customerEntity.setApartmentNumber(customerInfo.getApartmentNumber());
+            customerEntity.setContractDate(customerInfo.getContractDate());
+
+            if (UserIdentity.getLoginUser().isSuperUser()) {
+                customerEntity.setAgentId(new BigInteger(customerInfo.getAgentId()));
+            } else if (UserIdentity.getLoginUser().isAgent()) {
+                customerEntity.setAgentId(new BigInteger(UserIdentity.getLoginUser().getUserId()));
+            }
+
+            customerEntity.setPhoneNumber(customerInfo.getPhoneNumber());
+            customerEntity.setStartDeliveryDate(customerInfo.getStartDeliveryDate());
+
+            UserInfo userInfo = identityAccessManagementServiceAdapter.getUser(customerEntity.getAgentId());
+            customerEntity.setAgentName(userInfo.getFirstName() + " " + userInfo.getLastName());
         }
-
-        customerEntity.setCountyId(customerInfo.getCountyId());
-        customerEntity.setLocation(customerInfo.getLocation());
-        customerEntity.setStreet(customerInfo.getStreet());
-        customerEntity.setStreetNumber(customerInfo.getStreetNumber());
-        customerEntity.setFlat(customerInfo.getFlat());
-        customerEntity.setStairNumber(customerInfo.getStairNumber());
-        customerEntity.setApartmentNumber(customerInfo.getApartmentNumber());
-        customerEntity.setContractDate(customerInfo.getContractDate());
-
-        if (UserIdentity.getLoginUser().isSuperUser()) {
-            customerEntity.setAgentId(new BigInteger(customerInfo.getAgentId()));
-        } else if (UserIdentity.getLoginUser().isAgent()){
-            customerEntity.setAgentId(new BigInteger(UserIdentity.getLoginUser().getUserId()));
-        }
-
-        customerEntity.setPhoneNumber(customerInfo.getPhoneNumber());
-        customerEntity.setStartDeliveryDate(customerInfo.getStartDeliveryDate());
-
-        UserInfo userInfo = identityAccessManagementServiceAdapter.getUser(customerEntity.getAgentId());
-        customerEntity.setAgentName(userInfo.getFirstName() + " " + userInfo.getLastName());
 
         return customerEntity;
     }
@@ -185,44 +198,41 @@ public class CustomerService {
     private void validateCustomer(CustomerInfo customerInfo) {
         validateRequiredObject(customerInfo, "customerInfo");
 
-        if (UserIdentity.getLoginUser().isSuperUser()) {
+        if (UserIdentity.getLoginUser().isSuperUser() || UserIdentity.getLoginUser().isModerator()) {
             validateRequiredObject(customerInfo.getStatus(), "status");
         }
 
-        validateRequiredObject(customerInfo.getContractNumber(), "contractNumber", 10);
-        validateRequiredObject(customerInfo.getFirstName(), "firstName", 50);
-        validateRequiredObject(customerInfo.getLastName(), "lastName", 50);
-        validateRequiredObject(customerInfo.getProductType(), "productType");
-        validateRequiredObject(customerInfo.getCommissionType(), "commissionType");
+        if (!UserIdentity.getLoginUser().isModerator()) {
+            validateRequiredObject(customerInfo.getContractNumber(), "contractNumber", 10);
+            validateRequiredObject(customerInfo.getFirstName(), "firstName", 50);
+            validateRequiredObject(customerInfo.getLastName(), "lastName", 50);
+            validateRequiredObject(customerInfo.getProductType(), "productType");
+            validateRequiredObject(customerInfo.getCommissionType(), "commissionType");
 
-        if (customerInfo.getProductType().equals(CustomerInfo.PRODUCT_TYPE_NATURAL_GAS)) {
-            if (!customerInfo.getCommissionType().equals(CustomerInfo.COMMISSION_TYPE_FLUX)) {
-                throw new ValidationException("Invalid contract type");
+            if (customerInfo.getProductType().equals(CustomerInfo.PRODUCT_TYPE_NATURAL_GAS)) {
+                if (!customerInfo.getCommissionType().equals(CustomerInfo.COMMISSION_TYPE_FLUX)) {
+                    throw new ValidationException("Invalid contract type");
+                }
+            } else if (customerInfo.getProductType().equals(CustomerInfo.PRODUCT_TYPE_ELECTRIC_ENERGY)) {
+                if (customerInfo.getCommissionType().equals(CustomerInfo.COMMISSION_TYPE_FLUX)) {
+                    throw new ValidationException("Invalid contract type");
+                }
             }
-        } else if (customerInfo.getProductType().equals(CustomerInfo.PRODUCT_TYPE_ELECTRIC_ENERGY)) {
-            if (customerInfo.getCommissionType().equals(CustomerInfo.COMMISSION_TYPE_FLUX)) {
-                throw new ValidationException("Invalid contract type");
+
+            validateRequiredObject(customerInfo.getCommissionSubcategory(), "commissionSubcategory");
+            validateRequiredObject(customerInfo.getCountyId(), "countyId");
+            validateRequiredObject(customerInfo.getLocation(), "location");
+            validateRequiredObject(customerInfo.getStreet(), "street");
+            validateRequiredObject(customerInfo.getStreetNumber(), "streetNumber");
+            validateRequiredObject(customerInfo.getContractDate(), "contractDate");
+
+            if (UserIdentity.getLoginUser().isSuperUser()) {
+                validateRequiredObject(customerInfo.getAgentId(), "agentId");
             }
+
+            validateRequiredObject(customerInfo.getPhoneNumber(), "phoneNumber");
+            validateRequiredObject(customerInfo.getStartDeliveryDate(), "startDeliveryDate");
         }
-
-        validateRequiredObject(customerInfo.getCommissionSubcategory(), "commissionSubcategory");
-        validateRequiredObject(customerInfo.getCountyId(), "countyId");
-        validateRequiredObject(customerInfo.getLocation(), "location");
-        validateRequiredObject(customerInfo.getStreet(), "street");
-        validateRequiredObject(customerInfo.getStreetNumber(), "streetNumber");
-        validateRequiredObject(customerInfo.getContractDate(), "contractDate");
-
-        if (UserIdentity.getLoginUser().isSuperUser()) {
-            validateRequiredObject(customerInfo.getAgentId(), "agentId");
-        }
-
-        validateRequiredObject(customerInfo.getPhoneNumber(), "phoneNumber");
-        validateRequiredObject(customerInfo.getStartDeliveryDate(), "startDeliveryDate");
-
-//        if (customerInfo.getStatus().equals(CustomerInfo.STATUS_DELIVERED_TO_ADMIN)
-//                && UserIdentity.getLoginUser().isSuperUser()) {
-//            validateRequiredObject(customerInfo.getCommission(), "commission");
-//        }
     }
 
     /**
@@ -274,7 +284,7 @@ public class CustomerService {
                 customerEntitySearchCriteria.setLocationStartsWith(searchCustomerCriteria.getLocationStartsWith() + "%");
             }
 
-            if (UserIdentity.getLoginUser().isSuperUser()) {
+            if (UserIdentity.getLoginUser().isSuperUser() || UserIdentity.getLoginUser().isModerator()) {
                 if (searchCustomerCriteria.getAgentId() != null) {
                     customerEntitySearchCriteria.setAgentId(new BigInteger(searchCustomerCriteria.getAgentId()));
                 }
@@ -339,11 +349,11 @@ public class CustomerService {
             throw new NotFoundException("customer not found");
         }
 
-        if (loginUser.isAgent() &&! customerEntity.getAgentId().toString().equals(loginUser.getUserId())) {
+        if (loginUser.isAgent() && !customerEntity.getAgentId().toString().equals(loginUser.getUserId())) {
             throw new UnauthorizedException("unauthorized");
         }
 
-        if (!loginUser.isAgent() && !loginUser.isSuperUser()) {
+        if (!loginUser.isAgent() && !loginUser.isSuperUser() && !loginUser.isModerator()) {
             throw new UnauthorizedException("unauthorized");
         }
 

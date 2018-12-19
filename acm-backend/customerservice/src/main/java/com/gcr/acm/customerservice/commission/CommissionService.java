@@ -33,8 +33,8 @@ public class CommissionService {
 		validateSearchCommissionCriteria(searchCommissionCriteria);
 
 		CustomerEntitySearchCriteria customerEntitySearchCriteria = new CustomerEntitySearchCriteria();
-		customerEntitySearchCriteria.setStartDate(searchCommissionCriteria.getStartDate());
-		customerEntitySearchCriteria.setEndDate(searchCommissionCriteria.getEndDate());
+		customerEntitySearchCriteria.setDeliveryStartDate(searchCommissionCriteria.getStartDate());
+		customerEntitySearchCriteria.setDeliveryEndDate(searchCommissionCriteria.getEndDate());
 		customerEntitySearchCriteria.setStatus(CustomerInfo.STATUS_APPROVED);
 
 		if (UserIdentity.getLoginUser().isAgent()) {

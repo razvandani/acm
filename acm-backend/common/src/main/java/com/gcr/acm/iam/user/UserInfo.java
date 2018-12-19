@@ -12,6 +12,7 @@ import java.util.List;
 public class UserInfo {
     public static final Integer ROLE_ID_SUPER_USER = 1;
     public static final Integer ROLE_ID_AGENT = 2;
+    private static final Integer ROLE_ID_MODERATOR = 3;
 
     private String userId;
     private String username;
@@ -126,6 +127,10 @@ public class UserInfo {
 
     public boolean isAgent() {
         return ROLE_ID_AGENT.equals(roleId);
+    }
+
+    public boolean isModerator() {
+        return ROLE_ID_MODERATOR.equals(roleId);
     }
 
     public String getErrorMessage() {
