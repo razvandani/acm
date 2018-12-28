@@ -2,7 +2,7 @@
 
 libraries=('restclient' 'jpaframework' 'common', 'email')
 services=('registry' 'iam' 'customerservice')
-export PATH=C:\\apache-maven-3.5.3-bin\\bin:${PATH}
+export PATH=C:\\apache-maven-3.6.0-bin\\bin:${PATH}
 
 for lib in ${libraries[@]} ; do
   (

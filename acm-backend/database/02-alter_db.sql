@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS `county` (
 INSERT IGNORE INTO role (role_id, role_name, role_desc, is_predefined_role) VALUES(1, 'Super user', 'Super user', 1);
 INSERT IGNORE INTO role (role_id, role_name, role_desc, is_predefined_role) VALUES(2, 'Agent', 'Agent', 1);
 INSERT IGNORE INTO role (role_id, role_name, role_desc, is_predefined_role) VALUES(3, 'Moderator', 'Moderator', 1);
+INSERT IGNORE INTO role (role_id, role_name, role_desc, is_predefined_role) VALUES(4, 'Operator', 'Operator', 1);
 
 insert ignore into user(user_name, email, first_name, last_name, password, is_active, is_locked,
 role_id, phone_number)
@@ -47,15 +48,21 @@ values ('super.user@pixelenergy.com', 'super.user@pixelenergy.com', 'Super', 'Us
 
 insert ignore into user(user_name, email, first_name, last_name, password, is_active, is_locked,
 role_id, phone_number)
-values ('agent.user@pixelenergy.com', 'agent.user@pixelenergy.com', 'Super', 'User',
+values ('agent.user@pixelenergy.com', 'agent.user@pixelenergy.com', 'Agent', 'User',
 'fa6ebc77818e918d48cce57c1065c73be466833e794e22b5d6604b6c00e071d40f97063057bd6962',
 1, 0, 2, '111111');
 
 insert ignore into user(user_name, email, first_name, last_name, password, is_active, is_locked,
 role_id, phone_number)
-values ('moderator.user@pixelenergy.com', 'moderator.user@pixelenergy.com', 'Super', 'User',
+values ('moderator.user@pixelenergy.com', 'moderator.user@pixelenergy.com', 'Moderator', 'User',
 'fa6ebc77818e918d48cce57c1065c73be466833e794e22b5d6604b6c00e071d40f97063057bd6962',
 1, 0, 3, '111111');
+
+insert ignore into user(user_name, email, first_name, last_name, password, is_active, is_locked,
+role_id, phone_number)
+values ('operator.user@pixelenergy.com', 'operator.user@pixelenergy.com', 'Operator', 'User',
+'fa6ebc77818e918d48cce57c1065c73be466833e794e22b5d6604b6c00e071d40f97063057bd6962',
+1, 0, 4, '111111');
 
 insert ignore into county(name) values ('Alba');
 insert ignore into county(name) values ('Arad');
@@ -172,7 +179,7 @@ INSERT IGNORE INTO permission_rest_method (permission_id, rest_request_path, res
 VALUES ((SELECT permission_id FROM permission WHERE permission_code='MCU'), '/customerservice/commission/calculate', 'POST');
 
 INSERT IGNORE INTO permission (permission_name, permission_code, permission_desc, is_deleted)
-VALUES ('Manage customer moderator', 'MCUM', 'Manage customer moderator', 0);
+VALUES ('Manage customer by moderator', 'MCUM', 'Manage customer by moderator', 0);
 
 INSERT IGNORE INTO permission_rest_method (permission_id, rest_request_path, rest_request_method)
 VALUES ((SELECT permission_id FROM permission WHERE permission_code='MCUM'), '/customerservice/customer', 'PUT');
@@ -188,6 +195,27 @@ VALUES ((SELECT permission_id FROM permission WHERE permission_code='MCUM'), '/c
 
 INSERT IGNORE INTO role_permission (role_id, permission_id)
 VALUES (3, (SELECT permission_id FROM permission WHERE permission_code='MCUM'));
+
+INSERT IGNORE INTO permission (permission_name, permission_code, permission_desc, is_deleted)
+VALUES ('Manage customer by operator', 'MCUO', 'Manage customer by operator', 0);
+
+INSERT IGNORE INTO permission_rest_method (permission_id, rest_request_path, rest_request_method)
+VALUES ((SELECT permission_id FROM permission WHERE permission_code='MCUO'), '/customerservice/customer', 'POST');
+
+INSERT IGNORE INTO permission_rest_method (permission_id, rest_request_path, rest_request_method)
+VALUES ((SELECT permission_id FROM permission WHERE permission_code='MCUO'), '/customerservice/customer', 'PUT');
+
+INSERT IGNORE INTO permission_rest_method (permission_id, rest_request_path, rest_request_method)
+VALUES ((SELECT permission_id FROM permission WHERE permission_code='MCUO'), '/customerservice/customer', 'GET');
+
+INSERT IGNORE INTO permission_rest_method (permission_id, rest_request_path, rest_request_method)
+VALUES ((SELECT permission_id FROM permission WHERE permission_code='MCUO'), '/customerservice/customer/find', 'POST');
+
+INSERT IGNORE INTO permission_rest_method (permission_id, rest_request_path, rest_request_method)
+VALUES ((SELECT permission_id FROM permission WHERE permission_code='MCUO'), '/customerservice/county/find', 'POST');
+
+INSERT IGNORE INTO role_permission (role_id, permission_id)
+VALUES (4, (SELECT permission_id FROM permission WHERE permission_code='MCUO'));
 
 INSERT IGNORE INTO permission (permission_name, permission_code, permission_desc, is_deleted)
 VALUES ('Customer Export', 'CE', 'Customer Export', 0);
@@ -261,3 +289,5 @@ update customer set status = 4 where status = 2 and id != 0;
 
 call ChangeColumn('customer', 'is_active', 'BIT NULL');
 call ChangeColumn('agent_commission', 'commission_type', 'INT NULL');
+
+call AddColumn('user', 'agent_abbreviation', 'VARCHAR(10) NULL');

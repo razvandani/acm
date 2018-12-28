@@ -13,6 +13,7 @@ public class UserInfo {
     public static final Integer ROLE_ID_SUPER_USER = 1;
     public static final Integer ROLE_ID_AGENT = 2;
     private static final Integer ROLE_ID_MODERATOR = 3;
+    private static final Integer ROLE_ID_OPERATOR = 4;
 
     private String userId;
     private String username;
@@ -26,11 +27,11 @@ public class UserInfo {
     private Boolean isLocked;
     private Integer roleId;
     private String phoneNumber;
+    private String agentAbbreviation;
 
     private String errorMessage; // readonly
     private String loginToken; // readonly
     private String newPassword; // write only
-    // todo list of agent commissions
     private List<AgentCommissionInfo> agentCommissionInfoList;
 
     public String getUserId() {
@@ -133,6 +134,10 @@ public class UserInfo {
         return ROLE_ID_MODERATOR.equals(roleId);
     }
 
+    public boolean isOperator() {
+        return ROLE_ID_OPERATOR.equals(roleId);
+    }
+
     public String getErrorMessage() {
         return errorMessage;
     }
@@ -163,6 +168,14 @@ public class UserInfo {
 
     public void setEncryptedPassword(String encryptedPassword) {
         this.encryptedPassword = encryptedPassword;
+    }
+
+    public String getAgentAbbreviation() {
+        return agentAbbreviation;
+    }
+
+    public void setAgentAbbreviation(String agentAbbreviation) {
+        this.agentAbbreviation = agentAbbreviation;
     }
 
     public List<AgentCommissionInfo> getAgentCommissionInfoList() {

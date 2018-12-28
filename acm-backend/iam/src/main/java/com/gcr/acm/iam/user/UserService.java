@@ -172,6 +172,7 @@ public class UserService {
     private void validateUser(UserInfo userInfo) {
         validateRequiredObject(userInfo.getUsername(), "username", 45);
         UserInfo loginUserInfo = null;
+
         if (userInfo.getUserId() == null) {
             validateRequiredObject(userInfo.getPassword(), "password");
         }
@@ -183,6 +184,7 @@ public class UserService {
         validateRequiredObject(userInfo.getEmail(), "email", 45);
         validateRequiredObject(userInfo.getFirstName(), "firstName", 45);
         validateRequiredObject(userInfo.getLastName(), "lastName", 45);
+        validateMaxLength(userInfo.getAgentAbbreviation(), "agentAbbreviation", 10);
         validateRequiredObject(userInfo.getPhoneNumber(), "phoneNumber", 20);
         validateRequiredObject(userInfo.getRoleId(), "roleId");
 

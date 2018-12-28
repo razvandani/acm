@@ -27,6 +27,7 @@ import java.util.List;
 
 import static com.gcr.acm.common.utils.ValidationUtils.validateAtLeastOneIsSet;
 import static com.gcr.acm.common.utils.ValidationUtils.validateRequiredObject;
+
 import javax.validation.ValidationException;
 
 /**
@@ -63,8 +64,8 @@ public class CustomerService {
     public CustomerInfo saveCustomer(CustomerInfo customerInfo) {
         validateCustomer(customerInfo);
 
-        if (customerInfo.getId() != null && !UserIdentity.getLoginUser().isSuperUser()
-                && !UserIdentity.getLoginUser().isModerator()) {
+        if (customerInfo.getId() != null && (UserIdentity.getLoginUser().isAgent()
+                || UserIdentity.getLoginUser().isOperator())) {
             throw new UnauthorizedException("unauthorized");
         }
 
@@ -242,8 +243,7 @@ public class CustomerService {
      * @return The List of CustomerInfo objects
      */
     @Transactional(readOnly = true)
-    public List<CustomerInfo> findCustomers(SearchCustomerCriteria searchCustomerCriteria)
-            throws Exception {
+    public List<CustomerInfo> findCustomers(SearchCustomerCriteria searchCustomerCriteria) {
         validateFindCustomers(searchCustomerCriteria);
 
         List<CustomerInfo> customerInfoList = new ArrayList<>();
@@ -263,7 +263,7 @@ public class CustomerService {
     private CustomerEntitySearchCriteria constructCustomerEntitySearchCriteria(SearchCustomerCriteria searchCustomerCriteria) {
         CustomerEntitySearchCriteria customerEntitySearchCriteria = new CustomerEntitySearchCriteria();
 
-        if (searchCustomerCriteria!= null) {
+        if (searchCustomerCriteria != null) {
             if (searchCustomerCriteria.getStatus() != null) {
                 customerEntitySearchCriteria.setStatus(searchCustomerCriteria.getStatus());
             }
@@ -284,14 +284,10 @@ public class CustomerService {
                 customerEntitySearchCriteria.setLocationStartsWith(searchCustomerCriteria.getLocationStartsWith() + "%");
             }
 
-            if (UserIdentity.getLoginUser().isSuperUser() || UserIdentity.getLoginUser().isModerator()) {
-                if (searchCustomerCriteria.getAgentId() != null) {
-                    customerEntitySearchCriteria.setAgentId(new BigInteger(searchCustomerCriteria.getAgentId()));
-                }
+            if (!UserIdentity.getLoginUser().isAgent() && searchCustomerCriteria.getAgentId() != null) {
+                customerEntitySearchCriteria.setAgentId(new BigInteger(searchCustomerCriteria.getAgentId()));
             } else if (UserIdentity.getLoginUser().isAgent()) {
                 customerEntitySearchCriteria.setAgentId(new BigInteger(UserIdentity.getLoginUser().getUserId()));
-            } else {
-                throw new ValidationException("unauthorized");
             }
 
             customerEntitySearchCriteria.setStartDate(searchCustomerCriteria.getStartDate());
@@ -350,10 +346,6 @@ public class CustomerService {
         }
 
         if (loginUser.isAgent() && !customerEntity.getAgentId().toString().equals(loginUser.getUserId())) {
-            throw new UnauthorizedException("unauthorized");
-        }
-
-        if (!loginUser.isAgent() && !loginUser.isSuperUser() && !loginUser.isModerator()) {
             throw new UnauthorizedException("unauthorized");
         }
 
