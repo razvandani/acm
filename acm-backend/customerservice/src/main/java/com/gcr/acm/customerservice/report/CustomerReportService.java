@@ -126,8 +126,8 @@ import static com.gcr.acm.customerservice.customer.CustomerDetailsEnums.ProductT
 			}
 		}
 
-		for (int i = 0; i < numberOfColumns; i++) {
-			sheet.autoSizeColumn(i);
-		}
+//		for (int i = 0; i < numberOfColumns; i++) {
+//			sheet.autoSizeColumn(i);
+//		}
 	}
 }
