@@ -103,13 +103,13 @@ import static com.gcr.acm.customerservice.customer.CustomerDetailsEnums.ProductT
 		String statusDescription = null;
 
 		if (status.equals(CustomerInfo.STATUS_ACTIVE)) {
-			statusDescription = "Nepreluat";
+			statusDescription = "Prelucrare";
 		} else if (status.equals(CustomerInfo.STATUS_GAVE_UP)) {
 			statusDescription = "Renuntat";
 		} else if (status.equals(CustomerInfo.STATUS_WRONG)) {
 			statusDescription = "Gresit";
 		} else if (status.equals(CustomerInfo.STATUS_APPROVED)) {
-			statusDescription = "Preluat";
+			statusDescription = "Aprobat";
 		}
 
 		return statusDescription;
