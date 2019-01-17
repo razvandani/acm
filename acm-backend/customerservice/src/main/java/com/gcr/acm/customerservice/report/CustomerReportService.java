@@ -75,7 +75,8 @@ import static com.gcr.acm.customerservice.customer.CustomerDetailsEnums.ProductT
 		int indiceMap = 1;
 		Map<String, Object[]> data = new LinkedHashMap<>();
 		Object[] tableHeader = new Object[] { "Numar de contract", "Data Contractului", "Numele",
-				"Enegie/gaz", "Tipul de contract", "Categoria", "Judet", "Localitate", "Telefon", "Data intrare in furnizare", "Agent" };
+				"Enegie/gaz", "Tipul de contract", "Categoria", "Judet", "Localitate",
+				"Telefon", "Data intrare in furnizare", "Agent", "Status" };
 		data.put(Integer.toString(indiceMap), tableHeader);
 
 		if (!customerInfoList.isEmpty()) {
@@ -91,11 +92,27 @@ import static com.gcr.acm.customerservice.customer.CustomerDetailsEnums.ProductT
 								getCommissionTypeByTypeId(customerInfo.getCommissionType()),
 								CustomerDetailsEnums.CommissionSubcategoryEnum.getCommissionSubcategoryById(customerInfo.getCommissionSubcategory()),
 								customerInfo.getCountyName(), customerInfo.getLocation(), customerInfo.getPhoneNumber(),
-								customerInfo.getStartDeliveryDate(), customerInfo.getAgentName() });
+								customerInfo.getStartDeliveryDate(), customerInfo.getAgentName(), getStatusDescription(customerInfo.getStatus()) });
 			}
 		}
 
 		return data;
+	}
+
+	private Object getStatusDescription(Integer status) {
+		String statusDescription = null;
+
+		if (status.equals(CustomerInfo.STATUS_ACTIVE)) {
+			statusDescription = "Nepreluat";
+		} else if (status.equals(CustomerInfo.STATUS_GAVE_UP)) {
+			statusDescription = "Renuntat";
+		} else if (status.equals(CustomerInfo.STATUS_WRONG)) {
+			statusDescription = "Gresit";
+		} else if (status.equals(CustomerInfo.STATUS_APPROVED)) {
+			statusDescription = "Preluat";
+		}
+
+		return statusDescription;
 	}
 
 	private void createRowsFromMapOfArrays(XSSFSheet sheet, Map<String, Object[]> data) {
