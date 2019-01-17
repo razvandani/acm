@@ -98,7 +98,9 @@ public class CustomerEAO extends EntityAccessObjectBase {
 //            queryBuilder.addCondition("c.contractDate BETWEEN :contractStartDate AND :contractEndDate");
 //        }
 
-        if (searchCriteria.getStatus() != null) {
+        if (searchCriteria.getStatus().equals(CustomerInfo.STATUS_APPROVED)) {
+            queryBuilder.addCondition("(c.status = :status OR c.startDeliveryDate < CURRENT_DATE)");
+        } else if (searchCriteria.getStatus() != null) {
             queryBuilder.addCondition("c.status = :status");
         }
 
