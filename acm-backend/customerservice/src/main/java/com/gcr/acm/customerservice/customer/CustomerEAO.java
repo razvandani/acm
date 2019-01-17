@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * Entity access object for customers.
- * 
+ *
  * @author Razvan Dani
  */
 @Component
@@ -20,8 +20,8 @@ public class CustomerEAO extends EntityAccessObjectBase {
     /**
      * Saves the customer.
      *
-     * @param customerEntity    The CustomerEntity
-     * @return              The stored CustomerEntity
+     * @param customerEntity The CustomerEntity
+     * @return The stored CustomerEntity
      */
     public CustomerEntity saveCustomer(CustomerEntity customerEntity) {
         return storeEntity(customerEntity);
@@ -30,12 +30,12 @@ public class CustomerEAO extends EntityAccessObjectBase {
     public CustomerEntity getCustomer(BigInteger id) {
         return getEntity(CustomerEntity.class, id);
     }
-    
+
     /**
      * Finds the customers for the specified search criteria.
      *
-     * @param searchCriteria    The CustomerEntitySearchCriteria
-     * @return                  The List of CustomerEntity objects
+     * @param searchCriteria The CustomerEntitySearchCriteria
+     * @return The List of CustomerEntity objects
      */
     public List<CustomerEntity> findCustomers(CustomerEntitySearchCriteria searchCriteria) {
         JpaQueryBuilder queryBuilder = constructFindCustomersBuilder(searchCriteria);
@@ -98,8 +98,8 @@ public class CustomerEAO extends EntityAccessObjectBase {
 //            queryBuilder.addCondition("c.contractDate BETWEEN :contractStartDate AND :contractEndDate");
 //        }
 
-        if (searchCriteria.getStatus().equals(CustomerInfo.STATUS_APPROVED)) {
-            queryBuilder.addCondition("(c.status = :status OR c.startDeliveryDate < CURRENT_DATE)");
+        if (CustomerInfo.STATUS_APPROVED.equals(searchCriteria.getStatus())) {
+            queryBuilder.addCondition("(c.status = :status OR (c.startDeliveryDate < CURRENT_DATE AND c.status = 1))");
         } else if (searchCriteria.getStatus() != null) {
             queryBuilder.addCondition("c.status = :status");
         }
