@@ -17,6 +17,48 @@ public class SearchCustomerCriteria {
     private Integer pageSize;
     private String agentId;
     private Integer status;
+    private String contractNumber;
+    private String street;
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public Date getDeliveryStartDate() {
+        return deliveryStartDate;
+    }
+
+    public void setDeliveryStartDate(Date deliveryStartDate) {
+        this.deliveryStartDate = deliveryStartDate;
+    }
+
+    public Date getDeliveryEndDate() {
+        return deliveryEndDate;
+    }
+
+    public void setDeliveryEndDate(Date deliveryEndDate) {
+        this.deliveryEndDate = deliveryEndDate;
+    }
+
+    public Integer getProductType() {
+        return productType;
+    }
+
+    public void setProductType(Integer productType) {
+        this.productType = productType;
+    }
 
     public String getFirstNameStartsWith() {
         return firstNameStartsWith;
@@ -50,11 +92,11 @@ public class SearchCustomerCriteria {
         this.locationStartsWith = locationStartsWith;
     }
 
-    public Boolean getIsActive() {
+    public Boolean getActive() {
         return isActive;
     }
 
-    public void setIsActive(Boolean active) {
+    public void setActive(Boolean active) {
         isActive = active;
     }
 
@@ -82,51 +124,27 @@ public class SearchCustomerCriteria {
         this.agentId = agentId;
     }
 
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
-
-    public Integer getProductType() {
-        return productType;
-    }
-
-    public void setProductType(Integer productType) {
-        this.productType = productType;
-    }
-
-    public Date getDeliveryStartDate() {
-        return deliveryStartDate;
-    }
-
-    public void setDeliveryStartDate(Date deliveryStartDate) {
-        this.deliveryStartDate = deliveryStartDate;
-    }
-
-    public Date getDeliveryEndDate() {
-        return deliveryEndDate;
-    }
-
-    public void setDeliveryEndDate(Date deliveryEndDate) {
-        this.deliveryEndDate = deliveryEndDate;
-    }
-
     public Integer getStatus() {
         return status;
     }
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getContractNumber() {
+        return contractNumber;
+    }
+
+    public void setContractNumber(String contractNumber) {
+        this.contractNumber = contractNumber;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
     }
 }
