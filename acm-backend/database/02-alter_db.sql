@@ -39,6 +39,7 @@ INSERT IGNORE INTO role (role_id, role_name, role_desc, is_predefined_role) VALU
 INSERT IGNORE INTO role (role_id, role_name, role_desc, is_predefined_role) VALUES(2, 'Agent', 'Agent', 1);
 INSERT IGNORE INTO role (role_id, role_name, role_desc, is_predefined_role) VALUES(3, 'Moderator', 'Moderator', 1);
 INSERT IGNORE INTO role (role_id, role_name, role_desc, is_predefined_role) VALUES(4, 'Operator', 'Operator', 1);
+INSERT IGNORE INTO role (role_id, role_name, role_desc, is_predefined_role) VALUES(5, 'Partener', 'Partener', 1);
 
 insert ignore into user(user_name, email, first_name, last_name, password, is_active, is_locked,
 role_id, phone_number)
@@ -63,6 +64,12 @@ role_id, phone_number)
 values ('operator.user@pixelenergy.com', 'operator.user@pixelenergy.com', 'Operator', 'User',
 'fa6ebc77818e918d48cce57c1065c73be466833e794e22b5d6604b6c00e071d40f97063057bd6962',
 1, 0, 4, '111111');
+
+insert ignore into user(user_name, email, first_name, last_name, password, is_active, is_locked,
+role_id, phone_number)
+values ('partener.user@pixelenergy.com', 'partener.user@pixelenergy.com', 'Partener', 'User',
+'fa6ebc77818e918d48cce57c1065c73be466833e794e22b5d6604b6c00e071d40f97063057bd6962',
+1, 0, 5, '111111');
 
 insert ignore into county(name) values ('Alba');
 insert ignore into county(name) values ('Arad');
@@ -290,3 +297,13 @@ call ChangeColumn('customer', 'is_active', 'BIT NULL');
 call ChangeColumn('agent_commission', 'commission_type', 'INT NULL');
 
 call AddColumn('user', 'agent_abbreviation', 'VARCHAR(10) NULL');
+
+INSERT IGNORE INTO permission (permission_name, permission_code, permission_desc, is_deleted)
+VALUES ('Delete customer', 'DELC', 'Delete customer', 0);
+
+INSERT IGNORE INTO role_permission (role_id, permission_id)
+VALUES (1, (SELECT permission_id FROM permission WHERE permission_code='DELC'));
+
+INSERT IGNORE INTO permission_rest_method (permission_id, rest_request_path, rest_request_method)
+VALUES ((SELECT permission_id FROM permission WHERE permission_code='DELC'), '/customerservice/customer', 'DELETE');
+

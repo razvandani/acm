@@ -23,6 +23,8 @@ public class CustomerEntitySearchCriteria extends EntitySearchCriteria {
     private Boolean isActive;
     private BigInteger agentId;
     private Integer status;
+    private String contractNumber;
+    private String street;
 
     public Date getDeliveryStartDate() {
         return deliveryStartDate;
@@ -118,5 +120,21 @@ public class CustomerEntitySearchCriteria extends EntitySearchCriteria {
 
     public void setProductType(Integer productType) {
         this.productType = productType;
+    }
+
+    public String getContractNumber() {
+        return contractNumber;
+    }
+
+    public void setContractNumber(String contractNumber) {
+        this.contractNumber = contractNumber;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
     }
 }

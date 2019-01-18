@@ -52,6 +52,13 @@ public class CustomerController {
         return new SuccessObject();
     }
 
+    @RequestMapping(value = "/{customerId}/", method = RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public SuccessObject deleteCustomer(@PathVariable BigInteger customerId) throws Exception {
+        customerService.deleteCustomer(customerId);
+        return new SuccessObject();
+    }
+
 
     @RequestMapping(value = "/export", method = RequestMethod.POST)
     public String exportCustomers(@RequestBody SearchCustomerCriteria searchCustomerCriteria) throws Exception {

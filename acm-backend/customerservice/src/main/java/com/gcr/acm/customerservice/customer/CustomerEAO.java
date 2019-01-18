@@ -94,6 +94,14 @@ public class CustomerEAO extends EntityAccessObjectBase {
             queryBuilder.addCondition("c.agentId = :agentId");
         }
 
+        if (searchCriteria.getContractNumber() != null) {
+            queryBuilder.addCondition("c.contractNumber = :contractNumber");
+        }
+
+        if (searchCriteria.getStreet() != null) {
+            queryBuilder.addCondition("c.street LIKE :street");
+        }
+
 //        if (searchCriteria.getContractStartDate() != null && searchCriteria.getContractEndDate() != null) {
 //            queryBuilder.addCondition("c.contractDate BETWEEN :contractStartDate AND :contractEndDate");
 //        }
@@ -115,5 +123,9 @@ public class CustomerEAO extends EntityAccessObjectBase {
 
         List<Counter> countersList = findObjects(queryBuilder, customerEntitySearchCriteria);
         return countersList.get(0).getCount();
+    }
+
+    public void deleteCustomer(BigInteger customerId) {
+        removeEntity(CustomerEntity.class, customerId);
     }
 }
