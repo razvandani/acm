@@ -179,11 +179,7 @@ public class CustomerInfo  {
     }
 
     public Integer getStatus() {
-        if (startDeliveryDate != null && System.currentTimeMillis() > startDeliveryDate.getTime()) {
-            return STATUS_APPROVED;
-        } else {
-            return status;
-        }
+        return status;
     }
 
     public void setStatus(Integer status) {
