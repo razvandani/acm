@@ -112,7 +112,9 @@ public class CustomerEAO extends EntityAccessObjectBase {
 //            queryBuilder.addCondition("c.status = :status");
 //        }
 
-        queryBuilder.addCondition("c.status = :status");
+        if (searchCriteria.getStatus() != null) {
+            queryBuilder.addCondition("c.status = :status");
+        }
 
         queryBuilder.addOrderByStatement("c.contractDate, c.firstName, c.lastName");
     }
