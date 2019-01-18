@@ -247,7 +247,8 @@ public class CustomerService {
         validateFindCustomers(searchCustomerCriteria);
 
         List<CustomerInfo> customerInfoList = new ArrayList<>();
-        CustomerEntitySearchCriteria customerEntitySearchCriteria = constructCustomerEntitySearchCriteria(searchCustomerCriteria);
+        CustomerEntitySearchCriteria customerEntitySearchCriteria =
+                constructCustomerEntitySearchCriteria(searchCustomerCriteria);
 
         List<CustomerEntity> customerEntityList = customerEAO.findCustomers(customerEntitySearchCriteria);
         List<BigInteger> userIdList = new ArrayList<>();
@@ -295,6 +296,11 @@ public class CustomerService {
             customerEntitySearchCriteria.setDeliveryStartDate(searchCustomerCriteria.getDeliveryStartDate());
             customerEntitySearchCriteria.setDeliveryEndDate(searchCustomerCriteria.getDeliveryEndDate());
             customerEntitySearchCriteria.setProductType(searchCustomerCriteria.getProductType());
+            customerEntitySearchCriteria.setContractNumber(searchCustomerCriteria.getContractNumber());
+
+            if (searchCustomerCriteria.getStreet() != null) {
+                customerEntitySearchCriteria.setStreet("%" + searchCustomerCriteria.getStreet() + "%");
+            }
 
             customerEntitySearchCriteria.setStartResultIndex(searchCustomerCriteria.getStartIndex());
             customerEntitySearchCriteria.setMaxResults(searchCustomerCriteria.getPageSize());
@@ -306,11 +312,11 @@ public class CustomerService {
     private void validateFindCustomers(SearchCustomerCriteria searchCustomerCriteria) {
         validateRequiredObject(searchCustomerCriteria, "searchCustomerCriteria");
 //        validateLoginUserCustomer(searchCustomerCriteria.getAgentId());
-        validateAtLeastOneIsSet(Arrays.asList(searchCustomerCriteria.getAgentId(), searchCustomerCriteria.getCountyId(),
-                searchCustomerCriteria.getFirstNameStartsWith(), searchCustomerCriteria.getLastNameStartsWith(),
-                searchCustomerCriteria.getLocationStartsWith(), searchCustomerCriteria.getStartDate(), searchCustomerCriteria.getEndDate(),
-                searchCustomerCriteria.getDeliveryStartDate(), searchCustomerCriteria.getDeliveryEndDate()),
-                "At least one search criteria must be set");
+//        validateAtLeastOneIsSet(Arrays.asList(searchCustomerCriteria.getAgentId(), searchCustomerCriteria.getCountyId(),
+//                searchCustomerCriteria.getFirstNameStartsWith(), searchCustomerCriteria.getLastNameStartsWith(),
+//                searchCustomerCriteria.getLocationStartsWith(), searchCustomerCriteria.getStartDate(), searchCustomerCriteria.getEndDate(),
+//                searchCustomerCriteria.getDeliveryStartDate(), searchCustomerCriteria.getDeliveryEndDate()),
+//                "At least one search criteria must be set");
     }
 
 //    private void validateLoginUserCustomer(String agentId) {
@@ -350,5 +356,10 @@ public class CustomerService {
         }
 
         return getCustomerInfo(customerEntity);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public void deleteCustomer(BigInteger customerId) {
+        customerEAO.deleteCustomer(customerId);
     }
 }
