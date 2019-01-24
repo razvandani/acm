@@ -182,7 +182,8 @@ public class CustomerService {
                             2, customerInfo.getCommissionSubcategory()); // QUICK-FIX: in order to get and set comissions for B1 - B4
         } else if (customerInfo.getProductType().equals(CustomerInfo.PRODUCT_TYPE_ELECTRIC_ENERGY)) {
             agentCommissionEntity =
-                    commissionEAO.getAgentCommissionForElectricCurrent(new BigInteger(customerInfo.getAgentId()), customerInfo.getCommissionSubcategory());
+                    commissionEAO.getAgentCommissionForElectricCurrent(new BigInteger(customerInfo.getAgentId()),
+                            customerInfo.getCommissionSubcategory());
         }
 
         BigDecimal commission;

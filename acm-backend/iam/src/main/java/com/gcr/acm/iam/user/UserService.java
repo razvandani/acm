@@ -521,6 +521,10 @@ public class UserService {
         List<UserInfo> userInfoList = new ArrayList<>();
         UserEntitySearchCriteria userEntitySearchCriteria = new UserEntitySearchCriteria();
 
+        if (loginUserInfo.isPartner()) {
+            userEntitySearchCriteria.setPartnerId(new BigInteger(UserIdentity.getLoginUser().getUserId()));
+        }
+
         if (searchUserCriteria.getUserIdList() != null) {
             List<BigInteger> userIdList = new ArrayList<>();
 

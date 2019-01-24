@@ -71,6 +71,9 @@ public class UserEntity extends EntityBase {
     @OneToMany(mappedBy = "agentEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AgentCommissionEntity> agentCommissionEntitySet;
 
+    @OneToMany(mappedBy = "partnerEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<PartnerAgentListEntity> partnerAgentListEntitySet;
+
     public BigInteger getUserId() {
         return userId;
     }
@@ -189,5 +192,13 @@ public class UserEntity extends EntityBase {
 
     public void setAgentAbbreviation(String agentAbbreviation) {
         this.agentAbbreviation = agentAbbreviation;
+    }
+
+    public Set<PartnerAgentListEntity> getPartnerAgentListEntitySet() {
+        return partnerAgentListEntitySet;
+    }
+
+    public void setPartnerAgentListEntitySet(Set<PartnerAgentListEntity> partnerAgentListEntitySet) {
+        this.partnerAgentListEntitySet = partnerAgentListEntitySet;
     }
 }

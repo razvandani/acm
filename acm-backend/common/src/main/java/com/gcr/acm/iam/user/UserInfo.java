@@ -14,6 +14,7 @@ public class UserInfo {
     public static final Integer ROLE_ID_AGENT = 2;
     private static final Integer ROLE_ID_MODERATOR = 3;
     private static final Integer ROLE_ID_OPERATOR = 4;
+    private static final Integer ROLE_ID_PARTNER = 5;
 
     private String userId;
     private String username;
@@ -136,6 +137,10 @@ public class UserInfo {
 
     public boolean isOperator() {
         return ROLE_ID_OPERATOR.equals(roleId);
+    }
+
+    public boolean isPartner() {
+        return ROLE_ID_PARTNER.equals(roleId);
     }
 
     public String getErrorMessage() {

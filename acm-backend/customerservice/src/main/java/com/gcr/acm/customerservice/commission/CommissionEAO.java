@@ -1,5 +1,6 @@
 package com.gcr.acm.customerservice.commission;
 
+import com.gcr.acm.customerservice.customer.CustomerInfo;
 import com.gcr.acm.jpaframework.EntityAccessObjectBase;
 import com.gcr.acm.jpaframework.JpaQueryBuilder;
 import org.springframework.stereotype.Component;
@@ -69,6 +70,7 @@ public class CommissionEAO extends EntityAccessObjectBase {
 			BigInteger agentId, Integer commissionSubcategory) {
 		AgentCommissionEntitySearchCriteria agentCommissionEntitySearchCriteria = new AgentCommissionEntitySearchCriteria();
 		agentCommissionEntitySearchCriteria.setAgentId(agentId);
+		agentCommissionEntitySearchCriteria.setCommissionType(1);
 		agentCommissionEntitySearchCriteria.setCommissionSubcategoryElectricCurrent(commissionSubcategory);
 
 		List<AgentCommissionEntity> agentCommissionEntityList = findAgentCommissions(agentCommissionEntitySearchCriteria);

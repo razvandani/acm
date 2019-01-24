@@ -307,3 +307,20 @@ VALUES (1, (SELECT permission_id FROM permission WHERE permission_code='DELC'));
 INSERT IGNORE INTO permission_rest_method (permission_id, rest_request_path, rest_request_method)
 VALUES ((SELECT permission_id FROM permission WHERE permission_code='DELC'), '/customerservice/customer', 'DELETE');
 
+CREATE TABLE IF NOT EXISTS `partner_agent_list` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `partner_id` BIGINT NOT NULL,
+  `agent_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `partner_agent_partner_fk_idx` (`partner_id` ASC) VISIBLE,
+  INDEX `partner_agent_agent_fk_idx` (`agent_id` ASC) VISIBLE,
+  CONSTRAINT `partner_agent_partner_fk`
+    FOREIGN KEY (`partner_id`)
+    REFERENCES `user` (`user_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `partner_agent_agent_fk`
+    FOREIGN KEY (`agent_id`)
+    REFERENCES `user` (`user_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);

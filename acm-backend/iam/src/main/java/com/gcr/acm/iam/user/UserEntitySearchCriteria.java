@@ -19,6 +19,7 @@ public class UserEntitySearchCriteria extends EntitySearchCriteria {
     private String firstName;
     private String lastName;
     private List<Integer> statusIdList;
+    private BigInteger partnerId;
 
     public Boolean getSearchOnlyActive() {
         return searchOnlyActive;
@@ -82,5 +83,13 @@ public class UserEntitySearchCriteria extends EntitySearchCriteria {
 
     public void setStatusIdList(List<Integer> statusIdList) {
         this.statusIdList = statusIdList;
+    }
+
+    public BigInteger getPartnerId() {
+        return partnerId;
+    }
+
+    public void setPartnerId(BigInteger partnerId) {
+        this.partnerId = partnerId;
     }
 }

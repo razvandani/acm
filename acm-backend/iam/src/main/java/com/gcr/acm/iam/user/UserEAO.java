@@ -88,6 +88,11 @@ public class UserEAO extends EntityAccessObjectBase {
             queryBuilder.addCondition("u.username = :userName");
         }
 
+        if (searchCriteria.getPartnerId() != null) {
+            queryBuilder.addLeftFetchJoin("u.partnerAgentListEntitySet pa");
+            queryBuilder.addCondition("pa.partnerId = :partnerId");
+        }
+
         if (searchCriteria.getEmail() != null) {
             queryBuilder.addCondition("u.email = :email");
         }
