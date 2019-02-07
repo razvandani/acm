@@ -90,7 +90,7 @@ import static com.gcr.acm.customerservice.customer.CustomerDetailsEnums.ProductT
 								customerInfo.getContractNumber(),
 								customerInfo.getContractDate(), customerInfo.getLastName() + " " + customerInfo.getFirstName(), productType,
 								getCommissionTypeByTypeId(customerInfo.getCommissionType()),
-								CustomerDetailsEnums.CommissionSubcategoryEnum.getCommissionSubcategoryById(customerInfo.getCommissionSubcategory()),
+								CustomerDetailsEnums.CommissionSubcategoryEnum.getCommissionSubcategoryById(customerInfo.getCommissionSubcategory(), customerInfo.getProductType()),
 								customerInfo.getCountyName(), customerInfo.getLocation(), customerInfo.getPhoneNumber(),
 								customerInfo.getStartDeliveryDate(), customerInfo.getAgentName(), getStatusDescription(customerInfo.getStatus()) });
 			}

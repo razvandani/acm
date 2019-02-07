@@ -84,8 +84,8 @@ public final class CustomerDetailsEnums {
 			return description;
 		}
 
-		public static String getCommissionSubcategoryById(Integer id) {
-			if (id <= 4) {
+		public static String getCommissionSubcategoryById(Integer id, Integer productType) {
+			if (productType.equals(CustomerInfo.PRODUCT_TYPE_NATURAL_GAS)) {
 				CommissionSubcategoryEnum commissionSubcategoryResult = null;
 
 				for (int i = 0; i < values().length; i++) {

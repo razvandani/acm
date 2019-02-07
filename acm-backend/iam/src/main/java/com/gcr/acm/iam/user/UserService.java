@@ -510,14 +510,6 @@ public class UserService {
             throw new ValidationException("invalid user role");
         }
 
-//        if (Utilities.isEmptyOrNull(searchUserCriteria.getUsername())
-//                && Utilities.isEmptyOrNull(searchUserCriteria.getEmail())
-//                && Utilities.isEmptyOrNull(searchUserCriteria.getFirstName())
-//                && Utilities.isEmptyOrNull(searchUserCriteria.getLastName())
-//                && searchUserCriteria.getUserIdList() == null) {
-//            throw new ValidationException("either username or email or firstName or lastName or userIdList is required");
-//        }
-
         List<UserInfo> userInfoList = new ArrayList<>();
         UserEntitySearchCriteria userEntitySearchCriteria = new UserEntitySearchCriteria();
 
